@@ -1,1 +1,59 @@
-<p>producto-card works!</p>
+<a  [routerLink]="['/productos', producto().slug]"
+    class="group flex h-full flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-gray-300 hover:shadow-md">
+
+    <!-- Image -->
+    <div class="relative aspect-4/5 overflow-hidden bg-gray-100">
+
+        @if (producto().destacado) {
+            <span class="absolute left-3 top-3 z-10 rounded-sm bg-gray-950 px-2.5 py-1 text-[8px] font-bold uppercase tracking-[0.15em] text-white">
+                Destacado
+            </span>
+        }
+
+        <img [src]="producto().imagen" [alt]="producto().nombre" class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.025]" >
+
+    </div>
+
+
+    <!-- Information -->
+    <div class="border-t border-gray-200 bg-white p-3.5 sm:p-4">
+
+        <!-- Category -->
+        <div class="flex items-center gap-2">
+
+            <span class="h-1 w-1 rounded-full bg-gray-300"></span>
+
+            <span class="text-[9px] font-semibold uppercase tracking-[0.14em] text-gray-500">
+                {{ producto().categoria }}
+            </span>
+
+        </div>
+
+
+        <!-- Name -->
+        <h2 class="mt-2 min-h-10 line-clamp-2 text-sm font-semibold leading-5 text-gray-900 transition-colors duration-200 group-hover:text-red-600 sm:text-[15px]">
+            {{ producto().nombre }}
+        </h2>
+
+
+        <!-- Brand -->
+        <p class="mt-1 truncate text-xs text-gray-500">
+            {{ producto().marca }}
+        </p>
+
+
+        <!-- Price -->
+        <div class="mt-4 flex items-center justify-between border-t border-gray-100 pt-3">
+
+            <span class="text-base font-bold tracking-tight text-gray-950">
+                S/ {{ producto().precio }}
+            </span>
+
+            <span class="text-[9px] font-semibold uppercase tracking-[0.12em] text-gray-400 transition-colors duration-200 group-hover:text-red-600">
+                Ver producto
+            </span>
+
+        </div>
+
+    </div>
+</a>

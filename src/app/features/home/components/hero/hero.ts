@@ -5,6 +5,5 @@ import { RouterLink } from '@angular/router';
   selector: 'app-hero',
   imports: [RouterLink],
   templateUrl: './hero.html',
-  styleUrl: './hero.css',
 })
 export class Hero {}

@@ -1,4 +1,4 @@
-export interface ProductCard {
+export interface Producto {
     id: number;
     nombre: string;
     slug: string;

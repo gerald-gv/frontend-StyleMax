@@ -8,6 +8,5 @@ import { RouterOutlet } from '@angular/router';
   imports: [Navbar, RouterOutlet, Footer],
   standalone: true,
   templateUrl: './public-layout.html',
-  styleUrl: './public-layout.css',
 })
 export class PublicLayout {}

@@ -1,9 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
+import { Producto } from '../../../core/models/producto.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-producto-card',
-  imports: [],
+  selector: 'producto-card',
+  imports: [RouterLink],
   templateUrl: './producto-card.html',
-  styleUrl: './producto-card.css',
 })
-export class ProductoCard {}
+export class ProductoCard {
+  producto = input.required<Producto>();
+
+}
