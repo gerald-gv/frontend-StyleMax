@@ -2,26 +2,35 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductoService } from '../../../../core/services/producto.service';
 import { ProductoDetalle } from '../../../../core/models/producto-detalle.model';
+import { AuthRequiredModal } from '../../../../shared/components/auth-require-modal/auth-require-modal';
+import { AuthService } from '../../../../core/services/auth.service';
+import { CarritoService } from '../../../../core/services/carrito.service';
 
 type Estado = 'loading' | 'error' | 'success';
 
 @Component({
   selector: 'producto-detalle',
-  imports: [RouterLink],
+  imports: [RouterLink, AuthRequiredModal],
   templateUrl: './producto-detalle.html',
 })
 export class ProductoDetallePage implements OnInit {
+
   private readonly route = inject(ActivatedRoute)
   private readonly productoService = inject(ProductoService);
+  private readonly authService = inject(AuthService);
+  private readonly carritoService = inject(CarritoService);
 
   producto = signal<ProductoDetalle | null>(null)
 
   estado = signal<Estado>('loading')
-  
+  mostrarAuthModal = signal(false);
+
+  agregandoAlCarrito = signal(false);
+
   ngOnInit(): void {
     const slug = this.route.snapshot.paramMap.get('slug')
 
-    if(!slug){
+    if (!slug) {
       this.estado.set('error')
       return
     }
@@ -43,6 +52,37 @@ export class ProductoDetallePage implements OnInit {
         this.estado.set('error');
       }
     })
+  }
+
+  agregarAlCarrito(): void {
+
+    if (!this.authService.autenticado()) {
+      this.mostrarAuthModal.set(true);
+      return;
+    }
+
+    const productoActual = this.producto();
+
+    if (!productoActual || productoActual.stock <= 0) {
+      return;
+    }
+
+    this.agregandoAlCarrito.set(true);
+
+    this.carritoService.agregarItem(productoActual.id,1).subscribe({
+        next: () => {
+            this.agregandoAlCarrito.set(false);
+        },
+
+        error: (error) => {
+            console.error('Error al agregar el producto:', error);
+            this.agregandoAlCarrito.set(false);
+        }
+    });
+  }
+
+  cerrarAuthModal(): void {
+    this.mostrarAuthModal.set(false);
   }
 
 

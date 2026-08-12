@@ -2,14 +2,15 @@ import { HttpClient } from "@angular/common/http";
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { environment } from "../../../environments/environment";
 import { LoginRequest, LoginResponse, RegisterRequest } from "../models/auth.model";
+import { CarritoService } from "./carrito.service";
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
 
     private readonly http = inject(HttpClient);
-
     private readonly apiUrl = `${environment.apiUrl}/auth`;
+    private readonly carritoService = inject(CarritoService);
 
     private readonly _usuario = signal<LoginResponse | null>(
         this.obtenerUsuarioGuardado()
@@ -35,6 +36,7 @@ export class AuthService {
         localStorage.removeItem('usuario');
 
         this._usuario.set(null);
+        this.carritoService.limpiarCarrito();
     }
 
 
@@ -43,6 +45,7 @@ export class AuthService {
         localStorage.setItem('usuario', JSON.stringify(response));
 
         this._usuario.set(response);
+        this.carritoService.obtenerCarrito();
     }
 
     private obtenerUsuarioGuardado(): LoginResponse | null {
@@ -56,7 +59,7 @@ export class AuthService {
             return JSON.parse(usuario) as LoginResponse;
         } catch {
             localStorage.removeItem('usuario');
-            localStorage    .removeItem('token');
+            localStorage.removeItem('token');
 
             return null;
         }
