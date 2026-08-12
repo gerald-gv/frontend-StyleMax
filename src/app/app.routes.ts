@@ -3,6 +3,8 @@ import { PublicLayout } from './layouts/public-layout/public-layout';
 import { Home } from './features/home/pages/home/home';
 import { Catalogo } from './features/catalogo/pages/catalogo/catalogo';
 import { ProductoDetallePage } from './features/producto/pages/producto-detalle/producto-detalle';
+import { Login } from './features/auth/pages/login/login';
+import { Registro } from './features/auth/pages/registro/registro';
 
 export const routes: Routes = [
 
@@ -25,6 +27,16 @@ export const routes: Routes = [
                 path: 'productos/:slug',
                 component: ProductoDetallePage
             },
+
+            {
+                path: 'login',
+                component: Login
+            },
+
+            {
+                path: 'registro',
+                component: Registro
+            }
 
         ]
     }

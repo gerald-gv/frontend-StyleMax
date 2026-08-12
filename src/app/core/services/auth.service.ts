@@ -19,36 +19,34 @@ export class AuthService {
 
     readonly autenticado = computed(() => this._usuario() !== null);
 
-    login(request: LoginRequest): void {
-        this.http.post<LoginResponse>(`${this.apiUrl}/login`,request)
-        .subscribe({
-            next: (response) => {
-                this.guardarSesion(response);
-            }
-        });
+
+    login(request: LoginRequest) {
+        return this.http.post<LoginResponse>(`${this.apiUrl}/login`, request);
     }
 
-    register(request: RegisterRequest): void {
-        this.http.post<LoginResponse>(`${this.apiUrl}/register`,request)
-        .subscribe({
-            next: (response) => {
-                this.guardarSesion(response);
-            }
-        });
+
+    register(request: RegisterRequest) {
+        return this.http.post<LoginResponse>(`${this.apiUrl}/register`,request);
     }
+
 
     logout(): void {
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('usuario');
+        localStorage.removeItem('token');
+        localStorage.removeItem('usuario');
 
         this._usuario.set(null);
     }
 
 
-    // Metodos Auxiliares
+    guardarSesion(response: LoginResponse): void {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('usuario', JSON.stringify(response));
+
+        this._usuario.set(response);
+    }
 
     private obtenerUsuarioGuardado(): LoginResponse | null {
-        const usuario = sessionStorage.getItem('usuario');
+        const usuario = localStorage.getItem('usuario');
 
         if (!usuario) {
             return null;
@@ -57,17 +55,10 @@ export class AuthService {
         try {
             return JSON.parse(usuario) as LoginResponse;
         } catch {
-            sessionStorage.removeItem('usuario');
-            sessionStorage.removeItem('token');
+            localStorage.removeItem('usuario');
+            localStorage    .removeItem('token');
 
             return null;
         }
-    }
-
-    private guardarSesion(response: LoginResponse): void {
-        sessionStorage.setItem('token', response.token);
-        sessionStorage.setItem('usuario', JSON.stringify(response));
-
-        this._usuario.set(response);
     }
 }
