@@ -6,10 +6,14 @@ import { ProductoDetallePage } from './features/producto/pages/producto-detalle/
 import { Login } from './features/auth/pages/login/login';
 import { Registro } from './features/auth/pages/registro/registro';
 import { Carrito } from './features/carrito/pages/carrito/carrito';
+import { Checkout } from './features/checkout/pages/checkout/checkout';
+import { CheckoutSuccess } from './features/checkout/pages/checkout-success/checkout-success';
+import { CheckoutPending } from './features/checkout/pages/checkout-pending/checkout-pending';
+import { CheckoutFailure } from './features/checkout/pages/checkout-failure/checkout-failure';
 
 export const routes: Routes = [
 
-     {
+    {
         path: '',
         component: PublicLayout,
         children: [
@@ -42,7 +46,24 @@ export const routes: Routes = [
             {
                 path: 'carrito',
                 component: Carrito
-            }
+            },
+            {
+                path: 'checkout',
+                component: Checkout
+            },
+
+            {
+                path: 'checkout/success',
+                component: CheckoutSuccess
+            },
+            {
+                path: 'checkout/pending',
+                component: CheckoutPending
+            },
+            {
+                path: 'checkout/failure',
+                component: CheckoutFailure
+            },
 
         ]
     }

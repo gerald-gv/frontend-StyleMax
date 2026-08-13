@@ -1,0 +1,65 @@
+<div class="mx-auto max-w-3xl px-6 py-16 sm:py-24">
+
+    <div class="text-center">
+
+        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-50">
+
+            <i class="fa-solid fa-xmark text-2xl text-red-600"></i>
+
+        </div>
+
+
+        <h1 class="mt-6 text-3xl font-bold tracking-tight text-gray-950">
+            No pudimos procesar tu pago
+        </h1>
+
+
+        <p class="mx-auto mt-3 max-w-md text-sm leading-6 text-gray-500">
+            El pago no pudo completarse. Puedes intentarlo nuevamente.
+        </p>
+
+
+        @if (error()) {
+
+            <p class="mt-5 text-sm text-red-600">
+                No pudimos generar un nuevo intento de pago.
+                Inténtalo nuevamente.
+            </p>
+
+        }
+
+
+        <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+
+            @if (pedidoId()) {
+
+                <button
+                    type="button"
+                    (click)="reintentarPago()"
+                    [disabled]="procesando()"
+                    class="rounded-lg bg-red-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+
+                    @if (procesando()) {
+                        Procesando...
+                    } @else {
+                        Reintentar pago
+                    }
+
+                </button>
+
+            }
+
+
+            <a
+                routerLink="/carrito"
+                class="rounded-lg border border-gray-300 px-6 py-3 text-sm font-semibold text-gray-700 transition hover:border-gray-400"
+            >
+                Volver al carrito
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
