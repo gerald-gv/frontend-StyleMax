@@ -22,6 +22,17 @@ export class AuthService {
 
     readonly autenticado = computed(() => this._usuario() !== null);
 
+    constructor() {
+        const usuario = this._usuario();
+        const token = localStorage.getItem('token');
+
+        if (usuario && token) {
+            this.programarExpiracion(token);
+            this.carritoService.obtenerCarrito();
+        }
+    }
+
+
 
     login(request: LoginRequest) {
         return this.http.post<LoginResponse>(`${this.apiUrl}/login`, request);
@@ -99,9 +110,7 @@ export class AuthService {
                 return;
             }
 
-            console.log(
-                `Sesión válida. Expira en ${Math.round(tiempoRestante / 1000)} segundos`
-            );
+            console.log(`Sesión válida. Expira en ${Math.round(tiempoRestante / 1000)} segundos`);
 
             this.expiracionTimer = setTimeout(() => {
 
