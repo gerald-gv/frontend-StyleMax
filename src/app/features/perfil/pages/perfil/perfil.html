@@ -1,0 +1,683 @@
+<div class="mx-auto max-w-4xl px-6 py-10 sm:py-14">
+
+    <!-- Header -->
+
+    <div class="border-b border-gray-200 pb-6">
+
+        <span class="text-xs font-bold uppercase tracking-[0.28em] text-red-600">
+            Tu estilo
+        </span>
+
+        <h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl">
+            Mi perfil
+        </h1>
+
+        <p class="mt-2 text-sm text-gray-500">
+            Administra tus datos personales y la información de tu cuenta.
+        </p>
+
+    </div>
+
+
+    @if (cargando()) {
+
+    <!-- Loading -->
+
+    <div class="py-20 text-center">
+        <i class="fa-solid fa-spinner fa-spin text-2xl text-red-600"></i>
+        <p class="mt-4 text-sm text-gray-500">
+            Cargando tu perfil...
+        </p>
+
+    </div>
+
+
+    } @else if (error()) {
+
+    <div class="py-20 text-center">
+
+        <i class="fa-solid fa-circle-exclamation text-3xl text-red-600"></i>
+
+        <h2 class="mt-4 text-lg font-semibold text-gray-900">
+            No pudimos cargar tu perfil
+        </h2>
+
+        <p class="mt-2 text-sm text-gray-500">
+            Intenta nuevamente.
+        </p>
+
+        <button type="button" (click)="cargarPerfil()"
+            class="mt-6 rounded-lg bg-red-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-red-700">
+            Intentar nuevamente
+        </button>
+
+    </div>
+
+
+    } @else {
+
+    <!-- Profile -->
+
+    <section class="mt-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
+
+        <!-- Section header -->
+
+        <div class="flex items-center justify-between border-b border-gray-100 pb-5">
+
+            <div>
+
+                <h2 class="text-lg font-semibold text-gray-950">
+                    Datos personales
+                </h2>
+
+                <p class="mt-1 text-sm text-gray-500">
+                    Mantén actualizada la información de tu cuenta.
+                </p>
+
+            </div>
+
+
+            @if (!editando()) {
+
+            <button type="button" (click)="activarEdicion()"
+                class="rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:border-red-600 hover:text-red-600">
+                Editar
+            </button>
+
+            }
+
+        </div>
+
+
+        <!-- Form -->
+
+        <form [formGroup]="formulario" (ngSubmit)="guardarCambios()" class="mt-6 space-y-6">
+
+            <!--Full Name -->
+
+            <div class="grid gap-6 sm:grid-cols-2">
+
+                <!-- Name -->
+
+                <div>
+                    <label for="nombre" class="block text-sm font-medium text-gray-900">
+                        Nombre
+                    </label>
+
+                    <input id="nombre" type="text" formControlName="nombre" autocomplete="given-name"
+                        class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500">
+
+
+                    @if ( formulario.controls.nombre.touched && formulario.controls.nombre.invalid) {
+                    <p class="mt-2 text-xs text-red-600">
+                        El nombre es obligatorio.
+                    </p>
+                    }
+
+                </div>
+
+
+                <!-- Surname -->
+
+                <div>
+
+                    <label for="apellido" class="block text-sm font-medium text-gray-900">
+                        Apellido
+                    </label>
+
+                    <input id="apellido" type="text" formControlName="apellido" autocomplete="family-name"
+                        class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500">
+
+                    @if ( formulario.controls.apellido.touched && formulario.controls.apellido.invalid) {
+                    <p class="mt-2 text-xs text-red-600">
+                        El apellido es obligatorio.
+                    </p>
+                    }
+
+                </div>
+
+            </div>
+
+
+            <!-- Email -->
+
+            <div>
+
+                <label for="correo" class="block text-sm font-medium text-gray-900">
+                    Correo electrónico
+                </label>
+
+                <input id="correo" type="email" formControlName="correo" autocomplete="email"
+                    class="mt-2 w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-500 outline-none">
+
+
+                <p class="mt-2 text-xs text-gray-400">
+                    El correo electrónico no puede modificarse desde el perfil.
+                </p>
+
+            </div>
+
+
+            <!-- Phone -->
+
+            <div>
+
+                <label for="telefono" class="block text-sm font-medium text-gray-900">
+
+                    Teléfono
+
+                </label>
+
+                <input id="telefono" type="tel" formControlName="telefono" autocomplete="tel" placeholder="999 999 999"
+                    class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500">
+
+            </div>
+
+
+            <!-- Actions -->
+
+            <div class="flex flex-col gap-4 border-t border-gray-100 pt-6 sm:flex-row sm:items-center sm:justify-between">
+
+
+                <!-- Messages -->
+
+                <div>
+
+                    @if (errorGuardando()) {
+
+                    <p class="text-sm font-medium text-red-600">
+
+                        <i class="fa-solid fa-circle-exclamation mr-1"></i>
+
+                        No pudimos guardar los cambios.
+                        Intenta nuevamente.
+
+                    </p>
+
+                    } @else if (guardado()) {
+
+                    <p class="text-sm font-medium text-green-600">
+
+                        <i class="fa-solid fa-circle-check mr-1"></i>
+
+                        Cambios guardados correctamente.
+
+                    </p>
+
+                    }
+
+                </div>
+
+
+                <!-- Actions -->
+
+                @if (editando()) {
+
+                <div class="flex flex-col gap-3 sm:flex-row">
+
+
+                    <!-- Cancel -->
+
+                    <button type="button" (click)="cancelarEdicion()" [disabled]="guardando()"
+                        class="rounded-lg border border-gray-300 px-6 py-3.5 text-sm font-semibold text-gray-700 transition hover:border-gray-500 hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-60">
+
+                        Cancelar
+
+                    </button>
+
+
+                    <!-- Save -->
+
+                    <button type="submit" [disabled]="guardando()"
+                        class="rounded-lg bg-red-600 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60">
+
+
+                        @if (guardando()) {
+
+                        <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+
+                        Guardando...
+
+                        } @else {
+
+                        Guardar cambios
+
+                        }
+
+                    </button>
+
+                </div>
+
+                }
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    <!-- Direction -->
+
+    <section class="mt-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
+
+        <!-- Header -->
+
+        <div class="flex items-start justify-between gap-4">
+
+            <div>
+
+                <h2 class="text-lg font-semibold text-gray-950">
+                    Dirección de entrega
+                </h2>
+
+                <p class="mt-1 text-sm text-gray-500">
+                    Configura la dirección donde recibirás tus pedidos.
+                </p>
+
+            </div>
+
+            <i class="fa-solid fa-location-dot text-lg text-gray-300"></i>
+
+        </div>
+
+
+        <!-- Loading -->
+
+        @if (cargandoDireccion()) {
+
+        <div class="py-12 text-center">
+
+            <i class="fa-solid fa-spinner fa-spin text-2xl text-red-600"></i>
+
+            <p class="mt-4 text-sm text-gray-500">
+                Cargando dirección...
+            </p>
+
+        </div>
+
+
+        } @else if (errorDireccion()) {
+
+        <!-- Error -->
+
+        <div class="py-10 text-center">
+
+            <i class="fa-solid fa-circle-exclamation text-3xl text-red-600"></i>
+
+            <h3 class="mt-4 text-base font-semibold text-gray-900">
+                No pudimos cargar tu dirección
+            </h3>
+
+            <p class="mt-2 text-sm text-gray-500">
+                Intenta nuevamente.
+            </p>
+
+            <button type="button" (click)="cargarDireccion()"
+                class="mt-5 rounded-lg bg-red-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700">
+
+                Intentar nuevamente
+
+            </button>
+
+        </div>
+
+
+        } @else {
+
+
+        @if (!direccionExiste() && !editandoDireccion()) {
+
+        <div class="mt-6 rounded-lg border border-dashed border-gray-300 bg-gray-50 p-8 text-center">
+
+            <i class="fa-solid fa-location-dot text-2xl text-gray-300"></i>
+
+            <p class="mt-4 text-sm font-medium text-gray-600">
+                Todavía no has registrado una dirección.
+            </p>
+
+            <p class="mt-1 text-xs text-gray-400">
+                Registra una dirección para utilizarla durante tus compras.
+            </p>
+
+
+            <button type="button" (click)="activarEdicionDireccion()"
+                class="mt-5 rounded-lg bg-red-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700">
+
+                Agregar dirección
+
+            </button>
+
+        </div>
+
+        }
+
+
+        @if (direccionExiste() && !editandoDireccion()) {
+
+        <div class="mt-6">
+
+            <div class="grid gap-4 sm:grid-cols-2">
+
+                <!-- Department -->
+
+                <div>
+
+                    <p class="text-xs font-medium uppercase tracking-wide text-gray-400">
+                        Departamento
+                    </p>
+
+                    <p class="mt-1 text-sm font-medium text-gray-900">
+                        {{ formularioDireccion.controls.departamento.value }}
+                    </p>
+
+                </div>
+
+
+                <!-- Province -->
+
+                <div>
+
+                    <p class="text-xs font-medium uppercase tracking-wide text-gray-400">
+                        Provincia
+                    </p>
+
+                    <p class="mt-1 text-sm font-medium text-gray-900">
+                        {{ formularioDireccion.controls.provincia.value }}
+                    </p>
+
+                </div>
+
+
+                <!-- District -->
+
+                <div>
+
+                    <p class="text-xs font-medium uppercase tracking-wide text-gray-400">
+                        Distrito
+                    </p>
+
+                    <p class="mt-1 text-sm font-medium text-gray-900">
+                        {{ formularioDireccion.controls.distrito.value }}
+                    </p>
+
+                </div>
+
+
+                <!-- Location -->
+
+                <div>
+
+                    <p class="text-xs font-medium uppercase tracking-wide text-gray-400">
+                        Dirección
+                    </p>
+
+                    <p class="mt-1 text-sm font-medium text-gray-900">
+                        {{ formularioDireccion.controls.direccionCompleta.value }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Reference -->
+
+            @if (formularioDireccion.controls.referencia.value) {
+
+            <div class="mt-4 border-t border-gray-100 pt-4">
+
+                <p class="text-xs font-medium uppercase tracking-wide text-gray-400">
+                    Referencia
+                </p>
+
+                <p class="mt-1 text-sm text-gray-700">
+                    {{ formularioDireccion.controls.referencia.value }}
+                </p>
+
+            </div>
+
+            }
+
+
+            <!-- Edit -->
+
+            <div class="mt-6 border-t border-gray-100 pt-5">
+
+                <button type="button" (click)="activarEdicionDireccion()"
+                    class="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 transition hover:border-red-600 hover:text-red-600">
+
+                    <i class="fa-solid fa-pen mr-2"></i>
+
+                    Editar dirección
+
+                </button>
+
+            </div>
+
+        </div>
+
+        }
+
+
+        <!-- Form Direction -->
+
+        @if (editandoDireccion()) {
+
+        <form [formGroup]="formularioDireccion" (ngSubmit)="guardarDireccion()" class="mt-6 space-y-6">
+
+
+            <!-- Location -->
+
+            <div class="grid gap-6 sm:grid-cols-3">
+
+
+                <!-- Department -->
+
+                <div>
+
+                    <label for="departamento" class="block text-sm font-medium text-gray-900">
+
+                        Departamento
+
+                    </label>
+
+                    <input id="departamento" type="text" formControlName="departamento" autocomplete="address-level1"
+                        placeholder="Ej. Lima"
+                        class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10">
+
+
+                    @if (
+                    formularioDireccion.controls.departamento.touched &&
+                    formularioDireccion.controls.departamento.invalid
+                    ) {
+
+                    <p class="mt-2 text-xs text-red-600">
+                        El departamento es obligatorio.
+                    </p>
+
+                    }
+
+                </div>
+
+
+                <!-- Province -->
+
+                <div>
+
+                    <label for="provincia" class="block text-sm font-medium text-gray-900">
+
+                        Provincia
+
+                    </label>
+
+                    <input id="provincia" type="text" formControlName="provincia" autocomplete="address-level2"
+                        placeholder="Ej. Lima"
+                        class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10">
+
+
+                    @if (
+                    formularioDireccion.controls.provincia.touched &&
+                    formularioDireccion.controls.provincia.invalid
+                    ) {
+
+                    <p class="mt-2 text-xs text-red-600">
+                        La provincia es obligatoria.
+                    </p>
+
+                    }
+
+                </div>
+
+
+                <!-- District -->
+
+                <div>
+
+                    <label for="distrito" class="block text-sm font-medium text-gray-900">
+
+                        Distrito
+
+                    </label>
+
+                    <input id="distrito" type="text" formControlName="distrito" autocomplete="address-level3"
+                        placeholder="Ej. Miraflores"
+                        class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10">
+
+
+                    @if (
+                    formularioDireccion.controls.distrito.touched &&
+                    formularioDireccion.controls.distrito.invalid
+                    ) {
+
+                    <p class="mt-2 text-xs text-red-600">
+                        El distrito es obligatorio.
+                    </p>
+
+                    }
+
+                </div>
+
+            </div>
+
+
+            <!-- Complete Address -->
+
+            <div>
+
+                <label for="direccionCompleta" class="block text-sm font-medium text-gray-900">
+                    Dirección completa
+                </label>
+
+                <input id="direccionCompleta" type="text" formControlName="direccionCompleta"
+                    autocomplete="street-address" placeholder="Ej. Av. Arequipa 1234, Dpto. 502"
+                    class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10">
+
+
+                @if (
+                formularioDireccion.controls.direccionCompleta.touched &&
+                formularioDireccion.controls.direccionCompleta.invalid
+                ) {
+
+                <p class="mt-2 text-xs text-red-600">
+                    La dirección es obligatoria.
+                </p>
+
+                }
+
+            </div>
+
+
+            <!-- Reference -->
+
+            <div>
+
+                <label for="referencia" class="block text-sm font-medium text-gray-900">
+
+                    Referencia
+                    <span class="font-normal text-gray-400">
+                        (opcional)
+                    </span>
+
+                </label>
+
+                <textarea id="referencia" formControlName="referencia" rows="3"
+                    placeholder="Ej. Frente al parque, edificio con puerta negra..."
+                    class="mt-2 w-full resize-none rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10"></textarea>
+
+            </div>
+
+
+            <!-- Actions -->
+
+            <div
+                class="flex flex-col gap-4 border-t border-gray-100 pt-6 sm:flex-row sm:items-center sm:justify-between">
+
+
+                <!-- Message -->
+
+                <div>
+
+                    @if (direccionGuardada()) {
+
+                    <p class="text-sm font-medium text-green-600">
+                        <i class="fa-solid fa-circle-check mr-1"></i>
+                        Dirección guardada correctamente.
+                    </p>
+
+                    } @else if (errorDireccion()) {
+
+                    <p class="text-sm font-medium text-red-600">
+                        <i class="fa-solid fa-circle-exclamation mr-1"></i>
+                        No pudimos guardar la dirección.
+                    </p>
+
+                    }
+
+                </div>
+
+
+                <!-- Actions -->
+
+                <div class="flex flex-col gap-3 sm:flex-row">
+
+                    <!-- Cancel -->
+                    <button type="button" (click)="cancelarEdicionDireccion()" [disabled]="guardandoDireccion()"
+                        class="rounded-lg border border-gray-300 px-6 py-3.5 text-sm font-semibold text-gray-700 transition hover:border-gray-500 hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-60">
+                        Cancelar
+                    </button>
+
+
+                    <!-- Save -->
+
+                    <button type="submit" [disabled]="guardandoDireccion()"
+                        class="rounded-lg bg-red-600 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60">
+                        @if (guardandoDireccion()) {
+
+                        <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+
+                        Guardando...
+
+                        } @else {
+
+                        Guardar dirección
+
+                        }
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+        }
+
+        }
+
+    </section>
+
+    }
+
+</div>

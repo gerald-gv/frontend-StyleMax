@@ -10,6 +10,7 @@ import { Checkout } from './features/checkout/pages/checkout/checkout';
 import { CheckoutSuccess } from './features/checkout/pages/checkout-success/checkout-success';
 import { CheckoutPending } from './features/checkout/pages/checkout-pending/checkout-pending';
 import { CheckoutFailure } from './features/checkout/pages/checkout-failure/checkout-failure';
+import { Perfil } from './features/perfil/pages/perfil/perfil';
 
 export const routes: Routes = [
 
@@ -42,7 +43,10 @@ export const routes: Routes = [
                 path: 'registro',
                 component: Registro
             },
-
+            {
+                path: 'perfil',
+                component: Perfil
+            },
             {
                 path: 'carrito',
                 component: Carrito

@@ -10,5 +10,10 @@ export interface Pedido {
     fechaPedido: string;
     total: number;
     estado: PedidoEstado;
+    departamento: string;
+    provincia: string;
+    distrito: string;
+    direccionCompleta: string;
+    referencia: string | null;
     detalles: DetallePedido[];
 }

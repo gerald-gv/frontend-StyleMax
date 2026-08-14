@@ -15,6 +15,8 @@ export interface LoginResponse {
     token: string;
     usuarioId: number;
     nombre: string;
+    apellido: string;
     correo: string;
+    telefono: string | null;
     rol: string;
 }

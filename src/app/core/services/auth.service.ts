@@ -3,6 +3,8 @@ import { computed, inject, Injectable, signal } from "@angular/core";
 import { environment } from "../../../environments/environment";
 import { LoginRequest, LoginResponse, RegisterRequest } from "../models/auth.model";
 import { CarritoService } from "./carrito.service";
+import { Perfil } from "../models/perfil.model";
+
 @Injectable({
     providedIn: 'root'
 })
@@ -22,7 +24,9 @@ export class AuthService {
 
     readonly autenticado = computed(() => this._usuario() !== null);
 
+
     constructor() {
+
         const usuario = this._usuario();
         const token = localStorage.getItem('token');
 
@@ -32,47 +36,62 @@ export class AuthService {
         }
     }
 
-
-
     login(request: LoginRequest) {
-        return this.http.post<LoginResponse>(`${this.apiUrl}/login`, request);
+        return this.http.post<LoginResponse>(
+            `${this.apiUrl}/login`,
+            request
+        );
     }
 
 
     register(request: RegisterRequest) {
-        return this.http.post<LoginResponse>(`${this.apiUrl}/register`, request);
+        return this.http.post<LoginResponse>(
+            `${this.apiUrl}/register`,
+            request
+        );
     }
 
 
     logout(): void {
+
         this.limpiarSesion();
+
         this.carritoService.limpiarCarrito();
     }
 
 
     guardarSesion(response: LoginResponse): void {
+
         localStorage.setItem('token', response.token);
         localStorage.setItem('usuario', JSON.stringify(response));
 
         this._usuario.set(response);
+
         this.programarExpiracion(response.token);
+
         this.carritoService.obtenerCarrito();
     }
 
+
     private obtenerUsuarioGuardado(): LoginResponse | null {
+
         const usuario = localStorage.getItem('usuario');
         const token = localStorage.getItem('token');
 
         if (!usuario || !token) {
+
             localStorage.removeItem('usuario');
             localStorage.removeItem('token');
+
             return null;
         }
 
         try {
+
             const usuarioGuardado = JSON.parse(usuario) as LoginResponse;
 
             if (this.tokenExpirado(token)) {
+
                 console.log('La sesión ha expirado');
 
                 localStorage.removeItem('usuario');
@@ -84,12 +103,14 @@ export class AuthService {
             return usuarioGuardado;
 
         } catch {
+
             localStorage.removeItem('usuario');
             localStorage.removeItem('token');
 
             return null;
         }
     }
+
 
     private programarExpiracion(token: string): void {
 
@@ -98,6 +119,7 @@ export class AuthService {
         }
 
         try {
+
             const payload = this.obtenerPayload(token);
 
             const expiracion = payload.exp * 1000;
@@ -106,11 +128,15 @@ export class AuthService {
             const tiempoRestante = expiracion - ahora;
 
             if (tiempoRestante <= 0) {
+
                 this.logout();
+
                 return;
             }
 
-            console.log(`Sesión válida. Expira en ${Math.round(tiempoRestante / 1000)} segundos`);
+            console.log(
+                `Sesión válida. Expira en ${Math.round(tiempoRestante / 1000)} segundos`
+            );
 
             this.expiracionTimer = setTimeout(() => {
 
@@ -121,19 +147,24 @@ export class AuthService {
             }, tiempoRestante);
 
         } catch (error) {
+
             console.error('Token inválido:', error);
+
             this.logout();
         }
     }
 
 
     private tokenExpirado(token: string): boolean {
+
         try {
+
             const payload = this.obtenerPayload(token);
 
             return payload.exp * 1000 <= Date.now();
 
         } catch {
+
             return true;
         }
     }
@@ -156,7 +187,9 @@ export class AuthService {
         );
 
         if (!payload.exp) {
-            throw new Error('El JWT no contiene fecha de expiración');
+            throw new Error(
+                'El JWT no contiene fecha de expiración'
+            );
         }
 
         return payload;
@@ -166,7 +199,9 @@ export class AuthService {
     private limpiarSesion(): void {
 
         if (this.expiracionTimer) {
+
             clearTimeout(this.expiracionTimer);
+
             this.expiracionTimer = null;
         }
 
@@ -174,5 +209,33 @@ export class AuthService {
         localStorage.removeItem('usuario');
 
         this._usuario.set(null);
+    }
+
+
+    actualizarUsuario(perfil: Perfil): void {
+
+        const sesionActual = this._usuario();
+
+        if (!sesionActual) {
+            return;
+        }
+
+        const nuevaSesion: LoginResponse = {
+
+            ...sesionActual,
+
+            nombre: perfil.nombre,
+            apellido: perfil.apellido,
+            correo: perfil.correo,
+            telefono: perfil.telefono
+
+        };
+
+        localStorage.setItem(
+            'usuario',
+            JSON.stringify(nuevaSesion)
+        );
+
+        this._usuario.set(nuevaSesion);
     }
 }
