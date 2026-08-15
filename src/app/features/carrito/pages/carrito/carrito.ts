@@ -1,6 +1,6 @@
-import { Component, inject, OnInit } from "@angular/core";
+import { Component, inject, OnInit, signal } from "@angular/core";
 import { CarritoService } from "../../../../core/services/carrito.service";
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 
 @Component({
     selector: 'carrito',
@@ -10,17 +10,21 @@ import { RouterLink } from "@angular/router";
 export class Carrito implements OnInit {
 
     readonly carritoService = inject(CarritoService);
+    private readonly router = inject(Router);
 
     readonly carrito = this.carritoService.carrito;
     readonly total = this.carritoService.total;
 
+    readonly sincronizando = signal(false);
+
+    readonly errorStock = signal<string | null>(null);
 
     ngOnInit(): void {
         this.carritoService.obtenerCarrito();
     }
 
     aumentarCantidad(itemId: number, cantidad: number): void {
-        this.carritoService.actualizarCantidad(
+        this.carritoService.actualizarCantidadLocal(
             itemId,
             cantidad + 1
         );
@@ -32,7 +36,7 @@ export class Carrito implements OnInit {
             return;
         }
 
-        this.carritoService.actualizarCantidad(
+        this.carritoService.actualizarCantidadLocal(
             itemId,
             cantidad - 1
         );
@@ -41,6 +45,30 @@ export class Carrito implements OnInit {
 
     eliminarItem(itemId: number): void {
         this.carritoService.eliminarItem(itemId);
+    }
+
+    continuarCompra(): void {
+        this.errorStock.set(null);
+        this.sincronizando.set(true);
+
+        this.carritoService.sincronizarCambios().subscribe({
+
+            next: () => {
+                this.sincronizando.set(false);
+                this.router.navigate(['/checkout']);
+            },
+
+
+            error: (error) => {
+
+                this.sincronizando.set(false);
+                this.errorStock.set(error.error?.message ??
+                    'No se pudo actualizar el carrito.'
+                );
+
+            }
+
+        });
     }
 
 }

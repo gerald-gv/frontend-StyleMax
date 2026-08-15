@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { environment } from "../../../environments/environment";
 import { Carrito } from "../models/carrito.model";
-import { Observable, tap } from "rxjs";
+import { concatMap, from, last, Observable, of, tap } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -28,6 +28,8 @@ export class CarritoService {
         this._carrito()?.total ?? 0
     );
 
+    // Mapea las cantidades modificadas
+    private readonly pendingUpdates = new Map<number, number>();
 
     obtenerCarrito(): void {
         this.http.get<Carrito>(this.apiUrl).subscribe({
@@ -53,12 +55,75 @@ export class CarritoService {
         );
     }
 
-    actualizarCantidad(itemId: number, cantidad: number): void {
-        this.http.put<Carrito>(`${this.apiUrl}/items/${itemId}`,{cantidad}).subscribe({
-            next: (carrito) => {
-                this._carrito.set(carrito);
+    // Actualiza el carrito localmente
+    actualizarCantidadLocal(itemId: number,cantidad: number): void {
+
+        this._carrito.update(carrito => {
+
+            if (!carrito) {
+                return carrito;
             }
+
+            const items = carrito.items.map(item => {
+
+                if (item.id !== itemId) {
+                    return item;
+                }
+
+                const subtotal = Number((item.precioUnitario * cantidad).toFixed(2));
+
+                return {
+                    ...item,
+                    cantidad,
+                    subtotal
+                };
+            });
+
+
+            const total = Number(items.reduce((total, item) => total + item.subtotal,0).toFixed(2)
+            );
+
+
+            return {
+                ...carrito,
+                items,
+                total
+            };
+
         });
+
+
+        this.pendingUpdates.set(itemId, cantidad);
+    }
+
+    // Se envia al backend los cambios locales del carrito
+    sincronizarCambios(): Observable<Carrito> {
+
+        if (this.pendingUpdates.size === 0) {
+            const carrito = this._carrito();
+            return carrito ? of(carrito) : of(null as unknown as Carrito);
+        }
+
+
+        const cambios = Array.from(
+            this.pendingUpdates.entries()
+        );
+
+
+        return from(cambios).pipe(
+
+            concatMap(([itemId, cantidad]) =>
+                this.http.put<Carrito>(`${this.apiUrl}/items/${itemId}`, { cantidad })
+            ),
+
+            last(),
+
+            tap(carrito => {
+                this._carrito.set(carrito);
+                this.pendingUpdates.clear();
+            })
+
+        );
     }
 
     eliminarItem(itemId: number): void {
