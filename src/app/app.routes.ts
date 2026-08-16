@@ -11,6 +11,10 @@ import { CheckoutSuccess } from './features/checkout/pages/checkout-success/chec
 import { CheckoutPending } from './features/checkout/pages/checkout-pending/checkout-pending';
 import { CheckoutFailure } from './features/checkout/pages/checkout-failure/checkout-failure';
 import { Perfil } from './features/perfil/pages/perfil/perfil';
+import { adminGuard } from './core/guards/admin.guard';
+import { AdminLayout } from './layouts/admin-layout/admin-layout';
+import { AdminDashboard } from './features/admin/pages/dashboard/admin-dashboard';
+import { AdminProductos } from './features/admin/pages/productos/admin-productos';
 
 export const routes: Routes = [
 
@@ -69,6 +73,25 @@ export const routes: Routes = [
                 component: CheckoutFailure
             },
 
+        ]
+    },
+
+    {
+        path: 'admin',
+        component: AdminLayout,
+        canActivate: [adminGuard],
+
+        children: [
+
+            {
+                path: '',
+                component: AdminDashboard
+            },
+
+            {
+                path: 'productos',
+                component: AdminProductos
+            }
         ]
     }
 

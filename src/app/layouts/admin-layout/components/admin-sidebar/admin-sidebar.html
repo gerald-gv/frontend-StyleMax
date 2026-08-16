@@ -1,0 +1,146 @@
+<aside
+    class="fixed bottom-0 left-0 top-16 z-50 flex w-64 flex-col border-r border-gray-800 bg-gray-950 transition-transform duration-200 lg:translate-x-0"
+    [class.-translate-x-full]="!menuAbierto()" [class.translate-x-0]="menuAbierto()">
+
+
+    <!-- Navigation -->
+
+    <nav class="flex-1 overflow-y-auto px-3 py-6">
+
+
+        <!-- Section -->
+
+        <p class="mb-3 px-3 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-600">
+            Administración
+        </p>
+
+
+        <!-- Dashboard -->
+
+        <a routerLink="/admin" routerLinkActive="bg-red-600 text-white shadow-lg shadow-red-950/30"
+            [routerLinkActiveOptions]="{ exact: true }" (click)="cerrarMenu.emit()"
+            class="mb-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-400 transition hover:bg-gray-900 hover:text-white">
+
+            <i class="fa-solid fa-chart-line w-5 text-center text-sm"></i>
+
+            <span>
+                Dashboard
+            </span>
+
+        </a>
+
+
+        <!-- Productos -->
+
+        <a routerLink="/admin/productos" routerLinkActive="bg-red-600 text-white shadow-lg shadow-red-950/30"
+            (click)="cerrarMenu.emit()"
+            class="mb-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-400 transition hover:bg-gray-900 hover:text-white">
+
+            <i class="fa-solid fa-shirt w-5 text-center text-sm"></i>
+
+            <span>
+                Productos
+            </span>
+
+        </a>
+
+
+        <!-- Categorías -->
+
+        <a routerLink="/admin/categorias" routerLinkActive="bg-red-600 text-white shadow-lg shadow-red-950/30"
+            (click)="cerrarMenu.emit()"
+            class="mb-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-400 transition hover:bg-gray-900 hover:text-white">
+
+            <i class="fa-solid fa-layer-group w-5 text-center text-sm"></i>
+
+            <span>
+                Categorías
+            </span>
+
+        </a>
+
+
+        <!-- Marcas -->
+
+        <a routerLink="/admin/marcas" routerLinkActive="bg-red-600 text-white shadow-lg shadow-red-950/30"
+            (click)="cerrarMenu.emit()"
+            class="mb-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-400 transition hover:bg-gray-900 hover:text-white">
+
+            <i class="fa-solid fa-tags w-5 text-center text-sm"></i>
+
+            <span>
+                Marcas
+            </span>
+
+        </a>
+
+
+        <!-- Usuarios -->
+
+        <a routerLink="/admin/usuarios" routerLinkActive="bg-red-600 text-white shadow-lg shadow-red-950/30"
+            (click)="cerrarMenu.emit()"
+            class="mb-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-400 transition hover:bg-gray-900 hover:text-white">
+
+            <i class="fa-solid fa-users w-5 text-center text-sm"></i>
+
+            <span>
+                Usuarios
+            </span>
+
+        </a>
+
+
+        <!-- Pedidos -->
+
+        <a routerLink="/admin/pedidos" routerLinkActive="bg-red-600 text-white shadow-lg shadow-red-950/30"
+            (click)="cerrarMenu.emit()"
+            class="mb-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-400 transition hover:bg-gray-900 hover:text-white">
+
+            <i class="fa-solid fa-box w-5 text-center text-sm"></i>
+
+            <span>
+                Pedidos
+            </span>
+
+        </a>
+
+
+    </nav>
+
+
+    <!-- Bottom -->
+
+    <div class="border-t border-gray-800 p-3">
+
+
+        <!-- Back to store -->
+
+        <a routerLink="/" (click)="cerrarMenu.emit()"
+            class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-400 transition hover:bg-gray-900 hover:text-white">
+
+            <i class="fa-solid fa-arrow-left w-5 text-center text-sm"></i>
+
+            <span>
+                Volver a la tienda
+            </span>
+
+        </a>
+
+
+        <!-- Logout -->
+
+        <button type="button" (click)="solicitarCierreSesion.emit()"
+            class="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-500 transition hover:bg-red-950/40 hover:text-red-400 sm:hidden">
+
+            <i class="fa-solid fa-right-from-bracket w-5 text-center text-sm"></i>
+
+            <span>
+                Cerrar sesión
+            </span>
+
+        </button>
+
+
+    </div>
+
+</aside>

@@ -38,6 +38,11 @@ export class Login {
         this.authService.guardarSesion(response);
 
         this.loading.set(false);
+        
+        if (response.rol === 'ADMINISTRADOR') {
+          this.router.navigate(['/admin']);
+          return;
+        }
 
         this.router.navigate(['/']);
       },

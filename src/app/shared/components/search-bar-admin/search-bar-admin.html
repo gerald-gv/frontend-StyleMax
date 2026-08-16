@@ -1,0 +1,27 @@
+<div class="flex flex-col gap-4 border-b border-gray-200 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+
+    <!-- Search -->
+
+    <div class="relative w-full sm:max-w-sm">
+        <i class="fa-solid fa-magnifying-glass pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-400"></i>
+        <input type="search" [value]="busqueda()" (input)="actualizarBusqueda($event)" [placeholder]="placeholder()" class="w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-9 pr-4 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-red-600 focus:ring-2 focus:ring-red-600/10">
+    </div>
+
+
+    <!-- Result count -->
+
+    <p class="text-sm text-gray-500">
+
+        @if (busqueda()) {
+            <span>
+                {{ cantidadFiltrada() }} resultado(s)
+            </span>
+        } @else {
+            <span>
+                {{ cantidadTotal() }}
+            </span>
+        }
+
+    </p>
+
+</div>

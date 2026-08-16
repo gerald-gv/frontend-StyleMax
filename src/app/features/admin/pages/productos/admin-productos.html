@@ -1,0 +1,435 @@
+<section class="space-y-6">
+
+    <!-- HEADER -->
+
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+
+        <div>
+
+            <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-red-600">
+                <i class="fa-solid fa-shirt"></i>
+                <span>
+                    Catálogo
+                </span>
+            </div>
+
+            <h1 class="mt-2 text-2xl font-bold tracking-tight text-gray-950 sm:text-3xl">
+                Productos
+            </h1>
+
+            <p class="mt-1 text-sm text-gray-500">
+                Gestiona los productos disponibles en la tienda.
+            </p>
+
+        </div>
+
+
+        <button type="button" (click)="nuevoProducto()" class="inline-flex items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600/20">
+            <i class="fa-solid fa-plus text-xs"></i>
+            Nuevo producto
+        </button>
+
+    </div>
+
+
+    <!-- LOADING -->
+
+    @if (cargando()) {
+        <div class="rounded-xl border border-gray-200 bg-white p-12 text-center shadow-sm">
+            <i class="fa-solid fa-spinner fa-spin text-xl text-red-600"></i>
+            <p class="mt-3 text-sm text-gray-500">
+                Cargando productos...
+            </p>
+        </div>
+    }
+
+
+    <!-- ERROR -->
+
+    @else if (error()) {
+
+        <div class="rounded-xl border border-red-200 bg-red-50 p-5">
+
+            <div class="flex items-start gap-3">
+
+                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-red-100">
+                    <i class="fa-solid fa-circle-exclamation text-red-600"></i>
+                </div>
+
+                <div>
+
+                    <p class="text-sm font-semibold text-red-800">
+                        Ocurrió un problema
+                    </p>
+
+                    <p class="mt-1 text-sm text-red-700">
+                        {{ error() }}
+                    </p>
+
+                    <button type="button" (click)="cargarProductos()" class="mt-3 text-sm font-semibold text-red-700 underline underline-offset-2 hover:text-red-900">
+                        Intentar nuevamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    }
+
+
+    <!-- CONTENT -->
+
+    @else {
+
+
+        <!-- STATS -->
+
+        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+
+            <!-- Total -->
+            <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+                        <p class="text-sm text-gray-500">
+                            Total productos
+                        </p>
+                        <p class="mt-2 text-2xl font-bold text-gray-950">
+                            {{ totalProductos() }}
+                        </p>
+                    </div>
+
+                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100">
+                        <i class="fa-solid fa-boxes-stacked text-gray-600"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Active -->
+
+            <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+                        <p class="text-sm text-gray-500">
+                            Productos activos
+                        </p>
+
+                        <p class="mt-2 text-2xl font-bold text-gray-950">
+                            {{ productosActivos() }}
+                        </p>
+                    </div>
+
+                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-green-50">
+                        <i class="fa-solid fa-check text-green-600"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Without stock -->
+
+            <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+
+                        <p class="text-sm text-gray-500">
+                            Sin stock
+                        </p>
+
+                        <p class="mt-2 text-2xl font-bold text-gray-950">
+                            {{ productosSinStock() }}
+                        </p>
+
+                    </div>
+
+                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-50">
+
+                        <i class="fa-solid fa-triangle-exclamation text-red-600"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- featured products -->
+
+            <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+
+                        <p class="text-sm text-gray-500">
+                            Destacados
+                        </p>
+
+                        <p class="mt-2 text-2xl font-bold text-gray-950">
+                            {{ productosDestacados() }}
+                        </p>
+
+                    </div>
+
+                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50">
+
+                        <i class="fa-solid fa-star text-amber-500"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TABLE CARD -->
+
+        <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+
+
+            <search-bar-admin 
+                placeholder="Buscar Productos"
+                [busqueda]="busqueda()"
+                [cantidadTotal]="productos().length"
+                [cantidadFiltrada]="productosFiltrados().length"
+                (busquedaChange)="busqueda.set($event)"
+            ></search-bar-admin>
+
+
+            <!-- TABLE -->
+
+            <div class="overflow-x-auto">
+
+                <table class="w-full min-w-250 text-left text-sm">
+
+                    <thead class="border-b border-gray-200 bg-gray-50">
+
+                        <tr>
+                            <th class="px-5 py-3.5 font-semibold text-gray-600">
+                                Producto
+                            </th>
+                            <th class="px-5 py-3.5 font-semibold text-gray-600">
+                                Marca
+                            </th>
+                            <th class="px-5 py-3.5 font-semibold text-gray-600">
+                                Categoría
+                            </th>
+                            <th class="px-5 py-3.5 font-semibold text-gray-600">
+                                Precio
+                            </th>
+                            <th class="px-5 py-3.5 font-semibold text-gray-600">
+                                Stock
+                            </th>
+                            <th class="px-5 py-3.5 font-semibold text-gray-600">
+                                Estado
+                            </th>
+                            <th class="px-5 py-3.5 text-right font-semibold text-gray-600">
+                                Acciones
+                            </th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody class="divide-y divide-gray-100">
+
+                        @for (
+                        producto of productosFiltrados();
+                        track producto.id
+                        ) {
+                            
+
+                            <tr class="transition hover:bg-gray-50">
+
+
+                                <!-- PRODUCT -->
+
+                                <td class="px-5 py-4">
+
+                                    <div class="flex items-center gap-3">
+                                        <img [src]="producto.imagen" [alt]="producto.nombre" class="h-12 w-12 shrink-0 rounded-lg object-cover">
+
+                                        <div class="min-w-0">
+
+                                            <div class="flex items-center gap-2">
+
+                                                <p class="max-w-65 truncate font-semibold text-gray-900">
+                                                    {{ producto.nombre }}
+                                                </p>
+
+                                                @if (producto.destacado) {
+                                                    <i class="fa-solid fa-star shrink-0 text-xs text-amber-500" title="Producto destacado"></i>
+                                                }
+
+                                            </div>
+
+                                            <p class="mt-0.5 max-w-65 truncate text-xs text-gray-400">
+                                                {{ producto.slug }}
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- BRAND -->
+
+                                <td class="whitespace-nowrap px-5 py-4 text-gray-600">
+                                    {{ producto.marca }}
+                                </td>
+
+                                <!-- CATEGORY -->
+
+                                <td class="whitespace-nowrap px-5 py-4 text-gray-600">
+                                    {{ producto.categoria }}
+                                </td>
+
+                                <!-- PRICE -->
+
+                                <td class="whitespace-nowrap px-5 py-4 font-semibold text-gray-900">
+                                    S/ {{ producto.precio | number:'1.2-2' }}
+                                </td>
+
+                                <!-- STOCK -->
+
+                                <td class="whitespace-nowrap px-5 py-4">
+
+                                    @if (producto.stock === 0) {
+
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-700">
+                                            <span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>
+                                            Sin stock
+                                        </span>
+
+                                    }
+
+                                    @else if (producto.stock <= 5) {
+                                            <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">
+
+                                            <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+
+                                            {{ producto.stock }} unidades
+
+                                            </span>
+
+                                        }
+
+                                        @else {
+                                            <span class="text-gray-600">
+                                                {{ producto.stock }} unidades
+                                            </span>
+                                        }
+
+                                </td>
+
+
+                                <!-- STATE -->
+
+                                <td class="whitespace-nowrap px-5 py-4">
+
+                                    @if (producto.activo) {
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-xs font-semibold text-green-700">
+                                            <span class="h-1.5 w-1.5 rounded-full bg-green-500"></span>
+                                            Activo
+                                        </span>
+                                    }
+
+                                    @else {
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-600">
+                                            <span class="h-1.5 w-1.5 rounded-full bg-gray-400"></span>
+                                            Inactivo
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- ACTIONS -->
+
+                                <td class="px-5 py-4">
+
+                                    <div class="flex items-center justify-end gap-1">
+
+                                        <!-- Edit -->
+
+                                        <button type="button" title="Editar producto" (click)="editarProducto(producto.id)" class="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-100 hover:text-gray-900">
+                                            <i class="fa-solid fa-pen text-xs"></i>
+                                        </button>
+
+
+                                        <!-- Desactivate -->
+
+                                        @if (producto.activo) {
+                                            <button type="button" title="Desactivar producto" (click)="eliminarProducto(producto)"
+                                                class="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-red-50 hover:text-red-600">
+
+                                                <i class="fa-solid fa-trash text-xs"></i>
+
+                                            </button>
+                                        }
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        }
+
+
+                        <!-- NO RESULTS -->
+
+                        @if (productosFiltrados().length === 0) {
+
+                            <tr>
+
+                                <td colspan="7" class="px-6 py-16 text-center">
+
+                                    <div class="flex flex-col items-center">
+
+                                        <div class="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
+                                            <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
+                                        </div>
+
+                                        <p class="mt-3 font-semibold text-gray-900">
+                                            No se encontraron productos
+                                        </p>
+
+                                        <p class="mt-1 text-sm text-gray-500">
+                                            Intenta con otro término de búsqueda.
+                                        </p>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    }
+
+</section>
