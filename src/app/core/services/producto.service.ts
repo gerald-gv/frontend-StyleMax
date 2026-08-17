@@ -1,9 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Producto } from '../models/producto.model';
 import { environment } from '../../../environments/environment';
 import { ProductoDetalle } from '../models/producto-detalle.model';
+import { CatalogoResponse } from '../models/catalogo-response.model';
 
 
 @Injectable({
@@ -15,9 +15,9 @@ export class ProductoService {
 
   private readonly apiUrl = `${environment.apiUrl}/productos`;
 
-  listarCatalogo(categoriaId?: number, marcaId?: number, q?: string): Observable<Producto[]> {
+  listarCatalogo(pagina:number, categoriaId?: number, marcaId?: number, q?: string): Observable<CatalogoResponse> {
 
-    let params = new HttpParams();
+    let params = new HttpParams().set('page', pagina);
 
     if (categoriaId !== undefined) {
       params = params.set('categoriaId', categoriaId);
@@ -31,7 +31,7 @@ export class ProductoService {
       params = params.set('q', q);
     }
 
-    return this.http.get<Producto[]>(this.apiUrl, { params });
+    return this.http.get<CatalogoResponse>(this.apiUrl, { params });
   }
 
   obtenerPorSlug(slug: string): Observable<ProductoDetalle> {

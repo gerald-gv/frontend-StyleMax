@@ -9,7 +9,7 @@
                 Tu estilo
             </span>
 
-            <h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl" >
+            <h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl">
                 Catálogo
             </h1>
 
@@ -31,8 +31,90 @@
 <!-- Products -->
 <div class="mx-auto my-6 md:my-8 lg:my-12 grid max-w-6xl grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-6">
 
-    @for (producto of productos(); track producto.id) {
+    @if (cargando() && productosVisibles().length === 0) {
+        
+        @for (skeleton of [1,2,3,4,5,6,7,8]; track skeleton) {
+            <product-card-skeleton />
+        }
 
-        <producto-card  [producto]="producto" />
+    }
+
+    @else {
+        @for (producto of productosVisibles(); track producto.id) {
+            <producto-card [producto]="producto" />
+        }
     }
 </div>
+
+<div #sentinel class="h-1 w-full"></div>
+
+@if (todosLosProductosVisibles && totalPaginas() > 1) {
+
+    <nav class="mx-auto mb-12 flex max-w-6xl flex-col items-center justify-between gap-4 border-t border-gray-200 pt-6 sm:flex-row" aria-label="Paginación">
+
+        <div class="text-sm text-gray-500">
+
+            <span class="font-medium text-gray-950">
+                {{ resultadoInicial }}
+            </span>
+
+            <span class="mx-1 text-gray-400">
+                –
+            </span>
+
+            <span class="font-medium text-gray-950">
+                {{ resultadoFinal }}
+            </span>
+
+            <span class="ml-1">
+                de {{ totalElementos() }} resultados
+            </span>
+
+        </div>
+
+        <div class="flex items-center gap-1">
+
+            <button
+                type="button"
+                (click)="paginaAnterior()"
+                [disabled]="paginaActual() === 0"
+                aria-label="Página anterior"
+                class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:border-gray-300 hover:bg-gray-50 hover:text-gray-950 disabled:cursor-not-allowed disabled:opacity-30"
+            >
+                <i class="fa-solid fa-chevron-left text-[10px]"></i>
+            </button>
+
+            @for (pagina of [].constructor(totalPaginas()); track $index) {
+
+                <button
+                    type="button"
+                    (click)="irAPagina($index)"
+                    class="hidden h-9 min-w-9 items-center justify-center rounded-lg px-2.5 text-sm font-medium transition sm:flex"
+                    [class.bg-red-600]="paginaActual() === $index"
+                    [class.text-white]="paginaActual() === $index"
+                    [class.border]="paginaActual() !== $index"
+                    [class.border-gray-200]="paginaActual() !== $index"
+                    [class.text-gray-600]="paginaActual() !== $index"
+                    [class.hover:border-gray-300]="paginaActual() !== $index"
+                    [class.hover:bg-gray-50]="paginaActual() !== $index"
+                >
+                    {{ $index + 1 }}
+                </button>
+
+            }
+
+            <button
+                type="button"
+                (click)="paginaSiguiente()"
+                [disabled]="paginaActual() === totalPaginas() - 1"
+                aria-label="Página siguiente"
+                class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:border-gray-300 hover:bg-gray-50 hover:text-gray-950 disabled:cursor-not-allowed disabled:opacity-30"
+            >
+                <i class="fa-solid fa-chevron-right text-[10px]"></i>
+            </button>
+
+        </div>
+
+    </nav>
+
+}
