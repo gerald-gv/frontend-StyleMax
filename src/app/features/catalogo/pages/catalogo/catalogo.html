@@ -32,7 +32,15 @@
 <div class="mx-auto my-6 md:my-8 lg:my-12 grid max-w-6xl grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-6">
 
     @if (cargando() && productosVisibles().length === 0) {
-        
+
+        @for (skeleton of [1,2,3,4,5,6,7,8]; track skeleton) {
+            <product-card-skeleton />
+        }
+
+    }
+
+    @else if (cambiandoPagina()) {
+
         @for (skeleton of [1,2,3,4,5,6,7,8]; track skeleton) {
             <product-card-skeleton />
         }
@@ -40,9 +48,11 @@
     }
 
     @else {
+
         @for (producto of productosVisibles(); track producto.id) {
             <producto-card [producto]="producto" />
         }
+
     }
 </div>
 

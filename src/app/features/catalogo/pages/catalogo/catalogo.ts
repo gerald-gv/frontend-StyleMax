@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, inject, OnDestroy, OnInit, signal, Signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, inject, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { ProductoService } from '../../../../core/services/producto.service';
 import { Producto } from '../../../../core/models/producto.model';
 import { ProductoCard } from '../../../../shared/components/producto-card/producto-card';
@@ -22,6 +22,7 @@ export class Catalogo implements OnInit, AfterViewInit, OnDestroy {
   readonly totalElementos = signal(0);
 
   readonly cargando = signal(false);
+  readonly cambiandoPagina = signal(false);
   readonly error = signal<string | null>(null);
 
   private readonly PRODUCTOS_INICIALES = 8;
@@ -71,13 +72,20 @@ export class Catalogo implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
-  cargarPagina(pagina: number): void {
+  cargarPagina(pagina: number, esCambioPagina = false): void {
 
-    this.cargando.set(true);
+    if (esCambioPagina) {
+      this.cambiandoPagina.set(true);
+    } else {
+      this.cargando.set(true);
+    }
+
     this.error.set(null);
 
     this.productoService.listarCatalogo(pagina).subscribe({
+
       next: (response) => {
+
         this.productos.set(response.contenido);
 
         this.productosVisibles.set(
@@ -90,6 +98,7 @@ export class Catalogo implements OnInit, AfterViewInit, OnDestroy {
         this.totalElementos.set(response.totalElementos);
 
         this.cargando.set(false);
+        this.cambiandoPagina.set(false);
 
         requestAnimationFrame(() => {
           this.verificarContenidoVisible();
@@ -97,8 +106,13 @@ export class Catalogo implements OnInit, AfterViewInit, OnDestroy {
       },
 
       error: () => {
-        this.error.set('No se pudieron cargar los productos.');
+
+        this.error.set(
+          'No se pudieron cargar los productos.'
+        );
+
         this.cargando.set(false);
+        this.cambiandoPagina.set(false);
       }
 
     });
@@ -166,10 +180,15 @@ export class Catalogo implements OnInit, AfterViewInit, OnDestroy {
       pagina < 0 ||
       pagina >= this.totalPaginas() ||
       pagina === this.paginaActual() ||
-      this.cargando()
+      this.cargando() ||
+      this.cambiandoPagina()
     ) {
       return;
     }
+
+    this.cambiandoPagina.set(true);
+
+    this.productosVisibles.set([]);
 
     window.scrollTo({
       top: 0,
@@ -178,7 +197,7 @@ export class Catalogo implements OnInit, AfterViewInit, OnDestroy {
 
     await this.esperarScrollArriba();
 
-    this.cargarPagina(pagina);
+    this.cargarPagina(pagina, true);
   }
 
 
