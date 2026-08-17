@@ -15,7 +15,7 @@ export class ProductoService {
 
   private readonly apiUrl = `${environment.apiUrl}/productos`;
 
-  listarCatalogo(pagina:number, categoriaId?: number, marcaId?: number, q?: string): Observable<CatalogoResponse> {
+  listarCatalogo(pagina:number, categoriaId?: number, marcaId?: number, fit?:string, q?: string): Observable<CatalogoResponse> {
 
     let params = new HttpParams().set('page', pagina);
 
@@ -25,6 +25,10 @@ export class ProductoService {
 
     if (marcaId !== undefined) {
       params = params.set('marcaId', marcaId);
+    }
+
+    if (fit) {
+      params = params.set('fit', fit);
     }
 
     if (q) {

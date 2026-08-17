@@ -20,40 +20,77 @@
 
         </div>
 
-        <div class="text-xs font-medium uppercase tracking-[0.12em] text-gray-400">
-            {{ productos().length }} • productos
-        </div>
-
     </div>
 
 </div>
 
-<!-- Products -->
-<div class="mx-auto my-6 md:my-8 lg:my-12 grid max-w-6xl grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-6">
+<!-- Catalog content -->
 
-    @if (cargando() && productosVisibles().length === 0) {
+<div class="mx-auto my-6 max-w-6xl md:my-8 lg:my-12">
 
-        @for (skeleton of [1,2,3,4,5,6,7,8]; track skeleton) {
-            <product-card-skeleton />
-        }
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-[300px_minmax(0,1fr)] xl:grid-cols-[320px_minmax(0,1fr)] xl:gap-8">
 
-    }
+        <!-- FILTERS -->
 
-    @else if (cambiandoPagina()) {
+        <div class="block">
 
-        @for (skeleton of [1,2,3,4,5,6,7,8]; track skeleton) {
-            <product-card-skeleton />
-        }
+            <catalogo-filtros [categorias]="categorias()" [marcas]="marcas()"
+                [categoriaSeleccionada]="categoriaSeleccionada()" [marcaSeleccionada]="marcaSeleccionada()"
+                [fitSeleccionado]="fitSeleccionado()" (categoriaChange)="seleccionarCategoria($event)"
+                (marcaChange)="seleccionarMarca($event)" (fitChange)="seleccionarFit($event)" />
 
-    }
+        </div>
 
-    @else {
 
-        @for (producto of productosVisibles(); track producto.id) {
-            <producto-card [producto]="producto" />
-        }
+        <!-- PRODUCTS -->
 
-    }
+        <div class="min-w-0">
+
+            <!-- RESULT COUNT -->
+
+            <div class="mb-5 flex items-center justify-between">
+
+                <p class="text-xs font-medium uppercase tracking-[0.12em] text-gray-400">
+                    Resultados ( {{ totalElementos() }} )
+
+                </p>
+
+            </div>
+
+
+            <!-- PRODUCT GRID -->
+
+            <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-3">
+
+                @if (cargando() && productosVisibles().length === 0) {
+                    @for (skeleton of [1,2,3,4,5,6,7,8]; track skeleton) {
+                        <product-card-skeleton />
+                    }
+                }
+
+                @else if (cambiandoPagina()) {
+
+                    @for (skeleton of [1,2,3,4,5,6,7,8]; track skeleton) {
+
+                        <product-card-skeleton />
+
+                    }
+
+                }
+
+                @else {
+                    @for ( producto of productosVisibles(); track producto.id) {
+                        <producto-card [producto]="producto" />
+                    }
+
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
 <div #sentinel class="h-1 w-full"></div>

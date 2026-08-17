@@ -3,18 +3,32 @@ import { ProductoService } from '../../../../core/services/producto.service';
 import { Producto } from '../../../../core/models/producto.model';
 import { ProductoCard } from '../../../../shared/components/producto-card/producto-card';
 import { ProductCardSkeleton } from "../../../../shared/components/product-card-skeleton/product-card-skeleton";
+import { Categoria } from '../../../../core/models/categoria.model';
+import { Marca } from '../../../../core/models/marca.model';
+import { CategoriaService } from '../../../../core/services/categoria.service';
+import { MarcaService } from '../../../../core/services/marca.service';
+import { CatalogoFiltros } from '../../components/catalogo-filtros/catalogo-filtros';
 
 @Component({
   selector: 'catalogo',
-  imports: [ProductoCard, ProductCardSkeleton],
+  imports: [CatalogoFiltros, ProductoCard, ProductCardSkeleton],
   templateUrl: './catalogo.html',
 })
 export class Catalogo implements OnInit, AfterViewInit, OnDestroy {
 
   private readonly productoService = inject(ProductoService);
+  private readonly categoriaService = inject(CategoriaService);
+  private readonly marcaService = inject(MarcaService);
 
   readonly productos = signal<Producto[]>([]);
   readonly productosVisibles = signal<Producto[]>([]);
+
+  readonly categorias = signal<Categoria[]>([]);
+  readonly marcas = signal<Marca[]>([]);
+
+  readonly categoriaSeleccionada = signal<number | undefined>(undefined);
+  readonly marcaSeleccionada = signal<number | undefined>(undefined);
+  readonly fitSeleccionado = signal<string | undefined>(undefined);
 
   readonly paginaActual = signal(0);
   readonly tamanioPagina = signal(0);
@@ -35,6 +49,7 @@ export class Catalogo implements OnInit, AfterViewInit, OnDestroy {
   private verificacionEnCurso = false;
 
   ngOnInit(): void {
+    this.cargarFiltros();
     this.cargarPagina(0);
   }
 
@@ -82,7 +97,7 @@ export class Catalogo implements OnInit, AfterViewInit, OnDestroy {
 
     this.error.set(null);
 
-    this.productoService.listarCatalogo(pagina).subscribe({
+    this.productoService.listarCatalogo(pagina, this.categoriaSeleccionada(), this.marcaSeleccionada(), this.fitSeleccionado()).subscribe({
 
       next: (response) => {
 
@@ -232,6 +247,62 @@ export class Catalogo implements OnInit, AfterViewInit, OnDestroy {
       (this.paginaActual() + 1) * this.tamanioPagina(),
       this.totalElementos()
     );
+  }
+
+  private aplicarFiltros(): void {
+
+    this.verificacionEnCurso = false;
+
+    this.productos.set([]);
+    this.productosVisibles.set([]);
+
+    this.error.set(null);
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+
+    this.cargarPagina(0);
+  }
+
+
+
+
+  private cargarFiltros(): void {
+
+    this.categoriaService.listar().subscribe({
+      next: categorias => {
+        this.categorias.set(categorias);
+      }
+    });
+
+
+    this.marcaService.listar().subscribe({
+      next: marcas => {
+        this.marcas.set(marcas);
+      }
+    });
+
+  }
+
+  seleccionarCategoria(id: number | undefined): void {
+    this.categoriaSeleccionada.set(id);
+    this.aplicarFiltros();
+
+  }
+
+
+  seleccionarMarca(id: number | undefined): void {
+    this.marcaSeleccionada.set(id);
+    this.aplicarFiltros();
+
+  }
+
+
+  seleccionarFit(fit: string | undefined): void {
+    this.fitSeleccionado.set(fit);
+    this.aplicarFiltros();
   }
 
 

@@ -1,0 +1,270 @@
+<aside class="w-full lg:sticky lg:top-24 lg:self-start">
+
+    <div class="flex min-h-0 flex-col overflow-hidden rounded-xl border border-gray-200/80 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] sm:rounded-2xl lg:min-h-160 lg:shadow-[0_12px_40px_rgba(15,23,42,0.07)]">
+
+        <!-- HEADER -->
+        <header class="border-b border-gray-100 px-4 py-4 sm:px-5 sm:py-5">
+
+            <!-- Accent -->
+            <div class="flex items-center justify-between gap-3">
+
+                <div>
+                    <div class="flex items-center gap-2">
+
+                        <h2 class="text-[15px] font-bold tracking-tight text-gray-950">
+                            Filtros
+                        </h2>
+
+                        @if (tieneFiltros()) {
+
+                            <span class="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white">
+                                {{ cantidadFiltrosActivos() }}
+                            </span>
+
+                        }
+
+                    </div>
+
+                    <p class="mt-1 text-[11px] leading-4 text-gray-400">
+                        Refina tu búsqueda
+                    </p>
+
+                </div>
+
+                @if (tieneFiltros()) {
+
+                    <button type="button" (click)="limpiarFiltros()" class="rounded-lg px-2 py-1.5 text-[11px] font-semibold text-gray-400 transition hover:bg-red-50  hover:text-red-600">
+                        Limpiar
+                    </button>
+
+                }
+
+            </div>
+
+        </header>
+
+
+        <!-- CATEGORY-->
+
+        <section class="border-b border-gray-100">
+
+            <button type="button" (click)="toggleCategoria()" class="group flex w-full items-center justify-between px-4 py-3.5 text-left transition hover:bg-gray-50 sm:px-5 sm:py-4" [attr.aria-expanded]="categoriaExpandida()">
+
+                <div class="flex items-center gap-3">
+
+                    <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-gray-300 transition" [class.bg-red-600]=" categoriaSeleccionada() !== undefined " [class.scale-125]="categoriaSeleccionada() !== undefined"></span>
+
+                    <h3 class="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-500 transition group-hover:text-gray-900" [class.text-gray-950]="categoriaSeleccionada() !== undefined ">
+                        Categoría
+                    </h3>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-down text-[9px]  text-gray-400 transition-all duration-200  group-hover:text-gray-900" [class.rotate-180]="categoriaExpandida()"></i>
+
+            </button>
+
+
+            @if (categoriaExpandida()) {
+
+                <div class="px-4 pb-4">
+
+                    <div class="space-y-1" [class.max-h-52]=" categoriasMostrarTodas() && categorias().length > maxOpcionesIniciales " [class.overflow-y-auto]=" categoriasMostrarTodas() && categorias().length > maxOpcionesIniciales " >
+
+                        @for ( categoria of categoriasVisibles(); track categoria.id) {
+
+                            <button type="button" (click)="seleccionarCategoria(categoria.id)" class="group flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition-all duration-150" 
+                            [class.bg-red-50]=" categoriaSeleccionada() === categoria.id " [class.text-red-600]=" categoriaSeleccionada() === categoria.id  " [class.text-gray-600]=" categoriaSeleccionada() !== categoria.id" 
+                            [class.hover:bg-gray-50]=" categoriaSeleccionada() !== categoria.id " [class.hover:bg-red-50]=" categoriaSeleccionada() === categoria.id "
+                            >
+
+                                <span [class.font-semibold]=" categoriaSeleccionada() === categoria.id " [class.text-gray-950]=" categoriaSeleccionada() === categoria.id ">
+                                    {{ categoria.nombre }}
+                                </span>
+
+                                <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-all duration-150" [class.border-red-600]="  categoriaSeleccionada() === categoria.id " 
+                                [class.bg-red-600]=" categoriaSeleccionada() === categoria.id " [class.border-gray-300]=" categoriaSeleccionada() !== categoria.id ">
+
+                                    @if (
+                                        categoriaSeleccionada() === categoria.id
+                                    ) {
+
+                                        <i class="fa-solid fa-check text-[9px] text-white"></i>
+
+                                    }
+
+                                </span>
+
+                            </button>
+
+                        }
+
+                    </div>
+
+
+                    @if (categorias().length > maxOpcionesIniciales) {
+
+                        <button type="button" (click)="toggleTodasCategorias()" class="group mt-2 flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-[11px] font-semibold text-red-600 transition hover:bg-red-50">
+
+                            <span>
+                                {{ categoriasMostrarTodas() ? 'Ver menos' : 'Ver todas las categorías'}}
+                            </span>
+
+                            <i class="fa-solid text-[9px] transition-transform duration-200"[class.fa-chevron-down]="!categoriasMostrarTodas()"[class.fa-chevron-up]="categoriasMostrarTodas()"></i>
+
+                        </button>
+
+                    }
+
+                </div>
+
+            }
+
+        </section>
+
+
+        <!-- BRAND -->
+
+        <section class="border-b border-gray-100">
+
+            <button type="button" (click)="toggleMarca()" class="group flex w-full items-center justify-between px-4 py-3.5 text-left transition hover:bg-gray-50 sm:px-5 sm:py-4" [attr.aria-expanded]="marcaExpandida()">
+
+                <div class="flex items-center gap-3">
+
+                    <span class="h-1.5 w-1.5 shrink-0 rounded-full  bg-gray-300 transition" [class.bg-red-600]="  marcaSeleccionada() !== undefined  " [class.scale-125]=" marcaSeleccionada() !== undefined " ></span>
+
+                    <h3 class="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-500 transition group-hover:text-gray-900" [class.text-gray-950]=" marcaSeleccionada() !== undefined " >
+                        Marca
+                    </h3>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-down text-[9px]  text-gray-400 transition-all duration-200  group-hover:text-gray-900" [class.rotate-180]="marcaExpandida()" ></i>
+
+            </button>
+
+
+            @if (marcaExpandida()) {
+
+                <div class="px-4 pb-4">
+
+                    <div class="space-y-1" [class.max-h-52]=" marcasMostrarTodas() && marcas().length > maxOpcionesIniciales " [class.overflow-y-auto]=" marcasMostrarTodas() && marcas().length > maxOpcionesIniciales ">
+
+                        @for ( marca of marcasVisibles(); track marca.id ) {
+
+                            <button type="button" (click)="seleccionarMarca(marca.id)" class="group flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition-all duration-150" [class.bg-red-50]=" marcaSeleccionada() === marca.id" 
+                                [class.text-red-600]=" marcaSeleccionada() === marca.id  " [class.text-gray-600]=" marcaSeleccionada() !== marca.id " [class.hover:bg-gray-50]="  marcaSeleccionada() !== marca.id" 
+                                [class.hover:bg-red-50]=" marcaSeleccionada() === marca.id  " >
+
+                                <span [class.font-semibold]=" marcaSeleccionada() === marca.id"[class.text-gray-950]=" marcaSeleccionada() === marca.id ">
+                                    {{ marca.nombre }}
+                                </span>
+
+                                <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border" [class.border-red-600]=" marcaSeleccionada() === marca.id  " 
+                                [class.bg-red-600]=" marcaSeleccionada() === marca.id " [class.border-gray-300]=" marcaSeleccionada() !== marca.id  " >
+
+                                    @if (
+                                        marcaSeleccionada() === marca.id
+                                    ) {
+
+                                        <i class="fa-solid fa-check text-[9px] text-white"></i>
+
+                                    }
+
+                                </span>
+
+                            </button>
+
+                        }
+
+                    </div>
+
+
+                    @if (marcas().length > maxOpcionesIniciales) {
+
+                        <button type="button" (click)="toggleTodasMarcas()" class="group mt-2 flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-[11px] font-semibold  text-red-600 transition  hover:bg-red-50" >
+
+                            <span>
+                                {{ marcasMostrarTodas() ? 'Ver menos' : 'Ver todas las marcas' }}
+                            </span>
+
+                            <i class="fa-solid text-[9px]" [class.fa-chevron-down]=" !marcasMostrarTodas() " [class.fa-chevron-up]=" marcasMostrarTodas()" ></i>
+
+                        </button>
+
+                    }
+
+                </div>
+
+            }
+
+        </section>
+
+
+        <!-- FIT -->
+
+        <section>
+
+            <button type="button" (click)="toggleFit()" class="group flex w-full items-center justify-between px-4 py-3.5 text-left transition hover:bg-gray-50 sm:px-5 sm:py-4" [attr.aria-expanded]="fitExpandido()" >
+
+                <div class="flex items-center gap-3">
+
+                    <span class="h-1.5 w-1.5 shrink-0 rounded-full  bg-gray-300 transition" [class.bg-red-600]=" fitSeleccionado() !== undefined " [class.scale-125]=" fitSeleccionado() !== undefined "  ></span>
+
+                    <h3 class="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-500 transition group-hover:text-gray-900" [class.text-gray-950]=" fitSeleccionado() !== undefined " >
+                        Fit
+                    </h3>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-down text-[9px]  text-gray-400 transition-all duration-200  group-hover:text-gray-900" [class.rotate-180]="fitExpandido()" ></i>
+
+            </button>
+
+
+            @if (fitExpandido()) {
+
+                <div class="px-4 pb-4">
+
+                    <div class="space-y-1">
+
+                        @for (fit of fits; track fit.value) {
+
+                            <button type="button" (click)="seleccionarFit(fit.value)" class="group flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition-all duration-150" 
+                            [class.bg-red-50]=" fitSeleccionado() === fit.value " [class.text-red-600]=" fitSeleccionado() === fit.value  " 
+                            [class.text-gray-600]=" fitSeleccionado() !== fit.value " [class.hover:bg-gray-50]=" fitSeleccionado() !== fit.value " 
+                            [class.hover:bg-red-50]=" fitSeleccionado() === fit.value  ">
+
+                                <span [class.font-semibold]=" fitSeleccionado() === fit.value " [class.text-gray-950]=" fitSeleccionado() === fit.value " >
+                                    {{ fit.label }}
+                                </span>
+
+                                <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border" [class.border-red-600]=" fitSeleccionado() === fit.value "
+                                    [class.bg-red-600]=" fitSeleccionado() === fit.value "
+                                    [class.border-gray-300]=" fitSeleccionado() !== fit.value ">
+
+                                    @if (
+                                        fitSeleccionado() === fit.value
+                                    ) {
+                                        <i class="fa-solid fa-check text-[9px] text-white"></i>
+                                    }
+
+                                </span>
+
+                            </button>
+
+                        }
+
+                    </div>
+
+                </div>
+
+            }
+
+        </section>
+
+        <div class="hidden flex-1 lg:block"></div>
+
+    </div>
+
+</aside>
