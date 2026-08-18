@@ -8,6 +8,7 @@
 
             <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-red-600">
                 <i class="fa-solid fa-shirt"></i>
+
                 <span>
                     Catálogo
                 </span>
@@ -24,7 +25,11 @@
         </div>
 
 
-        <button type="button" (click)="nuevoProducto()" class="inline-flex items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600/20">
+        <button
+            type="button"
+            (click)="nuevoProducto()"
+            class="inline-flex items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600/20"
+        >
             <i class="fa-solid fa-plus text-xs"></i>
             Nuevo producto
         </button>
@@ -35,12 +40,17 @@
     <!-- LOADING -->
 
     @if (cargando()) {
+
         <div class="rounded-xl border border-gray-200 bg-white p-12 text-center shadow-sm">
+
             <i class="fa-solid fa-spinner fa-spin text-xl text-red-600"></i>
+
             <p class="mt-3 text-sm text-gray-500">
                 Cargando productos...
             </p>
+
         </div>
+
     }
 
 
@@ -66,7 +76,11 @@
                         {{ error() }}
                     </p>
 
-                    <button type="button" (click)="cargarProductos()" class="mt-3 text-sm font-semibold text-red-700 underline underline-offset-2 hover:text-red-900">
+                    <button
+                        type="button"
+                        (click)="cargarProductos()"
+                        class="mt-3 text-sm font-semibold text-red-700 underline underline-offset-2 hover:text-red-900"
+                    >
                         Intentar nuevamente
                     </button>
 
@@ -83,23 +97,26 @@
 
     @else {
 
-
         <!-- STATS -->
 
         <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
 
-            <!-- Total -->
+            <!-- TOTAL -->
+
             <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
 
                 <div class="flex items-center justify-between">
 
                     <div>
+
                         <p class="text-sm text-gray-500">
                             Total productos
                         </p>
+
                         <p class="mt-2 text-2xl font-bold text-gray-950">
                             {{ totalProductos() }}
                         </p>
+
                     </div>
 
                     <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100">
@@ -111,13 +128,14 @@
             </div>
 
 
-            <!-- Active -->
+            <!-- ACTIVE -->
 
             <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
 
                 <div class="flex items-center justify-between">
 
                     <div>
+
                         <p class="text-sm text-gray-500">
                             Productos activos
                         </p>
@@ -125,6 +143,7 @@
                         <p class="mt-2 text-2xl font-bold text-gray-950">
                             {{ productosActivos() }}
                         </p>
+
                     </div>
 
                     <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-green-50">
@@ -136,7 +155,7 @@
             </div>
 
 
-            <!-- Without stock -->
+            <!-- WITHOUT STOCK -->
 
             <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
 
@@ -155,9 +174,7 @@
                     </div>
 
                     <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-50">
-
                         <i class="fa-solid fa-triangle-exclamation text-red-600"></i>
-
                     </div>
 
                 </div>
@@ -165,7 +182,7 @@
             </div>
 
 
-            <!-- featured products -->
+            <!-- FEATURED -->
 
             <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
 
@@ -184,9 +201,7 @@
                     </div>
 
                     <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50">
-
                         <i class="fa-solid fa-star text-amber-500"></i>
-
                     </div>
 
                 </div>
@@ -201,13 +216,16 @@
         <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
 
 
-            <search-bar-admin 
-                placeholder="Buscar Productos"
+            <!-- SEARCH -->
+
+            <search-bar-admin
+                placeholder="Buscar productos"
                 [busqueda]="busqueda()"
-                [cantidadTotal]="productos().length"
-                [cantidadFiltrada]="productosFiltrados().length"
-                (busquedaChange)="busqueda.set($event)"
-            ></search-bar-admin>
+                [cantidadTotal]="totalElementos()"
+                [cantidadFiltrada]="totalElementos()"
+                (busquedaChange)="actualizarBusqueda($event)"
+            >
+            </search-bar-admin>
 
 
             <!-- TABLE -->
@@ -219,40 +237,48 @@
                     <thead class="border-b border-gray-200 bg-gray-50">
 
                         <tr>
+
                             <th class="px-5 py-3.5 font-semibold text-gray-600">
                                 Producto
                             </th>
+
                             <th class="px-5 py-3.5 font-semibold text-gray-600">
                                 Marca
                             </th>
+
                             <th class="px-5 py-3.5 font-semibold text-gray-600">
                                 Categoría
                             </th>
+
                             <th class="px-5 py-3.5 font-semibold text-gray-600">
                                 Precio
                             </th>
+
                             <th class="px-5 py-3.5 font-semibold text-gray-600">
                                 Stock
                             </th>
+
                             <th class="px-5 py-3.5 font-semibold text-gray-600">
                                 Estado
                             </th>
+
                             <th class="px-5 py-3.5 text-right font-semibold text-gray-600">
                                 Acciones
                             </th>
+
                         </tr>
 
                     </thead>
 
+
                     <tbody class="divide-y divide-gray-100">
 
                         @for (
-                        producto of productosFiltrados();
-                        track producto.id
+                            producto of productos();
+                            track producto.id
                         ) {
-                            
 
-                            <tr class="transition hover:bg-gray-50">
+                            <tr class="cursor-pointer select-none transition hover:bg-gray-50" (click)="editarProducto(producto)">
 
 
                                 <!-- PRODUCT -->
@@ -260,7 +286,12 @@
                                 <td class="px-5 py-4">
 
                                     <div class="flex items-center gap-3">
-                                        <img [src]="producto.imagen" [alt]="producto.nombre" class="h-12 w-12 shrink-0 rounded-lg object-cover">
+
+                                        <img
+                                            [src]="producto.imagen"
+                                            [alt]="producto.nombre"
+                                            class="h-12 w-12 shrink-0 rounded-lg object-cover"
+                                        >
 
                                         <div class="min-w-0">
 
@@ -271,7 +302,12 @@
                                                 </p>
 
                                                 @if (producto.destacado) {
-                                                    <i class="fa-solid fa-star shrink-0 text-xs text-amber-500" title="Producto destacado"></i>
+
+                                                    <i
+                                                        class="fa-solid fa-star shrink-0 text-xs text-amber-500"
+                                                        title="Producto destacado"
+                                                    ></i>
+
                                                 }
 
                                             </div>
@@ -293,17 +329,20 @@
                                     {{ producto.marca }}
                                 </td>
 
+
                                 <!-- CATEGORY -->
 
                                 <td class="whitespace-nowrap px-5 py-4 text-gray-600">
                                     {{ producto.categoria }}
                                 </td>
 
+
                                 <!-- PRICE -->
 
                                 <td class="whitespace-nowrap px-5 py-4 font-semibold text-gray-900">
                                     S/ {{ producto.precio | number:'1.2-2' }}
                                 </td>
+
 
                                 <!-- STOCK -->
 
@@ -312,28 +351,34 @@
                                     @if (producto.stock === 0) {
 
                                         <span class="inline-flex items-center gap-1.5 rounded-full bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-700">
+
                                             <span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>
+
                                             Sin stock
+
                                         </span>
 
                                     }
 
                                     @else if (producto.stock <= 5) {
-                                            <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">
+
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">
 
                                             <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
 
                                             {{ producto.stock }} unidades
 
-                                            </span>
+                                        </span>
 
-                                        }
+                                    }
 
-                                        @else {
-                                            <span class="text-gray-600">
-                                                {{ producto.stock }} unidades
-                                            </span>
-                                        }
+                                    @else {
+
+                                        <span class="text-gray-600">
+                                            {{ producto.stock }} unidades
+                                        </span>
+
+                                    }
 
                                 </td>
 
@@ -343,17 +388,27 @@
                                 <td class="whitespace-nowrap px-5 py-4">
 
                                     @if (producto.activo) {
+
                                         <span class="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-xs font-semibold text-green-700">
+
                                             <span class="h-1.5 w-1.5 rounded-full bg-green-500"></span>
+
                                             Activo
+
                                         </span>
+
                                     }
 
                                     @else {
+
                                         <span class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-600">
+
                                             <span class="h-1.5 w-1.5 rounded-full bg-gray-400"></span>
+
                                             Inactivo
+
                                         </span>
+
                                     }
 
                                 </td>
@@ -364,23 +419,23 @@
                                 <td class="px-5 py-4">
 
                                     <div class="flex items-center justify-end gap-1">
-
                                         <!-- Edit -->
-
-                                        <button type="button" title="Editar producto" (click)="editarProducto(producto.id)" class="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-100 hover:text-gray-900">
+                                        <button type="button" title="Editar producto" (click)="$event.stopPropagation(); editarProducto(producto)" class="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-100 hover:text-gray-900">
                                             <i class="fa-solid fa-pen text-xs"></i>
                                         </button>
 
 
-                                        <!-- Desactivate -->
-
                                         @if (producto.activo) {
-                                            <button type="button" title="Desactivar producto" (click)="eliminarProducto(producto)"
-                                                class="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-red-50 hover:text-red-600">
 
+                                            <button
+                                                type="button"
+                                                title="Desactivar producto"
+                                                (click)="$event.stopPropagation(); eliminarProducto(producto)"
+                                                class="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-red-50 hover:text-red-600"
+                                            >
                                                 <i class="fa-solid fa-trash text-xs"></i>
-
                                             </button>
+
                                         }
 
                                     </div>
@@ -394,7 +449,7 @@
 
                         <!-- NO RESULTS -->
 
-                        @if (productosFiltrados().length === 0) {
+                        @if (productos().length === 0) {
 
                             <tr>
 
@@ -411,7 +466,12 @@
                                         </p>
 
                                         <p class="mt-1 text-sm text-gray-500">
-                                            Intenta con otro término de búsqueda.
+                                            @if (busqueda()) {
+                                                Intenta con otro término de búsqueda.
+                                            }
+                                            @else {
+                                                No hay productos registrados.
+                                            }
                                         </p>
 
                                     </div>
@@ -426,6 +486,102 @@
 
                 </table>
 
+
+                <!-- PAGINATION -->
+
+                @if (totalPaginas() > 1) {
+
+                    <nav
+                        class="flex flex-col gap-4 border-t border-gray-200 px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
+                        aria-label="Paginación"
+                    >
+
+                        <p class="text-sm text-gray-500">
+
+                            Mostrando
+
+                            <span class="font-medium text-gray-900">
+                                {{ paginaActual() * tamanioPagina() + 1 }}
+                            </span>
+
+                            –
+
+                            <span class="font-medium text-gray-900">
+                                {{ ultimoElemento() }}
+                            </span>
+
+                            de
+
+                            <span class="font-medium text-gray-900">
+                                {{ totalElementos() }}
+                            </span>
+
+                            productos
+
+                        </p>
+
+
+                        <div class="flex items-center gap-1">
+
+                            <!-- PREVIOUS -->
+
+                            <button
+                                type="button"
+                                (click)="paginaAnterior()"
+                                [disabled]="paginaActual() === 0 || cambiandoPagina()"
+                                class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-gray-950 disabled:cursor-not-allowed disabled:opacity-30"
+                                aria-label="Página anterior"
+                            >
+                                <i class="fa-solid fa-chevron-left text-xs"></i>
+                            </button>
+
+
+                            <!-- PAGES -->
+
+                            @for (
+                                pagina of [].constructor(totalPaginas());
+                                track $index
+                            ) {
+
+                                <button
+                                    type="button"
+                                    (click)="irAPagina($index)"
+                                    [disabled]="cambiandoPagina()"
+                                    class="hidden h-9 min-w-9 items-center justify-center rounded-lg px-2.5 text-sm font-medium transition sm:flex"
+                                    [class.bg-red-600]="paginaActual() === $index"
+                                    [class.text-white]="paginaActual() === $index"
+                                    [class.border]="paginaActual() !== $index"
+                                    [class.border-gray-200]="paginaActual() !== $index"
+                                    [class.text-gray-600]="paginaActual() !== $index"
+                                    [class.hover:bg-gray-50]="paginaActual() !== $index"
+                                >
+                                    {{ $index + 1 }}
+                                </button>
+
+                            }
+
+
+                            <!-- NEXT -->
+
+                            <button
+                                type="button"
+                                (click)="paginaSiguiente()"
+                                [disabled]="
+                                    paginaActual() === totalPaginas() - 1 ||
+                                    cambiandoPagina()
+                                "
+                                class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-gray-950 disabled:cursor-not-allowed disabled:opacity-30"
+                                aria-label="Página siguiente"
+                            >
+                                <i class="fa-solid fa-chevron-right text-xs"></i>
+                            </button>
+
+                        </div>
+
+                    </nav>
+
+                }
+
             </div>
 
         </div>
@@ -433,3 +589,16 @@
     }
 
 </section>
+
+@if (modalProductoAbierto()) {
+
+    <modal-producto
+        [producto]="productoSeleccionado()"
+        [marcas]="marcas()"
+        [categorias]="categorias()"
+        [fits]="fits"
+        (cerrar)="cerrarModalProducto()"
+        (guardado)="productoGuardado($event)"
+    />
+
+}

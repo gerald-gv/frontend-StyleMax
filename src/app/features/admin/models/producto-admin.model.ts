@@ -18,6 +18,20 @@ export interface ProductoAdmin {
     categoria: string;
 }
 
+export interface FormularioProducto {
+    nombre: string;
+    descripcion: string;
+    precio: number | null;
+    stock: number;
+    color: string;
+    fit: string;
+    imagen: string;
+    destacado: boolean;
+    activo: boolean;
+    marcaId: number | null;
+    categoriaId: number | null;
+}
+
 export interface CrearProductoRequest {
     nombre: string;
     descripcion: string;
@@ -28,6 +42,7 @@ export interface CrearProductoRequest {
     imagen: string;
     destacado: boolean;
     marcaId: number;
+    activo: boolean;
     categoriaId: number;
 }
 
@@ -40,6 +55,7 @@ export interface ActualizarProductoRequest {
     fit: string;
     imagen: string;
     destacado: boolean;
+    activo: boolean;
     marcaId: number;
     categoriaId: number;
 }
