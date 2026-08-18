@@ -15,6 +15,7 @@ import { adminGuard } from './core/guards/admin.guard';
 import { AdminLayout } from './layouts/admin-layout/admin-layout';
 import { AdminDashboard } from './features/admin/pages/dashboard/admin-dashboard';
 import { AdminProductos } from './features/admin/pages/productos/admin-productos';
+import { AdminCategorias } from './features/admin/pages/categorias/admin-categoria';
 
 export const routes: Routes = [
 
@@ -91,6 +92,11 @@ export const routes: Routes = [
             {
                 path: 'productos',
                 component: AdminProductos
+            },
+            
+            {
+                path: 'categorias',
+                component: AdminCategorias
             }
         ]
     }
