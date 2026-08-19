@@ -17,6 +17,7 @@ import { AdminDashboard } from './features/admin/pages/dashboard/admin-dashboard
 import { AdminProductos } from './features/admin/pages/productos/admin-productos';
 import { AdminCategorias } from './features/admin/pages/categorias/admin-categoria';
 import { AdminMarcas } from './features/admin/pages/marcas/admin-marcas/admin-marcas';
+import { AdminUsuarios } from './features/admin/pages/usuarios/admin-usuarios/admin-usuarios';
 
 export const routes: Routes = [
 
@@ -103,6 +104,11 @@ export const routes: Routes = [
             {
                 path: 'marcas',
                 component: AdminMarcas
+            },
+
+            {
+                path: 'usuarios',
+                component: AdminUsuarios
             }
         ]
     }

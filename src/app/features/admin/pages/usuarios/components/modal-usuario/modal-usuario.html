@@ -1,0 +1,816 @@
+<!-- OVERLAY -->
+
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-950/50 p-4 backdrop-blur-sm" role="dialog"
+    aria-modal="true" aria-labelledby="modal-usuario-titulo" (click)="cerrarModal()">
+
+    <!-- MODAL -->
+
+    <div class="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+        (click)="$event.stopPropagation()">
+
+        <!-- HEADER -->
+
+        <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+
+            <div>
+
+                <!-- ETIQUETA -->
+
+                <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-red-600">
+
+                    <i class="fa-solid fa-users"></i>
+
+                    <span>
+                        Administración
+                    </span>
+
+                </div>
+
+
+                <!-- TITLE -->
+
+                <h2 id="modal-usuario-titulo" class="mt-1 text-xl font-bold tracking-tight text-gray-950">
+                    {{ titulo() }}
+                </h2>
+
+
+                <!-- DESCRIPTION -->
+
+                <p class="mt-0.5 text-sm text-gray-500">
+                    Actualiza la información y configuración de la cuenta del usuario.
+                </p>
+
+            </div>
+
+
+            <!-- CLOSE -->
+
+            <button type="button" title="Cerrar" (click)="cerrarModal()"
+                [disabled]="guardando() || restableciendoPassword()"
+                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-400 transition hover:bg-gray-100 hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-50">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <!-- CONTENT -->
+
+        <div class="overflow-y-auto px-6 py-6">
+
+            <!-- ERROR GENERAL -->
+
+            @if (error()) {
+
+            <div class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
+
+                <div class="flex items-start gap-3">
+
+                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100">
+
+                        <i class="fa-solid fa-circle-exclamation text-sm text-red-600"></i>
+
+                    </div>
+
+
+                    <div class="min-w-0">
+
+                        <p class="text-sm font-semibold text-red-800">
+                            No se pudo actualizar el usuario
+                        </p>
+
+                        <p class="mt-1 text-sm text-red-700">
+                            {{ error() }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            }
+
+
+            <div class="space-y-8">
+
+                <!-- DATOS PERSONALES -->
+
+                <section>
+
+                    <div class="mb-4">
+
+                        <h3 class="text-sm font-bold text-gray-800">
+                            Datos personales
+                        </h3>
+
+                        <p class="mt-1 text-xs leading-5 text-gray-500">
+                            Información básica asociada a la cuenta del usuario.
+                        </p>
+
+                    </div>
+
+
+                    <div class="grid gap-5 sm:grid-cols-2">
+
+                        <!-- NOMBRE -->
+
+                        <div>
+
+                            <label for="usuario-nombre" class="mb-1.5 block text-sm font-semibold text-gray-700">
+                                Nombre
+                            </label>
+
+
+                            <input id="usuario-nombre" type="text" maxlength="100" [value]="formulario().nombre"
+                                (input)="actualizarCampo(
+                                    'nombre',
+                                    $any($event.target).value
+                                )" placeholder="Nombre" autocomplete="given-name"
+                                [disabled]="guardando() || restableciendoPassword()"
+                                class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-red-600 focus:ring-2 focus:ring-red-600/10 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500">
+
+                            <div class="mt-1.5 flex items-center justify-between">
+
+                                <p class="text-xs text-gray-400">
+                                    Máximo 100 caracteres.
+                                </p>
+
+                                <p class="text-xs text-gray-400">
+                                    {{ formulario().nombre.length }}/100
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- APELLIDO -->
+
+                        <div>
+
+                            <label for="usuario-apellido" class="mb-1.5 block text-sm font-semibold text-gray-700">
+                                Apellido
+                            </label>
+
+
+                            <input id="usuario-apellido" type="text" maxlength="100" [value]="formulario().apellido"
+                                (input)="actualizarCampo(
+                                    'apellido',
+                                    $any($event.target).value
+                                )" placeholder="Apellido" autocomplete="family-name"
+                                [disabled]="guardando() || restableciendoPassword()"
+                                class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-red-600 focus:ring-2 focus:ring-red-600/10 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500">
+
+                            <div class="mt-1.5 flex items-center justify-between">
+
+                                <p class="text-xs text-gray-400">
+                                    Máximo 100 caracteres.
+                                </p>
+
+                                <p class="text-xs text-gray-400">
+                                    {{ formulario().apellido.length }}/100
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CORREO -->
+
+                        <div>
+
+                            <label for="usuario-correo" class="mb-1.5 block text-sm font-semibold text-gray-700">
+                                Correo electrónico
+                            </label>
+
+
+                            <input id="usuario-correo" type="email" maxlength="150" [value]="formulario().correo"
+                                (input)="actualizarCampo(
+                                    'correo',
+                                    $any($event.target).value
+                                )" placeholder="correo@ejemplo.com" autocomplete="email"
+                                [disabled]="guardando() || restableciendoPassword()"
+                                class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-red-600 focus:ring-2 focus:ring-red-600/10 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500">
+
+                            <div class="mt-1.5 flex items-center justify-between">
+
+                                <p class="text-xs text-gray-400">
+                                    Máximo 150 caracteres.
+                                </p>
+
+                                <p class="text-xs text-gray-400">
+                                    {{ formulario().correo.length }}/150
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- TELEFONO -->
+
+                        <div>
+
+                            <label for="usuario-telefono" class="mb-1.5 block text-sm font-semibold text-gray-700">
+                                Teléfono
+                            </label>
+
+
+                            <input id="usuario-telefono" type="text" maxlength="20" [value]="formulario().telefono"
+                                (input)="actualizarCampo(
+                                    'telefono',
+                                    $any($event.target).value
+                                )" placeholder="Teléfono" autocomplete="tel"
+                                [disabled]="guardando() || restableciendoPassword()"
+                                class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-red-600 focus:ring-2 focus:ring-red-600/10 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500">
+
+                            <div class="mt-1.5 flex items-center justify-between">
+
+                                <p class="text-xs text-gray-400">
+                                    Máximo 20 caracteres.
+                                </p>
+
+                                <p class="text-xs text-gray-400">
+                                    {{ formulario().telefono.length }}/20
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- INFORMACION DE CUENTA -->
+
+                <section class="border-t border-gray-100 pt-6">
+
+                    <div class="mb-4">
+
+                        <h3 class="text-sm font-bold text-gray-800">
+                            Información de cuenta
+                        </h3>
+
+                        <p class="mt-1 text-xs leading-5 text-gray-500">
+                            Información administrada por el sistema.
+                        </p>
+
+                    </div>
+
+
+                    <div class="grid gap-4 sm:grid-cols-2">
+
+                        <!-- ROLE -->
+
+                        <div class="rounded-xl border border-gray-200 bg-gray-50 p-4">
+
+                            <div class="flex items-start gap-3">
+
+                                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white">
+
+                                    <i class="fa-solid fa-user-shield text-gray-500"></i>
+
+                                </div>
+
+
+                                <div class="min-w-0">
+
+                                    <p class="text-xs font-medium text-gray-400">
+                                        Rol
+                                    </p>
+
+                                    <div class="mt-2">
+
+                                        @if (esAdministrador()) {
+
+                                        <span
+                                            class="inline-flex items-center gap-1.5 rounded-full bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-700">
+
+                                            <span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>
+
+                                            Administrador
+
+                                        </span>
+
+                                        } @else {
+
+                                        <span
+                                            class="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">
+
+                                            <span class="h-1.5 w-1.5 rounded-full bg-blue-500"></span>
+
+                                            Cliente
+
+                                        </span>
+
+                                        }
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- STATUS -->
+
+                        <div class="rounded-xl border border-gray-200 bg-gray-50 p-4">
+
+                            <div class="flex items-start gap-3">
+
+                                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                                    [class.bg-green-50]="usuario()?.activo" [class.bg-gray-100]="!usuario()?.activo">
+
+                                    @if (usuario()?.activo) {
+
+                                    <i class="fa-solid fa-circle-check text-green-600"></i>
+
+                                    } @else {
+
+                                    <i class="fa-solid fa-circle-minus text-gray-500"></i>
+
+                                    }
+
+                                </div>
+
+
+                                <div class="min-w-0 flex-1">
+
+                                    <p class="text-xs font-medium text-gray-400">
+                                        Estado
+                                    </p>
+
+
+                                    <div class="mt-2">
+
+                                        @if (usuario()?.activo) {
+
+                                        <span
+                                            class="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-xs font-semibold text-green-700">
+
+                                            <span class="h-1.5 w-1.5 rounded-full bg-green-500"></span>
+
+                                            Activo
+
+                                        </span>
+
+                                        } @else {
+
+                                        <span
+                                            class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-600">
+
+                                            <span class="h-1.5 w-1.5 rounded-full bg-gray-400"></span>
+
+                                            Inactivo
+
+                                        </span>
+
+                                        }
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- ACTIVAR -->
+
+                            @if (!usuario()?.activo && esCliente()) {
+
+                            <div class="mt-4 border-t border-gray-200 pt-4">
+
+                                <p class="text-xs leading-5 text-gray-500">
+                                    Este usuario está desactivado y no puede iniciar sesión.
+                                </p>
+
+
+                                <button type="button" (click)="activarUsuario()" [disabled]="
+                    activando() ||
+                    guardando() ||
+                    restableciendoPassword()
+                " class="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-green-200 bg-white px-4 py-2.5 text-sm font-semibold text-green-700 transition hover:bg-green-50 disabled:cursor-not-allowed disabled:opacity-50">
+
+                                    @if (activando()) {
+
+                                    <i class="fa-solid fa-spinner fa-spin text-xs"></i>
+
+                                    <span>
+                                        Activando...
+                                    </span>
+
+                                    } @else {
+
+                                    <i class="fa-solid fa-user-check text-xs"></i>
+
+                                    <span>
+                                        Activar usuario
+                                    </span>
+
+                                    }
+
+                                </button>
+
+                            </div>
+
+                            }
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- DIRECCION -->
+
+                <section class="border-t border-gray-100 pt-6">
+
+                    <div class="mb-4">
+
+                        <h3 class="text-sm font-bold text-gray-800">
+                            Dirección
+                        </h3>
+
+                        <p class="mt-1 text-xs leading-5 text-gray-500">
+                            Dirección registrada por el usuario. Solo lectura.
+                        </p>
+
+                    </div>
+
+
+                    @if (usuario()?.direccion) {
+
+                    <div class="rounded-xl border border-gray-200 bg-gray-50 p-5">
+
+                        <div class="grid gap-5 sm:grid-cols-2">
+
+                            <!-- DEPARTAMENTO -->
+
+                            <div>
+
+                                <p class="text-xs font-medium text-gray-400">
+                                    Departamento
+                                </p>
+
+                                <p class="mt-1 text-sm font-semibold text-gray-700">
+                                    {{ usuario()?.direccion?.departamento }}
+                                </p>
+
+                            </div>
+
+
+                            <!-- PROVINCIA -->
+
+                            <div>
+
+                                <p class="text-xs font-medium text-gray-400">
+                                    Provincia
+                                </p>
+
+                                <p class="mt-1 text-sm font-semibold text-gray-700">
+                                    {{ usuario()?.direccion?.provincia }}
+                                </p>
+
+                            </div>
+
+
+                            <!-- DISTRITO -->
+
+                            <div>
+
+                                <p class="text-xs font-medium text-gray-400">
+                                    Distrito
+                                </p>
+
+                                <p class="mt-1 text-sm font-semibold text-gray-700">
+                                    {{ usuario()?.direccion?.distrito }}
+                                </p>
+
+                            </div>
+
+
+                            <!-- DIRECCION -->
+
+                            <div>
+
+                                <p class="text-xs font-medium text-gray-400">
+                                    Dirección
+                                </p>
+
+                                <p class="mt-1 text-sm font-semibold text-gray-700">
+                                    {{ usuario()?.direccion?.direccionCompleta }}
+                                </p>
+
+                            </div>
+
+
+                            <!-- REFERENCIA -->
+
+                            @if (usuario()?.direccion?.referencia) {
+
+                            <div class="sm:col-span-2">
+
+                                <p class="text-xs font-medium text-gray-400">
+                                    Referencia
+                                </p>
+
+                                <p class="mt-1 text-sm font-semibold text-gray-700">
+                                    {{ usuario()?.direccion?.referencia }}
+                                </p>
+
+                            </div>
+
+                            }
+
+                        </div>
+
+                    </div>
+
+                    } @else {
+
+                    <div class="rounded-lg border border-dashed border-gray-300 bg-gray-50 px-5 py-6">
+
+                        <div class="flex items-start gap-3">
+
+                            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white">
+
+                                <i class="fa-solid fa-location-dot text-gray-400"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <p class="text-sm font-semibold text-gray-600">
+                                    Sin dirección registrada
+                                </p>
+
+                                <p class="mt-1 text-xs leading-5 text-gray-400">
+                                    El usuario todavía no tiene una dirección
+                                    registrada en su cuenta.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    }
+
+                </section>
+
+
+                <!-- SEGURIDAD -->
+
+                <section class="border-t border-gray-100 pt-6">
+
+                    <div class="mb-4">
+
+                        <h3 class="text-sm font-bold text-gray-800">
+                            Seguridad
+                        </h3>
+
+                        <p class="mt-1 text-xs leading-5 text-gray-500">
+                            Administración de la contraseña de la cuenta.
+                        </p>
+
+                    </div>
+
+
+                    @if (esCliente()) {
+
+                    <div class="rounded-xl border border-gray-200 bg-gray-50 p-5">
+
+                        <div class="grid gap-5 sm:grid-cols-2">
+
+                            <!-- NUEVA PASSWORD -->
+
+                            <div>
+
+                                <label for="usuario-password" class="mb-1.5 block text-sm font-semibold text-gray-700">
+                                    Nueva contraseña
+                                </label>
+
+
+                                <input id="usuario-password" type="password" [value]="nuevaPassword()" (input)="actualizarPassword(
+                                            $any($event.target).value
+                                        )" autocomplete="new-password" placeholder="Mínimo 8 caracteres"
+                                    [disabled]="guardando() || restableciendoPassword()"
+                                    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-red-600 focus:ring-2 focus:ring-red-600/10 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500">
+
+                            </div>
+
+
+                            <!-- CONFIRMAR PASSWORD -->
+
+                            <div>
+
+                                <label for="usuario-password-confirmacion"
+                                    class="mb-1.5 block text-sm font-semibold text-gray-700">
+                                    Confirmar contraseña
+                                </label>
+
+
+                                <input id="usuario-password-confirmacion" type="password" [value]="confirmarPassword()"
+                                    (input)="actualizarConfirmacionPassword(
+                                            $any($event.target).value
+                                        )" autocomplete="new-password" placeholder="Repite la contraseña"
+                                    [disabled]="guardando() || restableciendoPassword()"
+                                    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-red-600 focus:ring-2 focus:ring-red-600/10 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500">
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- PASSWORD ERROR -->
+
+                        @if (errorPassword()) {
+
+                        <div class="mt-4 rounded-lg border border-red-200 bg-red-50 p-4">
+
+                            <div class="flex items-start gap-3">
+
+                                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100">
+
+                                    <i class="fa-solid fa-circle-exclamation text-sm text-red-600"></i>
+
+                                </div>
+
+
+                                <div>
+
+                                    <p class="text-sm font-semibold text-red-800">
+                                        No se pudo restablecer la contraseña
+                                    </p>
+
+                                    <p class="mt-1 text-sm text-red-700">
+                                        {{ errorPassword() }}
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        }
+
+
+                        <!-- PASSWORD ACTION -->
+
+                        <div class="mt-4 flex justify-end">
+
+                            <button type="button" (click)="restablecerPassword()"
+                                [disabled]="restableciendoPassword() || guardando()"
+                                class="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-white px-4 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50">
+
+                                @if (restableciendoPassword()) {
+
+                                <i class="fa-solid fa-spinner fa-spin text-xs"></i>
+
+                                <span>
+                                    Restableciendo...
+                                </span>
+
+                                } @else {
+
+                                <i class="fa-solid fa-key text-xs"></i>
+
+                                <span>
+                                    Restablecer contraseña
+                                </span>
+
+                                }
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    } @else {
+
+                    <div class="rounded-lg border border-gray-200 bg-white p-4">
+
+                        <div class="flex items-start gap-3">
+
+                            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100">
+
+                                <i class="fa-solid fa-shield-halved text-gray-500"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <p class="text-sm font-semibold text-gray-700">
+                                    Contraseña protegida
+                                </p>
+
+                                <p class="mt-1 text-xs leading-5 text-gray-500">
+                                    La contraseña de un administrador no puede
+                                    ser modificada desde este panel.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    }
+
+                </section>
+
+
+                <!-- INFORMATION -->
+
+                <div class="rounded-lg border border-gray-200 bg-white p-4">
+
+                    <div class="flex items-start gap-3">
+
+                        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100">
+
+                            <i class="fa-solid fa-circle-info text-gray-500"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <p class="text-sm font-semibold text-gray-700">
+                                Información del usuario
+                            </p>
+
+                            <p class="mt-1 text-xs leading-5 text-gray-500">
+
+                                Los datos personales pueden modificarse desde este
+                                panel. El rol, estado y dirección son administrados
+                                por las reglas correspondientes del sistema.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="flex items-center justify-end gap-3 border-t border-gray-200 bg-gray-50 px-6 py-4">
+
+            <!-- CANCEL -->
+
+            <button type="button" (click)="cerrarModal()" [disabled]="guardando() || restableciendoPassword()"
+                class="rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50">
+                Cancelar
+            </button>
+
+
+            <!-- SAVE -->
+
+            <button type="button" (click)="guardar()" [disabled]="guardando() || restableciendoPassword()"
+                class="inline-flex items-center gap-2 rounded-lg bg-red-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60">
+
+                @if (guardando()) {
+
+                <i class="fa-solid fa-spinner fa-spin text-xs"></i>
+
+                <span>
+                    Guardando...
+                </span>
+
+                } @else {
+
+                <i class="fa-solid fa-floppy-disk text-xs"></i>
+
+                <span>
+                    Guardar cambios
+                </span>
+
+                }
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
