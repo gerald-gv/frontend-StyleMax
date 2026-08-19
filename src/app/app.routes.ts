@@ -16,6 +16,7 @@ import { AdminLayout } from './layouts/admin-layout/admin-layout';
 import { AdminDashboard } from './features/admin/pages/dashboard/admin-dashboard';
 import { AdminProductos } from './features/admin/pages/productos/admin-productos';
 import { AdminCategorias } from './features/admin/pages/categorias/admin-categoria';
+import { AdminMarcas } from './features/admin/pages/marcas/admin-marcas/admin-marcas';
 
 export const routes: Routes = [
 
@@ -97,6 +98,11 @@ export const routes: Routes = [
             {
                 path: 'categorias',
                 component: AdminCategorias
+            },
+
+            {
+                path: 'marcas',
+                component: AdminMarcas
             }
         ]
     }

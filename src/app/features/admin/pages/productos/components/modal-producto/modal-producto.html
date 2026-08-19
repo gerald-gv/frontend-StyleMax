@@ -1,12 +1,6 @@
-<div
-    class="fixed inset-0 z-50 flex items-center justify-center bg-gray-950/50 p-4 backdrop-blur-sm"
-    (click)="cerrarModal()"
->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-950/50 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" [attr.aria-labelledby]="'modal-producto-titulo'" (click)="cerrarModal()" >
 
-    <div
-        class="flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
-        (click)="$event.stopPropagation()"
-    >
+    <div class="flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl" (click)="$event.stopPropagation()" >
 
         <!-- HEADER -->
 
@@ -14,26 +8,41 @@
 
             <div>
 
-                <h2 class="text-lg font-bold text-gray-950">
+                <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-red-600">
+                    <i class="fa-solid fa-box"></i>
+                    <span>
+                        Productos
+                    </span>
+                </div>
+
+
+                <!-- TITLE -->
+
+                <h2 id="modal-producto-titulo" class="mt-1 text-xl font-bold tracking-tight text-gray-950" >
                     {{ titulo() }}
                 </h2>
 
+
+                <!-- DESCRIPTION -->
+
                 <p class="mt-0.5 text-sm text-gray-500">
+
                     @if (esEdicion()) {
-                        Modifica la información del producto.
+                        Actualiza la información del producto.
+
                     } @else {
-                        Registra un nuevo producto en el catálogo.
+                        Registra un nuevo producto para la tienda.
                     }
+
                 </p>
 
             </div>
 
-            <button
-                type="button"
-                (click)="cerrarModal()"
-                [disabled]="guardando()"
-                class="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 transition hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50"
-            >
+
+            <!-- CLOSE -->
+
+            <button type="button" title="Cerrar" (click)="cerrarModal()" [disabled]="guardando()"
+                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-400 transition hover:bg-gray-100 hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-50">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
@@ -44,17 +53,28 @@
 
         <div class="overflow-y-auto px-6 py-6">
 
+            <!-- ERROR -->
+
             @if (error()) {
 
                 <div class="mb-5 rounded-lg border border-red-200 bg-red-50 p-4">
 
                     <div class="flex items-start gap-3">
 
-                        <i class="fa-solid fa-circle-exclamation mt-0.5 text-red-600"></i>
+                        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100">
+                            <i class="fa-solid fa-circle-exclamation text-sm text-red-600"></i>
+                        </div>
 
-                        <p class="text-sm text-red-700">
-                            {{ error() }}
-                        </p>
+
+                        <div class="min-w-0">
+                            <p class="text-sm font-semibold text-red-800">
+                                No se pudo guardar el producto
+                            </p>
+
+                            <p class="mt-1 text-sm text-red-700">
+                                {{ error() }}
+                            </p>
+                        </div>
 
                     </div>
 
@@ -66,7 +86,7 @@
             <div class="grid gap-6 lg:grid-cols-[220px_1fr]">
 
 
-                <!-- IMAGE -->
+                <!-- IMAGE / PREVIEW -->
 
                 <div>
 
@@ -74,31 +94,28 @@
                         Vista previa
                     </p>
 
+
                     <div class="aspect-square overflow-hidden rounded-xl border border-gray-200 bg-gray-50">
 
                         @if (formulario().imagen) {
-
-                            <img
-                                [src]="formulario().imagen"
-                                [alt]="formulario().nombre || 'Vista previa'"
-                                class="h-full w-full object-cover"
-                            >
-
+                            <img [src]="formulario().imagen" [alt]="formulario().nombre || 'Vista previa del producto'" class="h-full w-full object-cover" >
                         } @else {
 
                             <div class="flex h-full flex-col items-center justify-center text-gray-400">
-
                                 <i class="fa-solid fa-image text-3xl"></i>
-
                                 <span class="mt-2 text-xs">
                                     Sin imagen
                                 </span>
-
                             </div>
-
                         }
 
                     </div>
+
+
+                    <p class="mt-2 text-xs leading-5 text-gray-400">
+                        La imagen se actualizará automáticamente
+                        cuando ingreses una URL válida.
+                    </p>
 
                 </div>
 
@@ -112,35 +129,47 @@
 
                     <div>
 
-                        <label class="mb-1.5 block text-sm font-semibold text-gray-700">
+                        <label for="nombre-producto" class="mb-1.5 block text-sm font-semibold text-gray-700" >
                             Nombre
                         </label>
 
-                        <input
-                            type="text"
-                            [value]="formulario().nombre"
-                            (input)="actualizarCampo('nombre', $any($event.target).value)"
-                            maxlength="150"
-                            class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10"
-                            placeholder="Nombre del producto"
+
+                        <input id="nombre-producto" type="text" maxlength="150" [value]="formulario().nombre" (input)="actualizarCampo('nombre', $any($event.target).value)"
+                            placeholder="Ej. Polo básico oversize"
+                            autocomplete="off"
+                            [disabled]="guardando()"
+                            class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-red-600 focus:ring-2 focus:ring-red-600/10 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500"
                         >
 
+
+                        <!-- CHARACTER COUNT -->
+
+                        <div class="mt-1.5 flex items-center justify-between">
+
+                            <p class="text-xs text-gray-400">
+                                Máximo 150 caracteres.
+                            </p>
+
+                            <p class="text-xs text-gray-400">
+                                {{ formulario().nombre.length }}/150
+                            </p>
+
+                        </div>
+
                     </div>
+
 
                     <!-- SLUG PREVIEW -->
 
                     <div>
 
-                        <label class="mb-1.5 block text-sm font-semibold text-gray-700">
+                        <label for="slug-producto" class="mb-1.5 block text-sm font-semibold text-gray-700" >
                             Slug
                         </label>
 
-                        <input
-                            type="text"
-                            [value]="slugPreview()"
-                            readonly
-                            class="w-full cursor-not-allowed rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm text-gray-500 outline-none"
-                        >
+
+                        <input id="slug-producto" type="text" [value]="slugPreview()" readonly class="w-full cursor-not-allowed rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm text-gray-500 outline-none" >
+
 
                         <p class="mt-1.5 text-xs text-gray-400">
                             Se generará automáticamente a partir del nombre del producto.
@@ -153,18 +182,34 @@
 
                     <div>
 
-                        <label class="mb-1.5 block text-sm font-semibold text-gray-700">
+                        <label for="descripcion-producto" class="mb-1.5 block text-sm font-semibold text-gray-700" >
                             Descripción
                         </label>
 
+
                         <textarea
+                            id="descripcion-producto"
                             rows="4"
+                            maxlength="2000"
                             [value]="formulario().descripcion"
                             (input)="actualizarCampo('descripcion', $any($event.target).value)"
-                            maxlength="2000"
-                            class="w-full resize-none rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10"
-                            placeholder="Descripción del producto"
+                            [disabled]="guardando()"
+                            placeholder="Describe las características principales del producto."
+                            class="w-full resize-none rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-red-600 focus:ring-2 focus:ring-red-600/10 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500"
                         ></textarea>
+
+
+                        <div class="mt-1.5 flex items-center justify-between">
+
+                            <p class="text-xs text-gray-400">
+                                Máximo 2000 caracteres.
+                            </p>
+
+                            <p class="text-xs text-gray-400">
+                                {{ formulario().descripcion.length }}/2000
+                            </p>
+
+                        </div>
 
                     </div>
 
@@ -173,11 +218,15 @@
 
                     <div class="grid gap-4 sm:grid-cols-2">
 
+
+                        <!-- PRICE -->
+
                         <div>
 
-                            <label class="mb-1.5 block text-sm font-semibold text-gray-700">
+                            <label for="precio-producto" class="mb-1.5 block text-sm font-semibold text-gray-700" >
                                 Precio
                             </label>
+
 
                             <div class="relative">
 
@@ -185,14 +234,17 @@
                                     S/
                                 </span>
 
+
                                 <input
+                                    id="precio-producto"
                                     type="number"
                                     min="0.01"
                                     step="0.01"
                                     [value]="formulario().precio ?? ''"
                                     (input)="actualizarCampo('precio', +$any($event.target).value)"
-                                    class="w-full rounded-lg border border-gray-300 py-2.5 pl-9 pr-3 text-sm text-gray-900 outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10"
+                                    [disabled]="guardando()"
                                     placeholder="0.00"
+                                    class="w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-9 pr-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-red-600 focus:ring-2 focus:ring-red-600/10 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500"
                                 >
 
                             </div>
@@ -200,19 +252,24 @@
                         </div>
 
 
+                        <!-- STOCK -->
+
                         <div>
 
-                            <label class="mb-1.5 block text-sm font-semibold text-gray-700">
+                            <label for="stock-producto" class="mb-1.5 block text-sm font-semibold text-gray-700">
                                 Stock
                             </label>
 
+
                             <input
+                                id="stock-producto"
                                 type="number"
                                 min="0"
                                 [value]="formulario().stock"
                                 (input)="actualizarCampo('stock', +$any($event.target).value)"
-                                class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10"
+                                [disabled]="guardando()"
                                 placeholder="0"
+                                class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-red-600 focus:ring-2 focus:ring-red-600/10 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500"
                             >
 
                         </div>
@@ -224,36 +281,51 @@
 
                     <div class="grid gap-4 sm:grid-cols-2">
 
+
+                        <!-- COLOR -->
+
                         <div>
 
-                            <label class="mb-1.5 block text-sm font-semibold text-gray-700">
+                            <label for="color-producto" class="mb-1.5 block text-sm font-semibold text-gray-700" >
                                 Color
                             </label>
 
+
                             <input
+                                id="color-producto"
                                 type="text"
+                                maxlength="50"
                                 [value]="formulario().color"
                                 (input)="actualizarCampo('color', $any($event.target).value)"
-                                maxlength="50"
-                                class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10"
+                                [disabled]="guardando()"
                                 placeholder="Ej. Negro"
+                                class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-red-600 focus:ring-2 focus:ring-red-600/10 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500"
                             >
 
                         </div>
 
 
+                        <!-- FIT -->
+
                         <div>
 
-                            <label class="mb-1.5 block text-sm font-semibold text-gray-700">
+                            <label for="fit-producto" class="mb-1.5 block text-sm font-semibold text-gray-700" >
                                 Fit
                             </label>
 
-                            <select [ngModel]="formulario().fit" (ngModelChange)="actualizarCampo('fit', $event)"
-                                class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10">
+
+                            <select
+                                id="fit-producto"
+                                [ngModel]="formulario().fit"
+                                (ngModelChange)="actualizarCampo('fit', $event)"
+                                [disabled]="guardando()"
+                                class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500"
+                            >
 
                                 <option [ngValue]="''">
                                     Seleccionar fit
                                 </option>
+
 
                                 @for (opcion of fits(); track opcion) {
 
@@ -274,20 +346,28 @@
 
                     <div class="grid gap-4 sm:grid-cols-2">
 
+
+                        <!-- BRAND -->
+
                         <div>
 
-                            <label class="mb-1.5 block text-sm font-semibold text-gray-700">
+                            <label for="marca-producto" class="mb-1.5 block text-sm font-semibold text-gray-700" >
                                 Marca
                             </label>
 
+
                             <select
+                                id="marca-producto"
                                 [ngModel]="formulario().marcaId"
                                 (ngModelChange)="actualizarCampo('marcaId', $event)"
-                                class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10">
+                                [disabled]="guardando()"
+                                class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500"
+                            >
 
                                 <option [ngValue]="null">
                                     Seleccionar marca
                                 </option>
+
 
                                 @for (marca of marcas(); track marca.id) {
 
@@ -302,18 +382,23 @@
                         </div>
 
 
+                        <!-- CATEGORY -->
+
                         <div>
 
-                            <label class="mb-1.5 block text-sm font-semibold text-gray-700">
+                            <label for="categoria-producto" class="mb-1.5 block text-sm font-semibold text-gray-700" >
                                 Categoría
                             </label>
 
-                            <select [ngModel]="formulario().categoriaId" (ngModelChange)="actualizarCampo('categoriaId', $event)"
-                                class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10">
+
+                            <select id="categoria-producto" [ngModel]="formulario().categoriaId" (ngModelChange)="actualizarCampo('categoriaId', $event)" [disabled]="guardando()"
+                                class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500"
+                            >
 
                                 <option [ngValue]="null">
                                     Seleccionar categoría
                                 </option>
+
 
                                 @for (categoria of categorias(); track categoria.id) {
 
@@ -334,17 +419,21 @@
 
                     <div>
 
-                        <label class="mb-1.5 block text-sm font-semibold text-gray-700">
+                        <label for="imagen-producto" class="mb-1.5 block text-sm font-semibold text-gray-700" >
                             URL de imagen
                         </label>
 
+
                         <input
+                            id="imagen-producto"
                             type="url"
                             [value]="formulario().imagen"
                             (input)="actualizarCampo('imagen', $any($event.target).value)"
-                            class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10"
+                            [disabled]="guardando()"
                             placeholder="https://..."
+                            class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-red-600 focus:ring-2 focus:ring-red-600/10 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500"
                         >
+
 
                         <p class="mt-1.5 text-xs text-gray-400">
                             La imagen se actualizará automáticamente en la vista previa.
@@ -364,11 +453,9 @@
                             <input
                                 type="checkbox"
                                 [checked]="formulario().destacado"
-                                (change)="actualizarCampo(
-                                    'destacado',
-                                    $any($event.target).checked
-                                )"
-                                class="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-600"
+                                (change)="actualizarCampo( 'destacado', $any($event.target).checked)"
+                                [disabled]="guardando()"
+                                class="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-600 disabled:cursor-not-allowed disabled:opacity-50"
                             >
 
                             <div>
@@ -393,11 +480,9 @@
                             <input
                                 type="checkbox"
                                 [checked]="formulario().activo"
-                                (change)="actualizarCampo(
-                                    'activo',
-                                    $any($event.target).checked
-                                )"
-                                class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-600"
+                                (change)="actualizarCampo('activo',$any($event.target).checked)"
+                                [disabled]="guardando()"
+                                class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-600 disabled:cursor-not-allowed disabled:opacity-50"
                             >
 
                             <div>
@@ -415,7 +500,6 @@
                         </label>
 
                     </div>
-
                 </div>
 
             </div>
@@ -423,39 +507,31 @@
         </div>
 
 
-
         <!-- FOOTER -->
 
         <div class="flex items-center justify-end gap-3 border-t border-gray-200 bg-gray-50 px-6 py-4">
 
-            <button
-                type="button"
-                (click)="cerrarModal()"
-                [disabled]="guardando()"
-                class="rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 disabled:opacity-50"
-            >
+            <!-- CANCEL -->
+
+            <button type="button" (click)="cerrarModal()" [disabled]="guardando()" class="rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50" >
                 Cancelar
             </button>
 
-            <button
-                type="button"
-                (click)="guardar()"
-                [disabled]="guardando()"
-                class="inline-flex items-center gap-2 rounded-lg bg-red-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
-            >
+
+            <!-- SAVE -->
+
+            <button type="button" (click)="guardar()" [disabled]="guardando()" class="inline-flex items-center gap-2 rounded-lg bg-red-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60" >
 
                 @if (guardando()) {
-
                     <i class="fa-solid fa-spinner fa-spin text-xs"></i>
-
-                    Guardando...
-
+                    <span>
+                        Guardando...
+                    </span>
                 } @else {
-
                     <i class="fa-solid fa-floppy-disk text-xs"></i>
-
-                    {{ esEdicion() ? 'Guardar cambios' : 'Crear producto' }}
-
+                    <span>
+                        {{ esEdicion() ? 'Guardar cambios' : 'Crear producto' }}
+                    </span>
                 }
 
             </button>
