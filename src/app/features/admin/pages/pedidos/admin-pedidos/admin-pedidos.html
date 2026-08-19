@@ -1,0 +1,755 @@
+<div class="space-y-6">
+
+    <!-- HEADER -->
+
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+
+        <div>
+
+            <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-red-600">
+                <i class="fa-solid fa-box"></i>
+                <span>
+                    Administración
+                </span>
+            </div>
+
+            <h1 class="mt-1 text-2xl font-bold tracking-tight text-gray-950">
+                Pedidos
+            </h1>
+
+            <p class="mt-1 text-sm text-gray-500">
+                Gestiona y consulta los pedidos realizados en la tienda.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ERROR -->
+
+    @if (error()) {
+
+    <div class="rounded-xl border border-red-200 bg-red-50 p-4">
+
+        <div class="flex items-start gap-3">
+
+            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-red-100">
+
+                <i class="fa-solid fa-circle-exclamation text-red-600"></i>
+
+            </div>
+
+            <div class="min-w-0">
+
+                <p class="text-sm font-semibold text-red-800">
+                    Ocurrió un problema
+                </p>
+
+                <p class="mt-1 text-sm text-red-700">
+                    {{ error() }}
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    }
+
+
+
+    <!-- STATS -->
+
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+
+
+        <!-- PENDING -->
+
+        <div class="rounded-xl border border-gray-200 bg-white p-4">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+
+                    <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                        Pendientes
+                    </p>
+
+                    <p class="mt-1 text-2xl font-bold text-gray-950">
+                        {{ pendientes() }}
+                    </p>
+
+                </div>
+
+                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-yellow-50">
+
+                    <i class="fa-solid fa-clock text-yellow-600"></i>
+
+                </div>
+
+            </div>
+
+            <p class="mt-2 text-xs text-gray-500">
+                Pedidos pendientes
+            </p>
+
+        </div>
+
+
+
+        <!-- PAID -->
+
+        <div class="rounded-xl border border-gray-200 bg-white p-4">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                        Pagados
+                    </p>
+
+                    <p class="mt-1 text-2xl font-bold text-gray-950">
+                        {{ pagados() }}
+                    </p>
+                </div>
+
+                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50">
+
+                    <i class="fa-solid fa-credit-card text-blue-600"></i>
+
+                </div>
+
+            </div>
+
+            <p class="mt-2 text-xs text-gray-500">
+                Pagos confirmados
+            </p>
+
+        </div>
+
+
+
+        <!-- PACKING -->
+
+        <div class="rounded-xl border border-gray-200 bg-white p-4">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                        Empaquetando
+                    </p>
+                    <p class="mt-1 text-2xl font-bold text-gray-950">
+                        {{ empaquetando() }}
+                    </p>
+                </div>
+
+                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-50">
+
+                    <i class="fa-solid fa-box-open text-orange-600"></i>
+
+                </div>
+
+            </div>
+
+            <p class="mt-2 text-xs text-gray-500">
+                En preparación
+            </p>
+
+        </div>
+
+
+
+        <!-- SENDING -->
+
+        <div class="rounded-xl border border-gray-200 bg-white p-4">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                        Enviando
+                    </p>
+                    <p class="mt-1 text-2xl font-bold text-gray-950">
+                        {{ enviando() }}
+                    </p>
+                </div>
+
+                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-50">
+                    <i class="fa-solid fa-truck text-purple-600"></i>
+                </div>
+
+            </div>
+
+            <p class="mt-2 text-xs text-gray-500">
+                Pedidos en tránsito
+            </p>
+
+        </div>
+
+
+
+        <!-- DELIVERED -->
+
+        <div class="rounded-xl border border-gray-200 bg-white p-4">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                        Entregados
+                    </p>
+                    <p class="mt-1 text-2xl font-bold text-gray-950">
+                        {{ entregados() }}
+                    </p>
+                </div>
+
+                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-green-50">
+
+                    <i class="fa-solid fa-circle-check text-green-600"></i>
+
+                </div>
+
+            </div>
+
+            <p class="mt-2 text-xs text-gray-500">
+                Pedidos completados
+            </p>
+
+        </div>
+
+
+
+        <!-- CANCELLED -->
+
+        <div class="rounded-xl border border-gray-200 bg-white p-4">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                        Cancelados
+                    </p>
+                    <p class="mt-1 text-2xl font-bold text-gray-950">
+                        {{ cancelados() }}
+                    </p>
+                </div>
+
+                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-50">
+                    <i class="fa-solid fa-circle-xmark text-red-500"></i>
+                </div>
+
+            </div>
+
+            <p class="mt-2 text-xs text-gray-500">
+                Pedidos cancelados
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- LIST -->
+
+    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white">
+
+
+        <!-- TOOLBAR -->
+
+        <div class="border-b border-gray-200 px-5 py-4">
+
+            <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+
+
+                <!-- SEARCH -->
+
+                <div class="relative w-full lg:max-w-md">
+
+                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+
+                        <i class="fa-solid fa-magnifying-glass text-sm text-gray-400">
+                        </i>
+
+                    </div>
+
+                    <input type="search" [value]="busqueda()" (input)="actualizarBusqueda($any($event.target).value)"
+                        placeholder="Buscar por cliente o correo..."
+                        class="w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-9 pr-10 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-red-600 focus:ring-2 focus:ring-red-600/10">
+
+                    @if (buscando()) {
+
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+
+                        <i class="fa-solid fa-spinner fa-spin text-xs text-gray-400">
+                        </i>
+
+                    </div>
+
+                    }
+
+                </div>
+
+
+
+                <!-- STATUS FILTER -->
+
+                <div class="flex items-center gap-2">
+
+                    <label for="filtro-estado" class="hidden text-sm font-medium text-gray-600 sm:block">
+
+                        Estado
+
+                    </label>
+
+                    <select id="filtro-estado" [value]="estadoSeleccionado()"
+                        (change)="cambiarEstado($any($event.target).value)"
+                        class="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-700 outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10">
+
+                        <option value="">
+                            Todos
+                        </option>
+
+                        <option value="PENDIENTE">
+                            Pendientes
+                        </option>
+
+                        <option value="PAGADO">
+                            Pagados
+                        </option>
+
+                        <option value="EMPAQUETANDO">
+                            Empaquetando
+                        </option>
+
+                        <option value="ENVIANDO">
+                            Enviando
+                        </option>
+
+                        <option value="ENTREGADO">
+                            Entregados
+                        </option>
+
+                        <option value="CANCELADO">
+                            Cancelados
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- LOADING -->
+
+        @if (cargando()) {
+
+        <div class="flex min-h-80 flex-col items-center justify-center">
+
+            <i class="fa-solid fa-spinner fa-spin text-xl text-red-600">
+            </i>
+
+            <p class="mt-3 text-sm text-gray-500">
+                Cargando pedidos...
+            </p>
+
+        </div>
+
+        } @else {
+
+
+        <!-- EMPTY -->
+
+        @if (pedidos().length === 0) {
+
+        <div class="flex min-h-80 flex-col items-center justify-center px-6 text-center">
+
+            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
+
+                <i class="fa-solid fa-box-open text-gray-400"></i>
+
+            </div>
+
+            <p class="mt-4 text-sm font-semibold text-gray-700">
+                No se encontraron pedidos
+            </p>
+
+            <p class="mt-1 max-w-sm text-sm text-gray-500">
+
+                @if (busqueda() || estadoSeleccionado()) {
+
+                Prueba cambiando los filtros de búsqueda.
+
+                } @else {
+
+                Todavía no hay pedidos registrados.
+
+                }
+
+            </p>
+
+        </div>
+
+            } @else {
+
+                <!-- TABLE -->
+
+                <div class="overflow-x-auto">
+
+                    <table class="w-full min-w-225 text-left">
+
+
+                        <!-- HEAD -->
+
+                        <thead class="border-b border-gray-200 bg-gray-50">
+
+                            <tr>
+
+                                <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                    Pedido
+                                </th>
+
+                                <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                    Cliente
+                                </th>
+
+                                <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                    Fecha
+                                </th>
+
+                                <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                    Total
+                                </th>
+
+                                <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                    Estado
+                                </th>
+
+                                <th class="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                    Acciones
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+
+                        <!-- BODY -->
+
+                        <tbody class="divide-y divide-gray-100">
+
+                            @for (pedido of pedidos(); track pedido.id) {
+
+                                <tr class="group cursor-pointer transition-colors hover:bg-gray-50/80" (click)="verDetalle(pedido)">
+
+
+                                    <!-- ORDER -->
+
+                                    <td class="px-5 py-4">
+
+                                        <div class="flex items-center gap-3">
+
+                                            <div
+                                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-gray-500 transition-colors group-hover:bg-red-50 group-hover:text-red-600">
+                                                <i class="fa-solid fa-box text-sm"></i>
+                                            </div>
+
+                                            <div class="min-w-0">
+
+                                                <p class="text-sm font-bold text-gray-900">
+                                                    #{{ pedido.id }}
+                                                </p>
+
+                                                <p class="mt-0.5 text-[11px] font-medium uppercase tracking-wide text-gray-400">
+                                                    Pedido
+                                                </p>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+
+                                    <!-- CLIENT -->
+
+                                    <td class="px-5 py-4">
+
+                                        <div class="min-w-0">
+
+                                            <p class="truncate text-sm font-semibold text-gray-900">
+                                                {{ pedido.cliente }}
+                                            </p>
+
+                                            <div class="mt-0.5 flex items-center gap-1.5">
+                                                <i class="fa-regular fa-envelope text-[10px] text-gray-400"></i>
+                                                <p class="truncate text-xs text-gray-400">
+                                                    {{ pedido.correo }}
+                                                </p>
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+
+                                    <!-- DATE -->
+
+                                    <td class="px-5 py-4">
+
+                                        <div>
+
+                                            <p class="text-sm font-medium text-gray-700">
+                                                {{ pedido.fechaPedido | date:'dd/MM/yyyy' }}
+                                            </p>
+
+                                            <div class="mt-0.5 flex items-center gap-1">
+                                                <i class="fa-regular fa-clock text-[10px] text-gray-400"></i>
+                                                <p class="text-xs text-gray-400">
+                                                    {{ pedido.fechaPedido | date:'HH:mm' }}
+                                                </p>
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+
+                                    <!-- TOTAL -->
+
+                                    <td class="px-5 py-4">
+                                        <p class="text-sm font-bold text-gray-900">
+                                            S/ {{ pedido.total | number:'1.2-2' }}
+                                        </p>
+                                        <p class="mt-0.5 text-[11px] text-gray-400">
+                                            Total del pedido
+                                        </p>
+                                    </td>
+
+
+
+                                    <!-- STATE -->
+
+                                    <td class="px-5 py-4">
+
+                                        @if (estadoPuedeAvanzar(pedido.estado)) {
+
+                                            <div class="relative inline-flex">
+
+                                                <select [value]="pedido.estado" (click)="$event.stopPropagation()"
+                                                    (change)="cambiarEstadoPedido(pedido,$any($event.target).value)"
+                                                    class="appearance-none rounded-full border px-3 py-1.5 pr-8 text-xs font-bold outline-none transition cursor-pointer"
+                                                    [class.border-blue-200]="pedido.estado === 'PAGADO'"
+                                                    [class.bg-blue-50]="pedido.estado === 'PAGADO'"
+                                                    [class.text-blue-700]="pedido.estado === 'PAGADO'"
+                                                    [class.border-orange-200]="pedido.estado === 'EMPAQUETANDO'"
+                                                    [class.bg-orange-50]="pedido.estado === 'EMPAQUETANDO'"
+                                                    [class.text-orange-700]="pedido.estado === 'EMPAQUETANDO'"
+                                                    [class.border-purple-200]="pedido.estado === 'ENVIANDO'"
+                                                    [class.bg-purple-50]="pedido.estado === 'ENVIANDO'"
+                                                    [class.text-purple-700]="pedido.estado === 'ENVIANDO'"
+                                                    class="focus:ring-2 focus:ring-red-600/10">
+
+                                                    @if (pedido.estado === 'PAGADO') {
+
+                                                        <option value="PAGADO">
+                                                            Pagado
+                                                        </option>
+
+                                                        <option value="EMPAQUETANDO">
+                                                            Empaquetando
+                                                        </option>
+
+                                                    }
+
+                                                    @if (pedido.estado === 'EMPAQUETANDO') {
+
+                                                        <option value="EMPAQUETANDO">
+                                                            Empaquetando
+                                                        </option>
+
+                                                        <option value="ENVIANDO">
+                                                            Enviando
+                                                        </option>
+
+                                                    }
+
+                                                    @if (pedido.estado === 'ENVIANDO') {
+
+                                                        <option value="ENVIANDO">
+                                                            Enviando
+                                                        </option>
+
+                                                        <option value="ENTREGADO">
+                                                            Entregado
+                                                        </option>
+
+                                                    }
+
+                                                </select>
+
+                                                <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[9px]"
+                                                    [class.text-blue-500]="pedido.estado === 'PAGADO'"
+                                                    [class.text-orange-500]="pedido.estado === 'EMPAQUETANDO'"
+                                                    [class.text-purple-500]="pedido.estado === 'ENVIANDO'">
+                                                </i>
+
+                                            </div>
+
+                                        } @else {
+
+                                            <span
+                                                class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold"
+                                                [class.border-yellow-200]="pedido.estado === 'PENDIENTE'"
+                                                [class.bg-yellow-50]="pedido.estado === 'PENDIENTE'"
+                                                [class.text-yellow-700]="pedido.estado === 'PENDIENTE'"
+                                                [class.border-green-200]="pedido.estado === 'ENTREGADO'"
+                                                [class.bg-green-50]="pedido.estado === 'ENTREGADO'"
+                                                [class.text-green-700]="pedido.estado === 'ENTREGADO'"
+                                                [class.border-red-200]="pedido.estado === 'CANCELADO'"
+                                                [class.bg-red-50]="pedido.estado === 'CANCELADO'"
+                                                [class.text-red-700]="pedido.estado === 'CANCELADO'">
+
+                                                <i class="fa-solid text-[10px]" [class.fa-clock]="pedido.estado === 'PENDIENTE'"
+                                                    [class.fa-circle-check]="pedido.estado === 'ENTREGADO'"
+                                                    [class.fa-circle-xmark]="pedido.estado === 'CANCELADO'">
+                                                </i>
+
+                                                {{ estadoLabel(pedido.estado) }}
+
+                                            </span>
+
+                                        }
+
+                                    </td>
+
+
+
+                                    <!-- ACTIONS -->
+
+                                    <td class="px-5 py-4">
+
+                                        <div class="flex items-center justify-end">
+
+                                            <button type="button" title="Ver detalles"
+                                                (click)="$event.stopPropagation(); verDetalle(pedido)"
+                                                class="flex cursor-pointer h-9 w-9 items-center justify-center rounded-lg border border-transparent text-gray-400 transition hover:border-gray-200 hover:bg-white hover:text-gray-900 hover:shadow-sm">
+
+                                                <i class="fa-solid fa-eye text-xs"></i>
+
+                                            </button>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+
+                <!-- FOOTER / PAGINATION -->
+
+                <div class="flex flex-col gap-3 border-t border-gray-200 bg-gray-50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+
+
+                    <!-- INFO -->
+
+                    <p class="text-xs text-gray-500">
+                        Mostrando
+
+                        <span class="font-semibold text-gray-700">
+                            {{ totalElementos() === 0 ? 0 : (paginaActual() * tamanioPagina()) + 1 }}
+                        </span>
+
+                        -
+
+                        <span class="font-semibold text-gray-700">
+                            {{ ultimoElemento() }}
+                        </span>
+
+                        de
+
+                        <span class="font-semibold text-gray-700">
+                            {{ totalElementos() }}
+                        </span>
+
+                        pedidos
+
+                    </p>
+
+
+
+                    <!-- CONTROLS -->
+
+                    <div class="flex items-center gap-1">
+
+
+                        <!-- PREVIOUS -->
+
+                        <button type="button" title="Página anterior" (click)="paginaAnterior()"
+                            [disabled]="paginaActual() === 0 || cambiandoPagina()"
+                            class="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-500 transition hover:bg-gray-50 hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-40">
+
+                            <i class="fa-solid fa-chevron-left text-xs"></i>
+
+                        </button>
+
+
+
+                        <!-- CURRENT -->
+
+                        <span class="px-3 text-xs font-medium text-gray-600">
+
+                            Página
+                            {{ paginaActual() + 1 }}
+                            de
+                            {{ totalPaginas() }}
+
+                        </span>
+
+
+
+                        <!-- NEXT -->
+
+                        <button type="button" title="Página siguiente" (click)="paginaSiguiente()" [disabled]="paginaActual() >= totalPaginas() - 1 ||cambiandoPagina()"
+                            class="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-500 transition hover:bg-gray-50 hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-40">
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            }
+
+        }
+
+    </div>
+
+</div>
+
+@if (detalleAbierto()) {
+
+<modal-pedido [pedidoId]="pedidoDetalleId()" (cerrar)="cerrarDetalle()" />
+
+}

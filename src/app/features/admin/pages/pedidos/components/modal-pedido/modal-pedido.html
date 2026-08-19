@@ -1,0 +1,813 @@
+@if (pedidoId() !== null) {
+
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-950/40 p-4 backdrop-blur-sm" (click)="cerrarModal()">
+
+        <div class="flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl" (click)="$event.stopPropagation()">
+
+            <!-- HEADER -->
+
+            <div class="flex items-start justify-between border-b border-gray-200 px-6 py-5">
+
+                <div>
+
+                    <div class="flex items-center gap-2">
+
+                        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-red-50">
+                            <i class="fa-solid fa-box text-red-600"></i>
+                        </div>
+
+                        <div>
+
+                            <p class="text-xs font-semibold uppercase tracking-[0.15em] text-red-600">
+                                Pedido
+                            </p>
+
+                            @if (pedido()) {
+
+                            <h2 class="text-xl font-bold text-gray-950">
+                                #{{ pedido()!.id }}
+                            </h2>
+
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <button type="button" title="Cerrar" (click)="cerrarModal()" class="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 transition hover:bg-gray-100 hover:text-gray-900">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+
+
+            <!-- BODY -->
+
+            <div class="overflow-y-auto">
+
+
+                <!-- LOADING / SKELETON -->
+
+                @if (cargando()) {
+
+                <div class="space-y-6 p-6 animate-pulse">
+
+                    <!-- INFORMACION GENERAL -->
+
+                    <div
+                        class="flex flex-col gap-4 rounded-xl border border-gray-200 bg-gray-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+
+                        <!-- FECHA -->
+
+                        <div class="space-y-2">
+
+                            <div class="h-3 w-24 rounded bg-gray-200"></div>
+
+                            <div class="flex items-center gap-2">
+                                <div class="h-4 w-4 rounded-full bg-gray-200"></div>
+                                <div class="h-4 w-36 rounded bg-gray-200"></div>
+                            </div>
+
+                        </div>
+
+
+                        <!-- ESTADO -->
+
+                        <div class="space-y-2">
+                            <div class="h-3 w-14 rounded bg-gray-200"></div>
+                            <div class="h-7 w-24 rounded-full bg-gray-200"></div>
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- CLIENTE -->
+
+                    <section>
+
+                        <div class="mb-3 flex items-center gap-2">
+                            <div class="h-8 w-8 rounded-lg bg-gray-200"></div>
+                            <div class="h-4 w-16 rounded bg-gray-200"></div>
+                        </div>
+
+
+                        <div class="rounded-xl border border-gray-200 p-4">
+
+                            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+                                <!-- NOMBRE -->
+
+                                <div class="space-y-2">
+                                    <div class="h-3 w-16 rounded bg-gray-200"></div>
+                                    <div class="h-4 w-32 rounded bg-gray-200"></div>
+                                </div>
+
+
+                                <!-- CORREO -->
+
+                                <div class="space-y-2">
+                                    <div class="h-3 w-14 rounded bg-gray-200"></div>
+                                    <div class="h-4 w-44 rounded bg-gray-200"></div>
+                                </div>
+
+
+                                <!-- TELEFONO -->
+
+                                <div class="space-y-2">
+                                    <div class="h-3 w-16 rounded bg-gray-200"></div>
+                                    <div class="h-4 w-28 rounded bg-gray-200"></div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+
+                    <!-- DIRECCION -->
+
+                    <section>
+
+                        <div class="mb-3 flex items-center gap-2">
+                            <div class="h-8 w-8 rounded-lg bg-gray-200"></div>
+                            <div class="h-4 w-40 rounded bg-gray-200"></div>
+                        </div>
+
+
+                        <div class="rounded-xl border border-gray-200 p-4">
+
+                            <div class="grid gap-4 sm:grid-cols-3">
+
+                                <div class="space-y-2">
+
+                                    <div class="h-3 w-24 rounded bg-gray-200"></div>
+                                    <div class="h-4 w-28 rounded bg-gray-200"></div>
+
+                                </div>
+
+                                <div class="space-y-2">
+
+                                    <div class="h-3 w-16 rounded bg-gray-200"></div>
+                                    <div class="h-4 w-28 rounded bg-gray-200"></div>
+
+                                </div>
+
+                                <div class="space-y-2">
+
+                                    <div class="h-3 w-16 rounded bg-gray-200"></div>
+                                    <div class="h-4 w-28 rounded bg-gray-200"></div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- DIRECCION -->
+
+                            <div class="mt-4 border-t border-gray-100 pt-4 space-y-2">
+
+                                <div class="h-3 w-20 rounded bg-gray-200"></div>
+                                <div class="h-4 w-3/4 rounded bg-gray-200"></div>
+
+                            </div>
+
+
+                            <!-- REFERENCIA -->
+
+                            <div class="mt-4 space-y-2">
+
+                                <div class="h-3 w-20 rounded bg-gray-200"></div>
+                                <div class="h-4 w-1/2 rounded bg-gray-200"></div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+
+                    <!-- PRODUCTOS -->
+
+                    <section>
+
+                        <div class="mb-3 flex items-center gap-2">
+
+                            <div class="h-8 w-8 rounded-lg bg-gray-200"></div>
+                            <div class="h-4 w-24 rounded bg-gray-200"></div>
+
+                        </div>
+
+
+                        <div class="overflow-hidden rounded-xl border border-gray-200">
+
+                            <!-- HEADER -->
+
+                            <div
+                                class="hidden border-b border-gray-200 bg-gray-50 px-4 py-3 sm:grid sm:grid-cols-[1fr_80px_110px]">
+
+                                <div class="h-3 w-20 rounded bg-gray-200"></div>
+                                <div class="mx-auto h-3 w-16 rounded bg-gray-200"></div>
+                                <div class="ml-auto h-3 w-16 rounded bg-gray-200"></div>
+
+                            </div>
+
+
+                            <!-- FILAS -->
+
+                            <div class="divide-y divide-gray-100">
+
+                                @for (fila of [1, 2, 3]; track fila) {
+
+                                    <div class="grid gap-2 px-4 py-4 sm:grid-cols-[1fr_80px_110px] sm:items-center">
+
+                                        <!-- PRODUCT -->
+
+                                        <div class="space-y-2">
+
+                                            <div class="h-4 w-40 rounded bg-gray-200"></div>
+
+                                            <div class="h-3 w-24 rounded bg-gray-200"></div>
+
+                                        </div>
+
+
+                                        <!-- QUANTITY -->
+
+                                        <div class="flex sm:justify-center">
+                                            <div class="h-4 w-8 rounded bg-gray-200"></div>
+                                        </div>
+
+
+                                        <!-- SUBTOTAL -->
+
+                                        <div class="flex sm:justify-end">
+                                            <div class="h-4 w-20 rounded bg-gray-200"></div>
+                                        </div>
+
+                                    </div>
+
+                                }
+
+                            </div>
+
+
+                            <!-- TOTAL -->
+
+                            <div class="flex items-center justify-between border-t border-gray-200 bg-gray-50 px-4 py-4">
+                                <div class="h-4 w-12 rounded bg-gray-200"></div>
+                                <div class="h-6 w-24 rounded bg-gray-200"></div>
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+
+                    <!-- PAYMENT -->
+
+                    <section>
+
+                        <div class="mb-3 flex items-center gap-2">
+                            <div class="h-8 w-8 rounded-lg bg-gray-200"></div>
+                            <div class="h-4 w-12 rounded bg-gray-200"></div>
+                        </div>
+
+
+                        <div class="rounded-xl border border-gray-200 p-4">
+
+                            <div class="space-y-2">
+                                <div class="h-3 w-28 rounded bg-gray-200"></div>
+                                <div class="h-4 w-32 rounded bg-gray-200"></div>
+                            </div>
+
+
+                            <div class="mt-4 grid gap-4 border-t border-gray-100 pt-4 sm:grid-cols-2">
+
+                                <div class="space-y-2">
+                                    <div class="h-3 w-24 rounded bg-gray-200"></div>
+                                    <div class="h-3 w-40 rounded bg-gray-200"></div>
+                                </div>
+
+                                <div class="space-y-2">
+                                    <div class="h-3 w-20 rounded bg-gray-200"></div>
+                                    <div class="h-3 w-32 rounded bg-gray-200"></div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+                }
+
+
+                <!-- ERROR -->
+
+                @else if (error()) {
+
+                <div class="flex min-h-96 flex-col items-center justify-center px-6 text-center">
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-full bg-red-50">
+                        <i class="fa-solid fa-circle-exclamation text-red-600"></i>
+                    </div>
+
+                    <p class="mt-4 text-sm font-semibold text-gray-800">
+                        No se pudo cargar el pedido
+                    </p>
+
+                    <p class="mt-1 text-sm text-gray-500">
+                        {{ error() }}
+                    </p>
+
+                </div>
+
+                }
+
+
+                <!-- DETAILS -->
+
+                @else if (pedido(); as detalle) {
+
+                    <div class="space-y-6 p-6">
+
+
+                        <!-- INFORMATION -->
+
+                        <div class="flex flex-col gap-4 rounded-xl border border-gray-200 bg-gray-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+
+                            <div>
+
+                                <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                                    Fecha del pedido
+                                </p>
+
+                                <div class="mt-1 flex items-center gap-2">
+                                    <i class="fa-regular fa-calendar text-sm text-gray-400"></i>
+                                    <p class="text-sm font-semibold text-gray-800">
+                                        {{ detalle.fechaPedido | date:'dd/MM/yyyy HH:mm' }}
+                                    </p>
+                                </div>
+
+                            </div>
+
+
+                            <!-- STATE -->
+
+                            <div>
+
+                                <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                                    Estado
+                                </p>
+
+                                <span class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-bold"
+                                    [class.border-yellow-200]="detalle.estado === 'PENDIENTE'"
+                                    [class.bg-yellow-50]="detalle.estado === 'PENDIENTE'"
+                                    [class.text-yellow-700]="detalle.estado === 'PENDIENTE'"
+                                    [class.border-blue-200]="detalle.estado === 'PAGADO'"
+                                    [class.bg-blue-50]="detalle.estado === 'PAGADO'"
+                                    [class.text-blue-700]="detalle.estado === 'PAGADO'"
+                                    [class.border-orange-200]="detalle.estado === 'EMPAQUETANDO'"
+                                    [class.bg-orange-50]="detalle.estado === 'EMPAQUETANDO'"
+                                    [class.text-orange-700]="detalle.estado === 'EMPAQUETANDO'"
+                                    [class.border-purple-200]="detalle.estado === 'ENVIANDO'"
+                                    [class.bg-purple-50]="detalle.estado === 'ENVIANDO'"
+                                    [class.text-purple-700]="detalle.estado === 'ENVIANDO'"
+                                    [class.border-green-200]="detalle.estado === 'ENTREGADO'"
+                                    [class.bg-green-50]="detalle.estado === 'ENTREGADO'"
+                                    [class.text-green-700]="detalle.estado === 'ENTREGADO'"
+                                    [class.border-red-200]="detalle.estado === 'CANCELADO'"
+                                    [class.bg-red-50]="detalle.estado === 'CANCELADO'"
+                                    [class.text-red-700]="detalle.estado === 'CANCELADO'">
+
+                                    <i class="fa-solid text-[10px]" [class.fa-clock]="detalle.estado === 'PENDIENTE'"
+                                        [class.fa-credit-card]="detalle.estado === 'PAGADO'"
+                                        [class.fa-box-open]="detalle.estado === 'EMPAQUETANDO'"
+                                        [class.fa-truck]="detalle.estado === 'ENVIANDO'"
+                                        [class.fa-circle-check]="detalle.estado === 'ENTREGADO'"
+                                        [class.fa-circle-xmark]="detalle.estado === 'CANCELADO'"></i>
+
+                                    {{ estadoLabel(detalle.estado) }}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- CLIENTE -->
+
+                        <section>
+
+                            <div class="mb-3 flex items-center gap-2">
+
+                                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100">
+                                    <i class="fa-solid fa-user text-xs text-gray-500"></i>
+                                </div>
+
+                                <h3 class="text-sm font-bold text-gray-900">
+                                    Cliente
+                                </h3>
+
+                            </div>
+
+
+                            <div class="rounded-xl border border-gray-200 p-4">
+
+                                <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+
+                                    <!-- NOMBRE -->
+
+                                    <div>
+
+                                        <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                                            Nombre
+                                        </p>
+
+                                        <p class="mt-1 text-sm font-semibold text-gray-900">
+                                            {{ detalle.cliente.nombre }}
+                                            {{ detalle.cliente.apellido }}
+                                        </p>
+
+                                    </div>
+
+
+                                    <!-- CORREO -->
+
+                                    <div>
+
+                                        <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                                            Correo
+                                        </p>
+
+                                        <p class="mt-1 break-all text-sm text-gray-700">
+                                            {{ detalle.cliente.correo }}
+                                        </p>
+
+                                    </div>
+
+
+                                    <!-- TELEFONO -->
+
+                                    <div>
+
+                                        <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                                            Teléfono
+                                        </p>
+
+                                        <p class="mt-1 text-sm text-gray-700">
+                                            {{ detalle.cliente.telefono }}
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+
+                        <!-- DIRECCION -->
+
+                        <section>
+
+                            <div class="mb-3 flex items-center gap-2">
+
+                                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100">
+                                    <i class="fa-solid fa-location-dot text-xs text-gray-500"></i>
+                                </div>
+
+                                <h3 class="text-sm font-bold text-gray-900">
+                                    Dirección de entrega
+                                </h3>
+
+                            </div>
+
+
+                            <div class="rounded-xl border border-gray-200 p-4">
+
+                                <div class="grid gap-4 sm:grid-cols-3">
+
+
+                                    <!-- DEPARTMENT -->
+
+                                    <div>
+
+                                        <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                                            Departamento
+                                        </p>
+
+                                        <p class="mt-1 text-sm font-medium text-gray-800">
+                                            {{ detalle.direccion.departamento }}
+                                        </p>
+
+                                    </div>
+
+
+                                    <!-- PROVINCE -->
+
+                                    <div>
+
+                                        <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                                            Provincia
+                                        </p>
+
+                                        <p class="mt-1 text-sm font-medium text-gray-800">
+                                            {{ detalle.direccion.provincia }}
+                                        </p>
+
+                                    </div>
+
+
+                                    <!-- DISTRICT -->
+
+                                    <div>
+
+                                        <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                                            Distrito
+                                        </p>
+
+                                        <p class="mt-1 text-sm font-medium text-gray-800">
+                                            {{ detalle.direccion.distrito }}
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- FULL ADRESS -->
+
+                                <div class="mt-4 border-t border-gray-100 pt-4">
+
+                                    <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                                        Dirección
+                                    </p>
+
+                                    <p class="mt-1 text-sm font-medium text-gray-800">
+                                        {{ detalle.direccion.direccionCompleta }}
+                                    </p>
+
+                                </div>
+
+
+                                <!-- REFERENCE -->
+
+                                @if (detalle.direccion.referencia) {
+
+                                <div class="mt-4">
+
+                                    <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                                        Referencia
+                                    </p>
+
+                                    <p class="mt-1 text-sm text-gray-600">
+                                        {{ detalle.direccion.referencia }}
+                                    </p>
+
+                                </div>
+
+                                }
+
+                            </div>
+
+                        </section>
+
+
+
+                        <!-- PRODUCTS -->
+
+                        <section>
+
+                            <div class="mb-3 flex items-center gap-2">
+
+                                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100">
+
+                                    <i class="fa-solid fa-box-open text-xs text-gray-500"></i>
+
+                                </div>
+
+                                <h3 class="text-sm font-bold text-gray-900">
+                                    Productos
+                                    <span class="ml-1 font-normal text-gray-400">
+                                        ({{ detalle.detalles.length }})
+                                    </span>
+                                </h3>
+
+                            </div>
+
+
+                            <div class="overflow-hidden rounded-xl border border-gray-200">
+
+
+                                <!-- HEADER -->
+
+                                <div
+                                    class="hidden border-b border-gray-200 bg-gray-50 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-400 sm:grid sm:grid-cols-[1fr_80px_110px]">
+
+                                    <span>
+                                        Producto
+                                    </span>
+
+                                    <span class="text-center">
+                                        Cantidad
+                                    </span>
+
+                                    <span class="text-right">
+                                        Subtotal
+                                    </span>
+
+                                </div>
+
+
+                                <!-- PRODUCTS -->
+
+                                <div class="max-h-80 overflow-y-auto divide-y divide-gray-100">
+
+                                    @for (producto of detalle.detalles; track producto.productoId) {
+
+                                    <div class="grid gap-2 px-4 py-4 sm:grid-cols-[1fr_80px_110px] sm:items-center">
+
+
+                                        <!-- PRODUCT -->
+
+                                        <div>
+
+                                            <p class="text-sm font-semibold text-gray-900">
+                                                {{ producto.productoNombre }}
+                                            </p>
+
+                                            <p class="mt-0.5 text-xs text-gray-400">
+                                                S/ {{ producto.precioUnitario | number:'1.2-2' }} c/u
+                                            </p>
+
+                                        </div>
+
+
+                                        <!-- QUANTITY -->
+
+                                        <div class="text-left sm:text-center">
+
+                                            <span class="text-sm font-medium text-gray-600">
+
+                                                x{{ producto.cantidad }}
+
+                                            </span>
+
+                                        </div>
+
+
+                                        <!-- SUBTOTAL -->
+
+                                        <div class="text-left sm:text-right">
+
+                                            <p class="text-sm font-bold text-gray-900">
+                                                S/ {{ producto.subtotal | number:'1.2-2' }}
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                    }
+
+                                </div>
+
+
+                                <!-- TOTAL -->
+
+                                <div class="flex items-center justify-between border-t border-gray-200 bg-gray-50 px-4 py-4">
+
+                                    <span class="text-sm font-semibold text-gray-700">
+                                        Total
+                                    </span>
+
+                                    <span class="text-lg font-bold text-gray-950">
+                                        S/ {{ detalle.total | number:'1.2-2' }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+
+                        <!-- PAYMENT -->
+
+                        <section>
+
+                            <div class="mb-3 flex items-center gap-2">
+
+                                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100">
+
+                                    <i class="fa-solid fa-credit-card text-xs text-gray-500"></i>
+
+                                </div>
+
+                                <h3 class="text-sm font-bold text-gray-900">
+                                    Pago
+                                </h3>
+
+                            </div>
+
+
+                            <div class="rounded-xl border border-gray-200 p-4">
+
+                                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+
+                                    <div>
+                                        <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                                            Método de pago
+                                        </p>
+                                        <p class="mt-1 text-sm font-bold text-gray-900">
+                                            {{ detalle.pago.metodo }}
+                                        </p>
+                                    </div>
+
+                                </div>
+
+
+                                @if (detalle.pago.preferenceId || detalle.pago.paymentId) {
+
+                                    <div class="mt-4 grid gap-4 border-t border-gray-100 pt-4 sm:grid-cols-2">
+
+                                        @if (detalle.pago.preferenceId) {
+
+                                            <div>
+                                                <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                                                    Preference ID
+                                                </p>
+                                                <p class="mt-1 break-all font-mono text-xs text-gray-600">
+                                                    {{ detalle.pago.preferenceId }}
+                                                </p>
+                                            </div>
+
+                                        }
+
+
+                                        @if (detalle.pago.paymentId) {
+
+                                            <div>
+                                                <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                                                    Payment ID
+                                                </p>
+                                                <p class="mt-1 break-all font-mono text-xs text-gray-600">
+                                                    {{ detalle.pago.paymentId }}
+                                                </p>
+                                            </div>
+
+                                        }
+
+                                    </div>
+
+                                }
+
+                            </div>
+
+                        </section>
+
+                    </div>
+
+                }
+
+            </div>
+
+
+
+            <!-- FOOTER -->
+
+            <div class="flex justify-end border-t border-gray-200 bg-gray-50 px-6 py-4">
+
+                <button type="button" (click)="cerrarModal()"
+                    class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50">
+
+                    Cerrar
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+}

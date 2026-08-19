@@ -18,6 +18,7 @@ import { AdminProductos } from './features/admin/pages/productos/admin-productos
 import { AdminCategorias } from './features/admin/pages/categorias/admin-categoria';
 import { AdminMarcas } from './features/admin/pages/marcas/admin-marcas/admin-marcas';
 import { AdminUsuarios } from './features/admin/pages/usuarios/admin-usuarios/admin-usuarios';
+import { AdminPedidos } from './features/admin/pages/pedidos/admin-pedidos/admin-pedidos';
 
 export const routes: Routes = [
 
@@ -109,6 +110,11 @@ export const routes: Routes = [
             {
                 path: 'usuarios',
                 component: AdminUsuarios
+            },
+
+            {
+                path: 'pedidos',
+                component: AdminPedidos
             }
         ]
     }
