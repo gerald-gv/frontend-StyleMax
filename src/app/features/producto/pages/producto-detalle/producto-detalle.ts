@@ -5,12 +5,13 @@ import { ProductoDetalle } from '../../../../core/models/producto-detalle.model'
 import { AuthRequiredModal } from '../../../../shared/components/auth-require-modal/auth-require-modal';
 import { AuthService } from '../../../../core/services/auth.service';
 import { CarritoService } from '../../../../core/services/carrito.service';
+import { DecimalPipe } from '@angular/common';
 
 type Estado = 'loading' | 'error' | 'success';
 
 @Component({
   selector: 'producto-detalle',
-  imports: [RouterLink, AuthRequiredModal],
+  imports: [RouterLink, AuthRequiredModal,DecimalPipe],
   templateUrl: './producto-detalle.html',
 })
 export class ProductoDetallePage implements OnInit {

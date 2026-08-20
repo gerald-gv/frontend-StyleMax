@@ -1,56 +1,86 @@
-<a  [routerLink]="['/productos', producto().slug]"
-    class="group flex h-full flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-gray-300 hover:shadow-md">
+<a [routerLink]="['/productos', producto().slug]" class="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-gray-300 hover:shadow-xl">
 
-    <!-- Image -->
+    <!-- Product Image -->
+
     <div class="relative aspect-4/5 overflow-hidden bg-gray-100">
+        <img [src]="producto().imagen"  [alt]="producto().nombre" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"/>
+
+        <!-- Image Overlay -->
+        <div class="pointer-events-none absolute inset-0 bg-linear-to-t from-black/25 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+
+        <!-- Badge -->
 
         @if (producto().destacado) {
-            <span class="absolute left-3 top-3 z-10 rounded-sm bg-gray-950 px-2.5 py-1 text-[8px] font-bold uppercase tracking-[0.15em] text-white">
+
+            <span class="absolute left-4 top-4 z-10 inline-flex items-center gap-1.5 rounded-full bg-red-600 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow-lg shadow-red-600/25">
+                <i class="fa-solid fa-star text-[8px]"></i>
                 Destacado
             </span>
+
         }
 
-        <img [src]="producto().imagen" [alt]="producto().nombre" loading="lazy" class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.025]" >
 
-    </div>
+        <!-- Favorite -->
+
+        <button
+            type="button"
+            class="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/95 text-gray-700 shadow-md backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-red-600 hover:text-white"
+            aria-label="Agregar a favoritos"
+            (click)="$event.preventDefault(); $event.stopPropagation()">
+            <i class="fa-regular fa-heart text-sm"></i>
+        </button>
 
 
-    <!-- Information -->
-    <div class="border-t border-gray-200 bg-white p-3.5 sm:p-4">
+        <!-- Product Action -->
 
-        <!-- Category -->
-        <div class="flex items-center gap-2">
+        <div class="absolute bottom-4 left-4 right-4 z-10 translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
 
-            <span class="h-1 w-1 rounded-full bg-gray-300"></span>
-
-            <span class="text-[9px] font-semibold uppercase tracking-[0.14em] text-gray-500">
-                {{ producto().categoria }}
+            <span class="flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-gray-900 shadow-xl transition-all duration-200 hover:bg-red-600 hover:text-white"> Ver producto
+                <i class="fa-solid fa-arrow-right text-xs transition-transform duration-200 group-hover:translate-x-1"></i>
             </span>
 
         </div>
 
+    </div>
+
+
+    <!-- Product Information -->
+
+    <div class="flex flex-1 flex-col p-4 sm:p-5">
+
+        <!-- Category -->
+        <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-red-600">
+            {{ producto().categoria }}
+        </p>
+
 
         <!-- Name -->
-        <h2 class="mt-2 min-h-10 line-clamp-2 text-sm font-semibold leading-5 text-gray-900 transition-colors duration-200 group-hover:text-red-600 sm:text-[15px]">
+        <h2 class="mt-1.5 min-h-10 line-clamp-2 text-sm font-semibold leading-5 text-gray-900 transition-colors duration-200 group-hover:text-red-600 sm:text-[15px]">
             {{ producto().nombre }}
         </h2>
 
 
         <!-- Brand -->
-        <p class="mt-1 truncate text-xs text-gray-500">
+        <p class="mt-1 truncate text-xs text-gray-400">
             {{ producto().marca }}
         </p>
 
+        <!-- Divider -->
+        <div class="my-4 h-px bg-gray-100"></div>
+
 
         <!-- Price -->
-        <div class="mt-4 flex items-center justify-between border-t border-gray-100 pt-3">
+        <div class="mt-auto flex items-center justify-between gap-3">
 
-            <span class="text-base font-bold tracking-tight text-gray-950">
+            <span class="text-lg font-extrabold tracking-tight text-gray-95">
                 S/ {{ producto().precio }}
             </span>
 
-            <span class="text-[9px] font-semibold uppercase tracking-[0.12em] text-gray-400 transition-colors duration-200 group-hover:text-red-600">
-                Ver producto
+
+            <!-- Desktop Action -->
+            <span class="hidden items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.12em] text-gray-400 transition-colors duration-200 group-hover:text-red-600 sm:inline-flex">
+                Ver
+                <i class="fa-solid fa-arrow-right text-[8px] transition-transform duration-200 group-hover:translate-x-1"></i>
             </span>
 
         </div>

@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { SearchBar } from '../search-bar/search-bar';
 import { AuthService } from '../../../core/services/auth.service';
 import { CarritoService } from '../../../core/services/carrito.service';
@@ -7,7 +7,7 @@ import { CarritoService } from '../../../core/services/carrito.service';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, SearchBar],
+  imports: [RouterLink,RouterLinkActive ,SearchBar],
   templateUrl: './navbar.html',
 })
 export class Navbar {

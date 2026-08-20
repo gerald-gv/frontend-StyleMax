@@ -1,0 +1,128 @@
+<section class="bg-white py-20">
+
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+        <!-- HEADER -->
+
+        <div class="mb-10 flex items-end justify-between gap-6">
+
+            <div>
+
+                <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-red-600">
+                    Explora tu estilo
+                </p>
+
+                <h2 class="text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl">
+                    Categorías clásicas
+                </h2>
+
+                <p class="mt-3 max-w-2xl text-base leading-7 text-gray-500">
+                    Encuentra prendas que se adapten a tu estilo y descubre
+                    nuevas opciones para cada ocasión.
+                </p>
+
+            </div>
+
+
+            <a
+                routerLink="/catalogo"
+                class="hidden shrink-0 text-sm font-semibold text-gray-900 transition hover:text-red-600 sm:block"
+            >
+                Ver catálogo
+                <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+            </a>
+
+        </div>
+
+
+        <!-- CATEGORIAS -->
+
+        @if (categorias().length > 0) {
+
+            <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+
+                @for (categoria of categorias(); track categoria.id) {
+
+                    <a
+                        [routerLink]="['/catalogo']"
+                        [queryParams]="{ categoriaId: categoria.id }"
+                        class="group relative aspect-3/4 overflow-hidden rounded-2xl bg-gray-100"
+                    >
+
+                        <!-- IMAGE -->
+
+                        <img
+                            [src]="obtenerImagenCategoria(categoria.nombre)"
+                            [alt]="categoria.nombre"
+                            class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                        >
+
+
+                        <!-- OVERLAY -->
+
+                        <div class="absolute inset-0 bg-linear-to-t from-gray-950/75 via-gray-950/20 to-transparent"></div>
+
+                        <!-- CONTENT -->
+
+                        <div class="absolute inset-x-0 bottom-0 p-5">
+
+                            <div class="flex items-end justify-between gap-3">
+
+                                <div>
+
+                                    <h3 class="text-lg font-bold text-white">
+                                        {{ categoria.nombre }}
+                                    </h3>
+
+                                    <p class="mt-1 text-xs font-medium text-white/70">
+                                        Explorar categoría
+                                    </p>
+
+                                </div>
+
+
+                                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition duration-300 group-hover:bg-red-600">
+                                    <i class="fa-solid fa-arrow-right text-xs transition-transform duration-300 group-hover:translate-x-0.5"></i>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                }
+
+            </div>
+
+        }
+
+        @else {
+
+            <!-- ESTADO VACÍO / CARGA -->
+
+            <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+
+                @for (item of [1, 2, 3, 4]; track item) {
+                    <div class="aspect-3/4 animate-pulse rounded-2xl bg-gray-100"></div>
+                }
+
+            </div>
+
+        }
+
+
+        <!-- MOBILE CTA -->
+
+        <div class="mt-8 sm:hidden">
+
+            <a routerLink="/catalogo" class="inline-flex items-center text-sm font-semibold text-gray-900 transition hover:text-red-600">
+                Ver todo el catálogo
+                <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+            </a>
+
+        </div>
+
+    </div>
+
+</section>

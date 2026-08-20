@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ProductoDetalle } from '../models/producto-detalle.model';
 import { CatalogoResponse } from '../models/catalogo-response.model';
+import { ProductoCard } from '../../shared/components/producto-card/producto-card';
+import { Producto } from '../models/producto.model';
 
 
 @Injectable({
@@ -15,7 +17,7 @@ export class ProductoService {
 
   private readonly apiUrl = `${environment.apiUrl}/productos`;
 
-  listarCatalogo(pagina:number, categoriaId?: number, marcaId?: number, fit?:string, q?: string): Observable<CatalogoResponse> {
+  listarCatalogo(pagina: number, categoriaId?: number, marcaId?: number, fit?: string, q?: string): Observable<CatalogoResponse> {
 
     let params = new HttpParams().set('page', pagina);
 
@@ -40,5 +42,9 @@ export class ProductoService {
 
   obtenerPorSlug(slug: string): Observable<ProductoDetalle> {
     return this.http.get<ProductoDetalle>(`${this.apiUrl}/${slug}`);
+  }
+
+  listarDestacados(): Observable<Producto[]> {
+    return this.http.get<Producto[]>(`${this.apiUrl}/destacados`);
   }
 }
