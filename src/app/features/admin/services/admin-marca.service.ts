@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { Observable } from "rxjs";
-import { PaginaDTO } from "../models/PaginaDTO.model";
+import { PaginaDTO } from "../../../core/models/PaginaDTO.model";
 import { ActualizarMarcaRequest, CrearMarcaRequest, MarcaAdmin } from "../models/marca-admin.model";
 import { MarcaEstadisticas } from "../models/marca-estadisticas.model";
 

@@ -3,7 +3,7 @@ import { inject, Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { ActualizarPedidoEstadoRequest, PedidoAdmin, PedidoEstado } from "../models/pedido-admin.model";
 import { Observable } from "rxjs";
-import { PaginaDTO } from "../models/PaginaDTO.model";
+import { PaginaDTO } from "../../../core/models/PaginaDTO.model";
 import { PedidoEstadisticas } from "../models/pedido-estadisticas.model";
 import { PedidoAdminDetalle } from "../models/pedido-admin-detalle.model";
 

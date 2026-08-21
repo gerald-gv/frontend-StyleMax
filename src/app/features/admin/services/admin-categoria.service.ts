@@ -3,7 +3,7 @@ import { inject, Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { Observable } from "rxjs";
 import { ActualizarCategoriaRequest, CategoriaAdmin, CategoriaEstadisticas, CrearCategoriaRequest } from "../models/categoria-admin.model";
-import { PaginaDTO } from "../models/PaginaDTO.model";
+import { PaginaDTO } from "../../../core/models/PaginaDTO.model";
 
 @Injectable({
     providedIn: 'root'

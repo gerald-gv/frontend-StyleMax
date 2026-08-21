@@ -7,7 +7,7 @@ import { CarritoService } from '../../../core/services/carrito.service';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink,RouterLinkActive ,SearchBar],
+  imports: [RouterLink, RouterLinkActive, SearchBar],
   templateUrl: './navbar.html',
 })
 export class Navbar {
@@ -21,12 +21,33 @@ export class Navbar {
   readonly cantidadItems = this.carritoService.cantidadItems;
 
   isMenuOpen = signal(false);
+  mostrarDropdown = signal(false);
 
   toggleMenu() {
     this.isMenuOpen.update(value => !value);
   }
 
+  toggleDropdown(): void {
+    this.mostrarDropdown.update(value => !value);
+  }
+
+  cuentaActiva(): boolean {
+    return this.router.isActive('/perfil', {
+      paths: 'exact',
+      queryParams: 'exact',
+      fragment: 'ignored',
+      matrixParams: 'ignored'
+    }) || this.router.isActive('/pedidos', {
+      paths: 'exact',
+      queryParams: 'exact',
+      fragment: 'ignored',
+      matrixParams: 'ignored'
+    });
+  }
+
+
   cerrarSesion(): void {
+    this.mostrarDropdown.set(false);
     this.authService.logout();
     this.router.navigate(['/']);
   }

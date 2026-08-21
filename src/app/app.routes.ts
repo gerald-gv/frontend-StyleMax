@@ -19,6 +19,7 @@ import { AdminCategorias } from './features/admin/pages/categorias/admin-categor
 import { AdminMarcas } from './features/admin/pages/marcas/admin-marcas/admin-marcas';
 import { AdminUsuarios } from './features/admin/pages/usuarios/admin-usuarios/admin-usuarios';
 import { AdminPedidos } from './features/admin/pages/pedidos/admin-pedidos/admin-pedidos';
+import { Pedidos } from './features/perfil/pages/mis-pedidos/mis-pedidos';
 
 export const routes: Routes = [
 
@@ -52,8 +53,12 @@ export const routes: Routes = [
                 component: Registro
             },
             {
-                path: 'perfil',
+                path: 'mi-perfil',
                 component: Perfil
+            },
+            {
+                path: 'mis-pedidos',
+                component: Pedidos  
             },
             {
                 path: 'carrito',

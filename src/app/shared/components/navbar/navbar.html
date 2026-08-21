@@ -34,40 +34,123 @@
 
             <div class="relative group">
 
+                <!-- User Button -->
+
                 <button
                     type="button"
-                    routerLink="/perfil"
-                    routerLinkActive="bg-red-50 text-red-600"
+                    (click)="toggleDropdown()"
+                    [class.bg-red-50]="cuentaActiva()"
+                    [class.text-red-600]="cuentaActiva()"
                     class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 text-gray-700 transition-all duration-200 hover:scale-105 hover:bg-red-50 hover:text-red-600"
-                    title="Mi perfil"
-                    aria-label="Mi perfil"
+                    title="Mi cuenta"
+                    aria-label="Mi cuenta"
+                    [attr.aria-expanded]="mostrarDropdown()"
                 >
+
                     <i class="fa-regular fa-user text-xl"></i>
+
                 </button>
 
+
                 <!-- User Dropdown -->
-                <div class="invisible absolute right-0 top-full z-50 mt-3 w-52 translate-y-1 rounded-lg border border-gray-200 bg-white p-2 opacity-0 shadow-lg transition-all group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
 
-                    <div class="border-b border-gray-100 px-3 py-2">
+                <div
+                    class="invisible absolute right-0 top-full z-50 mt-3 w-60 translate-y-1 rounded-xl border border-gray-200 bg-white p-2 opacity-0 shadow-xl shadow-gray-900/5 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100"
+                    [class.visible]="mostrarDropdown()"
+                    [class.translate-y-0]="mostrarDropdown()"
+                    [class.opacity-100]="mostrarDropdown()"
+                >
 
-                        <p class="text-xs text-gray-400">
+                    <!-- User Header -->
+
+                    <div class="border-b border-gray-100 px-3 py-3">
+
+                        <p class="text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-400">
                             Hola
                         </p>
 
-                        <p class="truncate text-sm font-semibold text-gray-900">
+                        <p class="mt-1 truncate text-sm font-semibold text-gray-900">
                             {{ usuario()?.nombre }}
                         </p>
 
                     </div>
 
 
-                    <button type="button" (click)="cerrarSesion()" class="mt-1 w-full rounded-md px-3 py-2 text-left text-sm text-gray-600 transition hover:bg-gray-50 hover:text-red-600">
-                        Cerrar sesión
-                    </button>
+                    <!-- Account Navigation -->
+
+                    <div class="py-1.5">
+
+                        <!-- Profile -->
+
+                        <a
+                            routerLink="/mi-perfil"
+                            routerLinkActive="bg-red-50 text-red-600"
+                            (click)="mostrarDropdown.set(false)"
+                            class="group/item flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-600 transition-colors duration-200 hover:bg-gray-50 hover:text-gray-900"
+                        >
+
+                            <span
+                                class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50 text-gray-500 transition-colors group-hover/item:bg-white group-hover/item:text-red-600"
+                            >
+                                <i class="fa-regular fa-user text-sm"></i>
+                            </span>
+
+                            <span>
+                                Mi perfil
+                            </span>
+
+                        </a>
+
+
+                        <!-- Orders -->
+
+                        <a
+                            routerLink="/mis-pedidos"
+                            routerLinkActive="bg-red-50 text-red-600"
+                            (click)="mostrarDropdown.set(false)"
+                            class="group/item flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-600 transition-colors duration-200 hover:bg-gray-50 hover:text-gray-900"
+                        >
+
+                            <span
+                                class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50 text-gray-500 transition-colors group-hover/item:bg-white group-hover/item:text-red-600"
+                            >
+                                <i class="fa-solid fa-box-open text-sm"></i>
+                            </span>
+
+                            <span>
+                                Mis pedidos
+                            </span>
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- Logout -->
+
+                    <div class="border-t border-gray-100 pt-1.5">
+
+                        <button type="button" (click)="cerrarSesion()"
+                            class="group/logout cursor-pointer flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-gray-500 transition-colors duration-200 hover:bg-red-50 hover:text-red-600">
+
+                            <span
+                                class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50 text-gray-500 transition-colors group-hover/logout:bg-red-100 group-hover/logout:text-red-600"
+                            >
+                                <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
+                            </span>
+
+                            <span>
+                                Cerrar sesión
+                            </span>
+
+                        </button>
+
+                    </div>
 
                 </div>
 
             </div>
+
 
             } @else {
 
