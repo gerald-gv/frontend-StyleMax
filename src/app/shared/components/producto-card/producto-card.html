@@ -1,17 +1,37 @@
 @if (compact()) {
-
-    <a [routerLink]="['/productos', producto().slug]" 
-        (click)="seleccionado.emit()"
-        class="group flex w-full min-w-0 flex-col overflow-hidden rounded-xl border border-gray-200 bg-white transition-all duration-200 hover:border-red-200 hover:shadow-md">
+    <a [routerLink]="['/productos', producto().slug]" (click)="seleccionado.emit()" class="group flex w-full min-w-0 flex-col overflow-hidden rounded-xl border border-gray-200 bg-white transition-all duration-200 hover:border-red-200 hover:shadow-md">
 
         <div class="relative aspect-6/7 w-full overflow-hidden bg-gray-100">
-            <img [src]="producto().imagen" [alt]="producto().nombre" loading="lazy" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+
+            <img
+                [src]="producto().imagen"
+                [alt]="producto().nombre"
+                loading="lazy"
+                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
 
             @if (producto().destacado) {
-                <span class="absolute left-1.5 top-1.5 rounded-full bg-red-600 px-1.5 py-0.5 text-[6px] font-bold uppercase tracking-wide text-white shadow-sm">
+                <span class="absolute left-1.5 top-1.5 z-10 rounded-full bg-red-600 px-1.5 py-0.5 text-[6px] font-bold uppercase tracking-wide text-white shadow-sm">
                     Destacado
                 </span>
             }
+
+            <button
+                type="button"
+                (click)="toggleFavorito($event)"
+                [attr.aria-label]="favoritoActivo() ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+                [disabled]="procesandoFavorito()"
+                class="cursor-pointer absolute right-1.5 top-1.5 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-white/95 shadow-sm backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-red-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
+                [class.text-red-600]="favoritoActivo()"
+                [class.text-gray-700]="!favoritoActivo()">
+
+                @if (procesandoFavorito()) {
+                    <i class="fa-solid fa-spinner fa-spin text-[9px]"></i>
+                } @else {
+                    <i [class.fa-solid]="favoritoActivo()" [class.fa-regular]="!favoritoActivo()" class="fa-heart text-[10px]" ></i>
+                }
+
+            </button>
         </div>
 
         <div class="min-w-0 px-2.5 py-2.5">
@@ -39,7 +59,7 @@
     </a>
 } @else {
 
-    <a [routerLink]="['/productos', producto().slug]" class="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-gray-300 hover:shadow-xl">
+    <a [routerLink]="['/productos', producto().slug]" class="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-gray-300 hover:shadow-xl" >
 
         <div class="relative aspect-4/5 overflow-hidden bg-gray-100">
             <img [src]="producto().imagen" [alt]="producto().nombre" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
@@ -53,8 +73,23 @@
                 </span>
             }
 
-            <button type="button" class="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/95 text-gray-700 shadow-md backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-red-600 hover:text-white" aria-label="Agregar a favoritos" (click)="$event.preventDefault(); $event.stopPropagation()">
-                <i class="fa-regular fa-heart text-sm"></i>
+            <button
+                type="button"
+                (click)="toggleFavorito($event)"
+                [attr.aria-label]="favoritoActivo() ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+                [disabled]="procesandoFavorito()"
+                class="cursor-pointer absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/95 shadow-md backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-red-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
+                [class.text-red-600]="favoritoActivo()"
+                [class.text-gray-700]="!favoritoActivo()">
+
+                @if (procesandoFavorito()) {
+                    <i class="fa-solid fa-spinner fa-spin text-sm"></i>
+                } @else {
+
+                    <i [class.fa-solid]="favoritoActivo()" [class.fa-regular]="!favoritoActivo()" class="fa-heart text-sm"></i>
+
+                }
+
             </button>
 
             <div class="absolute bottom-4 left-4 right-4 z-10 translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
@@ -66,13 +101,26 @@
         </div>
 
         <div class="flex flex-1 flex-col p-4 sm:p-5">
-            <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-red-600">{{ producto().categoria }}</p>
-            <h2 class="mt-1.5 min-h-10 line-clamp-2 text-sm font-semibold leading-5 text-gray-900 transition-colors duration-200 group-hover:text-red-600 sm:text-[15px]">{{ producto().nombre }}</h2>
-            <p class="mt-1 truncate text-xs text-gray-400">{{ producto().marca }}</p>
+
+            <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-red-600">
+                {{ producto().categoria }}
+            </p>
+
+            <h2 class="mt-1.5 min-h-10 line-clamp-2 text-sm font-semibold leading-5 text-gray-900 transition-colors duration-200 group-hover:text-red-600 sm:text-[15px]">
+                {{ producto().nombre }}
+            </h2>
+
+            <p class="mt-1 truncate text-xs text-gray-400">
+                {{ producto().marca }}
+            </p>
+
             <div class="my-4 h-px bg-gray-100"></div>
 
             <div class="mt-auto flex items-center justify-between gap-3">
-                <span class="text-lg font-extrabold tracking-tight text-gray-900">S/ {{ producto().precio }}</span>
+
+                <span class="text-lg font-extrabold tracking-tight text-gray-900">
+                    S/ {{ producto().precio }}
+                </span>
 
                 <span class="hidden items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.12em] text-gray-400 transition-colors duration-200 group-hover:text-red-600 sm:inline-flex">
                     Ver
@@ -82,5 +130,4 @@
         </div>
 
     </a>
-
 }

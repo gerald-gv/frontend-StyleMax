@@ -123,6 +123,25 @@
 
                         </a>
 
+
+                        <!-- Favorites -->
+
+                        <a
+                            routerLink="/mis-favoritos"
+                            routerLinkActive="bg-red-50 text-red-600"
+                            (click)="mostrarDropdown.set(false)"
+                            class="group/item flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-600 transition-colors duration-200 hover:bg-gray-50 hover:text-gray-900">
+
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50 text-gray-500 transition-colors group-hover/item:bg-white group-hover/item:text-red-600">
+                                <i class="fa-regular fa-heart text-sm"></i>
+                            </span>
+
+                            <span>
+                                Mis favoritos
+                            </span>
+
+                        </a>
+
                     </div>
 
 
@@ -133,9 +152,7 @@
                         <button type="button" (click)="cerrarSesion()"
                             class="group/logout cursor-pointer flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-gray-500 transition-colors duration-200 hover:bg-red-50 hover:text-red-600">
 
-                            <span
-                                class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50 text-gray-500 transition-colors group-hover/logout:bg-red-100 group-hover/logout:text-red-600"
-                            >
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50 text-gray-500 transition-colors group-hover/logout:bg-red-100 group-hover/logout:text-red-600" >
                                 <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
                             </span>
 
@@ -260,6 +277,72 @@
             >
                 Contacto
             </a>
+
+
+            <!-- Authenticated Mobile Navigation -->
+
+            @if (autenticado()) {
+
+                <div class="my-2 border-t border-gray-100 pt-2">
+
+                    <p class="px-4 py-2 text-[10px] font-bold uppercase tracking-[0.15em] text-gray-400">
+                        Mi cuenta
+                    </p>
+
+
+                    <!-- Profile -->
+
+                    <a
+                        routerLink="/mi-perfil"
+                        routerLinkActive="bg-red-50 text-red-600"
+                        (click)="toggleMenu()"
+                        class="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-medium text-gray-700 transition-colors hover:bg-red-50 hover:text-red-600">
+
+                        <i class="fa-regular fa-user w-5 text-center text-sm"></i>
+
+                        <span>
+                            Mi perfil
+                        </span>
+
+                    </a>
+
+
+                    <!-- Orders -->
+
+                    <a
+                        routerLink="/mis-pedidos"
+                        routerLinkActive="bg-red-50 text-red-600"
+                        (click)="toggleMenu()"
+                        class="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-medium text-gray-700 transition-colors hover:bg-red-50 hover:text-red-600">
+
+                        <i class="fa-solid fa-box-open w-5 text-center text-sm"></i>
+
+                        <span>
+                            Mis pedidos
+                        </span>
+
+                    </a>
+
+
+                    <!-- Favorites -->
+
+                    <a
+                        routerLink="/mis-favoritos"
+                        routerLinkActive="bg-red-50 text-red-600"
+                        (click)="toggleMenu()"
+                        class="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-medium text-gray-700 transition-colors hover:bg-red-50 hover:text-red-600">
+
+                        <i class="fa-regular fa-heart w-5 text-center text-sm"></i>
+
+                        <span>
+                            Mis favoritos
+                        </span>
+
+                    </a>
+
+                </div>
+
+            }
 
         </div>
     </nav>

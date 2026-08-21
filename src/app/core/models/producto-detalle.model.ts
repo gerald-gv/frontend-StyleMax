@@ -14,4 +14,5 @@ export interface ProductoDetalle {
   destacado: boolean;
   marca: Marca;
   categoria: Categoria;
+  favorito: boolean;
 }

@@ -20,6 +20,8 @@ import { AdminMarcas } from './features/admin/pages/marcas/admin-marcas/admin-ma
 import { AdminUsuarios } from './features/admin/pages/usuarios/admin-usuarios/admin-usuarios';
 import { AdminPedidos } from './features/admin/pages/pedidos/admin-pedidos/admin-pedidos';
 import { Pedidos } from './features/perfil/pages/mis-pedidos/mis-pedidos';
+import { MisFavoritos } from './features/perfil/pages/mis-favoritos/mis-favoritos';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
 
@@ -54,12 +56,21 @@ export const routes: Routes = [
             },
             {
                 path: 'mi-perfil',
-                component: Perfil
+                component: Perfil,
+                canActivate: [authGuard]
             },
             {
                 path: 'mis-pedidos',
-                component: Pedidos  
+                component: Pedidos,  
+                canActivate: [authGuard]
             },
+
+            {
+                path: 'mis-favoritos',
+                component: MisFavoritos,
+                canActivate: [authGuard]
+            },
+
             {
                 path: 'carrito',
                 component: Carrito

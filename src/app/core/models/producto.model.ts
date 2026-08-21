@@ -8,4 +8,5 @@ export interface Producto {
     destacado: boolean;
     marca: string;
     categoria: string;
+    favorito: boolean;
 }

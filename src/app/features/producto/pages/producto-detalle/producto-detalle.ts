@@ -6,6 +6,7 @@ import { AuthRequiredModal } from '../../../../shared/components/auth-require-mo
 import { AuthService } from '../../../../core/services/auth.service';
 import { CarritoService } from '../../../../core/services/carrito.service';
 import { DecimalPipe } from '@angular/common';
+import { FavoritoService } from '../../../../core/services/favorito.service';
 
 type Estado = 'loading' | 'error' | 'success';
 
@@ -20,6 +21,7 @@ export class ProductoDetallePage implements OnInit {
   private readonly productoService = inject(ProductoService);
   private readonly authService = inject(AuthService);
   private readonly carritoService = inject(CarritoService);
+  private readonly favoritoService = inject(FavoritoService);
 
   producto = signal<ProductoDetalle | null>(null)
 
@@ -27,6 +29,7 @@ export class ProductoDetallePage implements OnInit {
   mostrarAuthModal = signal(false);
 
   agregandoAlCarrito = signal(false);
+  procesandoFavorito = signal(false);
 
   ngOnInit(): void {
 
@@ -59,6 +62,101 @@ export class ProductoDetallePage implements OnInit {
         this.estado.set('error');
       }
     })
+  }
+
+  toggleFavorito(): void {
+
+    if (!this.authService.autenticado()) {
+      this.mostrarAuthModal.set(true);
+      return;
+    }
+
+    if (this.procesandoFavorito()) {
+      return;
+    }
+
+    const productoActual = this.producto();
+
+    if (!productoActual) {
+      return;
+    }
+
+    const esFavorito = productoActual.favorito;
+
+    this.procesandoFavorito.set(true);
+
+    if (esFavorito) {
+
+      this.favoritoService.eliminar(productoActual.id).subscribe({
+
+        next: () => {
+
+          this.producto.update(producto => {
+
+            if (!producto) {
+              return producto;
+            }
+
+            return {
+              ...producto,
+              favorito: false
+            };
+
+          });
+
+          this.procesandoFavorito.set(false);
+
+        },
+
+        error: error => {
+
+          console.error(
+            'No se pudo eliminar el favorito:',
+            error
+          );
+
+          this.procesandoFavorito.set(false);
+
+        }
+
+      });
+
+      return;
+    }
+
+    this.favoritoService.agregar(productoActual.id).subscribe({
+
+      next: () => {
+
+        this.producto.update(producto => {
+
+          if (!producto) {
+            return producto;
+          }
+
+          return {
+            ...producto,
+            favorito: true
+          };
+
+        });
+
+        this.procesandoFavorito.set(false);
+
+      },
+
+      error: error => {
+
+        console.error(
+          'No se pudo agregar el favorito:',
+          error
+        );
+
+        this.procesandoFavorito.set(false);
+
+      }
+
+    });
   }
 
   agregarAlCarrito(): void {
