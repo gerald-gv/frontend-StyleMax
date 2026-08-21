@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { Producto } from '../../../core/models/producto.model';
 import { RouterLink } from '@angular/router';
 
@@ -9,5 +9,7 @@ import { RouterLink } from '@angular/router';
 })
 export class ProductoCard {
   producto = input.required<Producto>();
+  compact = input(false);
 
+  readonly seleccionado = output<void>();
 }

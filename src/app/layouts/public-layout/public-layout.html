@@ -1,4 +1,12 @@
 <div class="min-h-screen flex flex-col bg-gray-50">
+
+        @if (buscadorService.abierto()) {
+        <div
+            class="fixed inset-0 z-40 bg-black/50 backdrop-blur-[2px]"
+            (click)="buscadorService.cerrar()">
+        </div>
+    }
+    
     <app-navbar />
     <main class="flex-1 pt-34 lg:pt-22">
         <router-outlet />

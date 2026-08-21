@@ -93,6 +93,39 @@
 
             <section class="min-w-0">
 
+                <!-- Search Result -->
+
+                @if (terminoBusqueda()) {
+
+                    <div class="mb-6 rounded-2xl border border-red-100 bg-red-50/60 px-5 py-4">
+
+                        <div class="flex items-start gap-3">
+
+                            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-red-600 text-white">
+                                <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                            </div>
+
+                            <div class="min-w-0">
+
+                                <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-red-600">
+                                    Búsqueda
+                                </p>
+
+                                <h2 class="mt-1 truncate text-base font-bold text-gray-950">
+                                    Resultados para
+                                    <span class="text-red-600">
+                                        "{{ terminoBusqueda() }}"
+                                    </span>
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                }
+
 
                 <!-- Result Count -->
 

@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Navbar } from "../../shared/components/navbar/navbar";
 import { Footer } from "../../shared/components/footer/footer";
 import { RouterOutlet } from '@angular/router';
+import { BuscadorService } from '../../core/services/buscador.service';
 
 @Component({
   selector: 'app-public-layout',
@@ -9,4 +10,8 @@ import { RouterOutlet } from '@angular/router';
   standalone: true,
   templateUrl: './public-layout.html',
 })
-export class PublicLayout {}
+export class PublicLayout {
+
+  readonly buscadorService = inject(BuscadorService);
+
+}

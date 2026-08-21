@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ProductoDetalle } from '../models/producto-detalle.model';
 import { CatalogoResponse } from '../models/catalogo-response.model';
-import { ProductoCard } from '../../shared/components/producto-card/producto-card';
 import { Producto } from '../models/producto.model';
 
 
@@ -17,9 +16,13 @@ export class ProductoService {
 
   private readonly apiUrl = `${environment.apiUrl}/productos`;
 
-  listarCatalogo(pagina: number, categoriaId?: number, marcaId?: number, fit?: string, q?: string): Observable<CatalogoResponse> {
+  listarCatalogo(pagina: number, categoriaId?: number, marcaId?: number, fit?: string, q?: string, size?: number): Observable<CatalogoResponse> {
 
     let params = new HttpParams().set('page', pagina);
+
+    if (size !== undefined) {
+      params = params.set('size', size);
+    }
 
     if (categoriaId !== undefined) {
       params = params.set('categoriaId', categoriaId);

@@ -29,14 +29,20 @@ export class ProductoDetallePage implements OnInit {
   agregandoAlCarrito = signal(false);
 
   ngOnInit(): void {
-    const slug = this.route.snapshot.paramMap.get('slug')
 
-    if (!slug) {
-      this.estado.set('error')
-      return
-    }
+    this.route.paramMap.subscribe(params => {
 
-    this.cargarProducto(slug)
+      const slug = params.get('slug');
+
+      if (!slug) {
+        this.estado.set('error');
+        return;
+      }
+
+      this.cargarProducto(slug);
+
+    });
+
   }
 
   private cargarProducto(slug: string): void {

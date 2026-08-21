@@ -34,6 +34,8 @@ export class Catalogo implements OnInit, AfterViewInit, OnDestroy {
   readonly categorias = signal<Categoria[]>([]);
   readonly marcas = signal<Marca[]>([]);
 
+  readonly terminoBusqueda = signal<string | undefined>(undefined);
+
 
   // Filters
 
@@ -89,13 +91,14 @@ export class Catalogo implements OnInit, AfterViewInit, OnDestroy {
     this.route.queryParamMap.subscribe(params => {
 
       const categoriaIdParam = params.get('categoriaId');
+      const terminoBusqueda = params.get('q')?.trim() ?? '';
 
       const categoriaId = categoriaIdParam
         ? Number(categoriaIdParam)
         : undefined;
 
       this.categoriaSeleccionada.set(categoriaId);
-
+      this.terminoBusqueda.set(terminoBusqueda);
       this.cargarPagina(0);
 
       window.scrollTo({
@@ -167,7 +170,8 @@ export class Catalogo implements OnInit, AfterViewInit, OnDestroy {
         pagina,
         this.categoriaSeleccionada(),
         this.marcaSeleccionada(),
-        this.fitSeleccionado()
+        this.fitSeleccionado(),
+        this.terminoBusqueda()
       )
       .subscribe({
 
