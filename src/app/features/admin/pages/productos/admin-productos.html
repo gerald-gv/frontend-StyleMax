@@ -602,3 +602,17 @@
     />
 
 }
+
+@if (modalConfirmacionAbierto()) {
+
+    <confirmation-modal
+        [abierto]="modalConfirmacionAbierto()"
+        titulo="Desactivar producto"
+        [mensaje]="mensajeConfirmacion()"
+        textoConfirmar="Desactivar"
+        textoCancelar="Cancelar"
+        (confirmar)="confirmarDesactivacionProducto()"
+        (cancelar)="cerrarConfirmacion()"
+    />
+
+}

@@ -1,3 +1,40 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+.modal-backdrop {
+    animation: modal-backdrop-enter 200ms ease-out both;
+}
+
+.modal-content {
+    animation: modal-content-enter 250ms ease-out both;
+}
+
+@keyframes modal-backdrop-enter {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modal-content-enter {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .modal-backdrop,
+    .modal-content {
+        animation: none;
+    }
+}

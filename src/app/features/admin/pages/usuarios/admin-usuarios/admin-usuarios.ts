@@ -4,6 +4,7 @@ import { catchError, debounceTime, distinctUntilChanged, EMPTY, Subject, switchM
 import { UsuarioAdmin } from '../../../models/usuario-admin.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ModalUsuario } from '../components/modal-usuario/modal-usuario';
+import { NotificationService } from '../../../../../core/services/notification.service';
 
 @Component({
   selector: 'admin-usuarios',
@@ -18,6 +19,7 @@ export class AdminUsuarios implements OnInit {
 
   private readonly terminoBusqueda$ = new Subject<string>();
 
+  private readonly notification = inject(NotificationService);
 
   // USUARIOS
 
@@ -264,13 +266,19 @@ export class AdminUsuarios implements OnInit {
   usuarioGuardado(usuario: UsuarioAdmin): void {
 
     this.usuarios.update(
-      usuarios => usuarios.map(u => u.id === usuario.id ? usuario : u)
+      usuarios =>
+        usuarios.map(u =>
+          u.id === usuario.id
+            ? usuario
+            : u
+        )
     );
 
     this.modalUsuarioAbierto.set(false);
     this.usuarioSeleccionado.set(null);
     this.cargarEstadisticas();
 
+    this.notification.success(`Usuario "${usuario.nombre} ${usuario.apellido}" actualizado correctamente.`);
   }
 
   editarUsuario(usuario: UsuarioAdmin): void {
@@ -318,18 +326,16 @@ export class AdminUsuarios implements OnInit {
   eliminarUsuario(usuario: UsuarioAdmin): void {
 
     if (usuario.rol === 'ADMINISTRADOR') {
-
       return;
-
     }
 
-    const confirmado = window.confirm(`¿Deseas desactivar al usuario "${usuario.nombre} ${usuario.apellido}"?`
+    const confirmado = window.confirm(
+      `¿Deseas desactivar al usuario "${usuario.nombre} ${usuario.apellido}"?`
     );
 
     if (!confirmado) {
       return;
     }
-
 
     this.usuarioService
       .eliminar(usuario.id)
@@ -337,18 +343,31 @@ export class AdminUsuarios implements OnInit {
 
         next: () => {
 
-          this.usuarios.update(usuarios => usuarios.map(u => u.id === usuario.id ? { ...u, activo: false } : u));
+          this.usuarios.update(
+            usuarios =>
+              usuarios.map(u =>
+                u.id === usuario.id
+                  ? { ...u, activo: false }
+                  : u
+              )
+          );
+
           this.cargarEstadisticas();
+
+          this.notification.success(
+            `Usuario "${usuario.nombre} ${usuario.apellido}" desactivado correctamente.`
+          );
         },
 
         error: () => {
 
-          this.error.set('No se pudo desactivar el usuario.');
+          this.notification.error(
+            `No se pudo desactivar al usuario "${usuario.nombre} ${usuario.apellido}".`
+          );
 
         }
 
       });
-
   }
 
 }

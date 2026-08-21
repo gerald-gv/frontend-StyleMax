@@ -5,6 +5,7 @@ import { ModalCategoria } from "./components/modal-categoria/modal-categoria";
 import { catchError, debounceTime, distinctUntilChanged, EMPTY, Subject, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SearchBarAdmin } from '../../../../shared/components/search-bar-admin/search-bar-admin';
+import { NotificationService } from '../../../../core/services/notification.service';
 
 @Component({
   selector: 'app-categoria',
@@ -17,6 +18,7 @@ export class AdminCategorias implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly terminoBusqueda$ = new Subject<string>();
 
+  private readonly notification = inject(NotificationService);
 
   readonly categorias = signal<CategoriaAdmin[]>([]);
   readonly cargando = signal(true);
@@ -219,22 +221,31 @@ export class AdminCategorias implements OnInit {
 
   categoriaGuardada(categoria: CategoriaAdmin): void {
 
-    this.categorias.update(
-      categorias => {
-        const existe = categorias.some(c => c.id === categoria.id );
-
-
-        if (existe) {
-          return categorias.map(c =>c.id === categoria.id? categoria: c);
-        }
-
-        return [categoria,...categorias];
-      }
+    const existe = this.categorias().some(
+      c => c.id === categoria.id
     );
 
+    this.categorias.update(categorias => {
+
+      if (existe) {
+        return categorias.map(c =>
+          c.id === categoria.id
+            ? categoria
+            : c
+        );
+      }
+
+      return [categoria, ...categorias];
+    });
 
     this.cerrarModalCategoria();
     this.cargarEstadisticas();
+
+    this.notification.success(
+      existe
+        ? `Categoría "${categoria.nombre}" actualizada correctamente.`
+        : `Categoría "${categoria.nombre}" creada correctamente.`
+    );
   }
 
 
@@ -242,12 +253,13 @@ export class AdminCategorias implements OnInit {
 
   eliminarCategoria(categoria: CategoriaAdmin): void {
 
-    const confirmado = window.confirm(`¿Deseas desactivar la categoría "${categoria.nombre}"?`);
+    const confirmado = window.confirm(
+      `¿Deseas desactivar la categoría "${categoria.nombre}"?`
+    );
 
     if (!confirmado) {
       return;
     }
-
 
     this.categoriaService.eliminar(categoria.id)
       .subscribe({
@@ -256,19 +268,29 @@ export class AdminCategorias implements OnInit {
 
           this.categorias.update(
             categorias =>
-              categorias.map(c => c.id === categoriaActualizada.id ? categoriaActualizada : c )
+              categorias.map(c =>
+                c.id === categoriaActualizada.id
+                  ? categoriaActualizada
+                  : c
+              )
           );
 
           this.cargarEstadisticas();
 
+          this.notification.success(
+            `Categoría "${categoria.nombre}" desactivada correctamente.`
+          );
         },
 
         error: () => {
-          this.error.set('No se pudo desactivar la categoría.');
+
+          this.notification.error(
+            `No se pudo desactivar la categoría "${categoria.nombre}".`
+          );
+
         }
 
       });
-
   }
 
 }

@@ -22,6 +22,7 @@ import { AdminPedidos } from './features/admin/pages/pedidos/admin-pedidos/admin
 import { Pedidos } from './features/perfil/pages/mis-pedidos/mis-pedidos';
 import { MisFavoritos } from './features/perfil/pages/mis-favoritos/mis-favoritos';
 import { authGuard } from './core/guards/auth.guard';
+import { NotFound } from './pages/not-found/not-found';
 
 export const routes: Routes = [
 
@@ -133,6 +134,11 @@ export const routes: Routes = [
                 component: AdminPedidos
             }
         ]
+    },
+
+    {
+        path: '**',
+        component: NotFound
     }
 
 ];

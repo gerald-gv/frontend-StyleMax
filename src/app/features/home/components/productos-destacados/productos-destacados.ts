@@ -11,219 +11,199 @@ import { DecimalPipe } from '@angular/common';
 })
 export class ProductosDestacados implements OnInit {
 
-  private readonly productoService = inject(ProductoService);
+    private readonly productoService = inject(ProductoService);
 
-  @ViewChild('slider')
-  slider!: ElementRef<HTMLDivElement>;
+    @ViewChild('slider')
+    slider!: ElementRef<HTMLDivElement>;
+
+    // Estado
+
+    productos = signal<Producto[]>([]);
+
+    cargando = signal(true);
+
+    error = signal(false);
+
+    paginaActual = signal(0);
+
+    productosPorPagina = signal(4);
 
 
-  // =========================================================
-  // Estado
-  // =========================================================
+    // Total de páginas
 
-  productos = signal<Producto[]>([]);
+    totalPaginas = computed(() => {
 
-  paginaActual = signal(0);
+        const totalProductos = this.productos().length;
 
-  productosPorPagina = signal(4);
+        const porPagina = this.productosPorPagina();
+
+        if (totalProductos === 0) {
+            return 0;
+        }
+
+        return Math.ceil(
+            totalProductos / porPagina
+        );
+
+    });
 
 
-  // =========================================================
-  // Total de páginas
-  // =========================================================
+    // Array para los indicadores
 
-  totalPaginas = computed(() => {
-
-    const totalProductos = this.productos().length;
-
-    const porPagina = this.productosPorPagina();
-
-    if (totalProductos === 0) {
-      return 0;
-    }
-
-    return Math.ceil(
-      totalProductos / porPagina
+    paginas = computed(() =>
+        Array.from({
+            length: this.totalPaginas()
+        })
     );
 
-  });
+
+    // Inicialización
+
+    ngOnInit(): void {
+
+        this.actualizarProductosPorPagina();
+
+        this.productoService.listarDestacados()
+            .subscribe({
+
+                next: (productos) => {
+
+                    this.productos.set(productos);
+
+                    this.cargando.set(false);
+
+                    this.error.set(false);
+
+                },
+
+                error: (error) => {
+
+                    console.error(
+                        'Error cargando productos destacados',
+                        error
+                    );
+
+                    this.cargando.set(false);
+
+                    this.error.set(true);
+
+                }
+
+            });
+
+    }
 
 
-  // =========================================================
-  // Array para los tabs
-  // =========================================================
+    // Responsive
 
-  paginas = computed(() =>
-    Array.from({
-      length: this.totalPaginas()
-    })
-  );
+    @HostListener('window:resize')
+    onResize(): void {
 
+        const paginaAnterior = this.paginaActual();
 
-  // =========================================================
-  // Inicialización
-  // =========================================================
+        this.actualizarProductosPorPagina();
 
-  ngOnInit(): void {
+        const total = this.totalPaginas();
 
-    this.productoService.listarDestacados()
-      .subscribe({
+        if (paginaAnterior >= total) {
 
-        next: (productos) => {
-
-          this.productos.set(productos);
-
-          // En desktop inicialmente mostramos 4
-          this.actualizarProductosPorPagina();
-
-        },
-
-        error: (error) => {
-
-          console.error(
-            'Error cargando productos destacados',
-            error
-          );
+            this.paginaActual.set(
+                Math.max(total - 1, 0)
+            );
 
         }
 
-      });
-
-  }
-
-
-
-  // =========================================================
-  // Responsive
-  // =========================================================
-
-
-  @HostListener('window:resize')
-  onResize(): void {
-
-    const paginaAnterior = this.paginaActual();
-
-    this.actualizarProductosPorPagina();
-
-    const total = this.totalPaginas();
-
-    if (paginaAnterior >= total) {
-
-      this.paginaActual.set(
-        Math.max(total - 1, 0)
-      );
-
-    }
-
-  }
-
-  private actualizarProductosPorPagina(): void {
-
-    const ancho = window.innerWidth;
-
-    if (ancho >= 1024) {
-
-      // lg → 4 productos
-      this.productosPorPagina.set(4);
-
-    } else if (ancho >= 768) {
-
-      // md → 3 productos
-      this.productosPorPagina.set(3);
-
-    } else {
-
-      // móvil → 2 productos
-      this.productosPorPagina.set(2);
-
-    }
-
-  }
-
-
-  // =========================================================
-  // Slider
-  // =========================================================
-
-  mover(direccion: 'prev' | 'next'): void {
-
-    const elemento = this.slider?.nativeElement;
-
-    if (!elemento) {
-      return;
     }
 
 
-    const total = this.totalPaginas();
+    private actualizarProductosPorPagina(): void {
 
-    if (total <= 1) {
-      return;
+        const ancho = window.innerWidth;
+
+        if (ancho >= 1024) {
+
+            // lg → 4 productos
+            this.productosPorPagina.set(4);
+
+        } else if (ancho >= 768) {
+
+            // md → 3 productos
+            this.productosPorPagina.set(3);
+
+        } else {
+
+            // móvil → 2 productos
+            this.productosPorPagina.set(2);
+
+        }
+
     }
 
 
-    const paginaActual = this.paginaActual();
+    // Slider
 
+    mover(direccion: 'prev' | 'next'): void {
 
-    const nuevaPagina =
-      direccion === 'next'
-        ? paginaActual + 1
-        : paginaActual - 1;
+        const elemento = this.slider?.nativeElement;
 
+        if (!elemento) {
+            return;
+        }
 
-    const pagina = Math.max(
-      0,
-      Math.min(
-        nuevaPagina,
-        total - 1
-      )
-    );
+        const total = this.totalPaginas();
 
+        if (total <= 1) {
+            return;
+        }
 
-    this.paginaActual.set(pagina);
+        const paginaActual = this.paginaActual();
 
+        const nuevaPagina =
+            direccion === 'next'
+                ? paginaActual + 1
+                : paginaActual - 1;
 
-    elemento.scrollTo({
+        const pagina = Math.max(
+            0,
+            Math.min(
+                nuevaPagina,
+                total - 1
+            )
+        );
 
-      left: pagina * elemento.clientWidth,
+        this.paginaActual.set(pagina);
 
-      behavior: 'smooth'
+        elemento.scrollTo({
+            left: pagina * elemento.clientWidth,
+            behavior: 'smooth'
+        });
 
-    });
-
-  }
-
-
-  // =========================================================
-  // Ir directamente a una página
-  // =========================================================
-
-  irAPagina(pagina: number): void {
-
-    const elemento = this.slider?.nativeElement;
-
-    if (!elemento) {
-      return;
     }
 
 
-    const total = this.totalPaginas();
+    // Ir directamente a una pagina
 
-    if (pagina < 0 || pagina >= total) {
-      return;
+    irAPagina(pagina: number): void {
+
+        const elemento = this.slider?.nativeElement;
+
+        if (!elemento) {
+            return;
+        }
+
+        const total = this.totalPaginas();
+
+        if (pagina < 0 || pagina >= total) {
+            return;
+        }
+
+        this.paginaActual.set(pagina);
+
+        elemento.scrollTo({
+            left: pagina * elemento.clientWidth,
+            behavior: 'smooth'
+        });
+
     }
-
-
-    this.paginaActual.set(pagina);
-
-
-    elemento.scrollTo({
-
-      left: pagina * elemento.clientWidth,
-
-      behavior: 'smooth'
-
-    });
-
-  }
 
 }

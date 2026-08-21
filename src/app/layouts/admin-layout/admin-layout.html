@@ -1,6 +1,11 @@
 <div class="min-h-screen bg-gray-100">
 
-    <admin-header></admin-header>
+    <!-- HEADER -->
+
+    <admin-header
+        (toggleMenu)="toggleMenu()"
+        (solicitarCierreSesion)="cerrarSesion()"
+    ></admin-header>
 
 
     <!-- MOBILE OVERLAY -->
@@ -19,10 +24,14 @@
 
     <!-- SIDEBAR -->
 
-    <admin-sidebar></admin-sidebar>
+    <admin-sidebar
+        [menuAbierto]="menuAbierto()"
+        (cerrarMenu)="cerrarMenu()"
+        (solicitarCierreSesion)="cerrarSesion()"
+    ></admin-sidebar>
 
 
-    <!-- MAIN  -->
+    <!-- MAIN -->
 
     <main class="min-h-screen pt-16 lg:pl-64">
 

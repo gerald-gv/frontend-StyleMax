@@ -1,73 +1,132 @@
-<main class="min-h-[calc(100vh-80px)] bg-gray-50 px-6 py-12">
+<div class="bg-gray-50 px-6 py-12 sm:py-16">
 
     <div class="mx-auto max-w-lg">
 
+        <!-- HEADER -->
+
         <div class="mb-8 text-center">
 
-            <span class="text-xs font-bold uppercase tracking-[0.28em] text-red-600">
+            <span class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.28em] text-red-600">
+                <span class="h-px w-5 bg-red-600"></span>
                 Tu estilo
+                <span class="h-px w-5 bg-red-600"></span>
             </span>
 
-            <h1 class="mt-3 text-3xl font-bold tracking-tight text-gray-950">
+
+            <h1 class="mt-4 text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl">
                 Crear cuenta
             </h1>
 
-            <p class="mt-3 text-sm leading-6 text-gray-500">
-                Crea tu cuenta para guardar tus datos y realizar tus compras.
+
+            <p class="mx-auto mt-3 max-w-md text-sm leading-6 text-gray-500">
+                Crea tu cuenta para guardar tus datos,
+                gestionar tus pedidos y realizar tus compras.
             </p>
 
         </div>
 
 
-        <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
+        <!-- CARD -->
 
-            <form [formGroup]="formulario" (ngSubmit)="registrarse()" class="space-y-5">
+        <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-[0_10px_40px_rgba(0,0,0,0.06)] sm:p-8">
+
+            <form
+                [formGroup]="formulario"
+                (ngSubmit)="registrarse()"
+                class="space-y-5"
+            >
+
+                <!-- NOMBRE / APELLIDO -->
 
                 <div class="grid gap-5 sm:grid-cols-2">
 
-                    <!-- Nombre -->
+                    <!-- NOMBRE -->
 
                     <div>
 
-                        <label for="nombre" class="block text-sm font-medium text-gray-900">
+                        <label
+                            for="nombre"
+                            class="block text-sm font-semibold text-gray-900"
+                        >
                             Nombre
                         </label>
 
-                        <input id="nombre" type="text" formControlName="nombre" autocomplete="given-name"
-                            class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10"
-                            placeholder="Tu nombre">
+
+                        <div class="relative mt-2">
+
+                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
+                                <i class="fa-regular fa-user text-sm"></i>
+                            </div>
+
+
+                            <input
+                                id="nombre"
+                                type="text"
+                                formControlName="nombre"
+                                autocomplete="given-name"
+                                placeholder="Tu nombre"
+                                class="w-full rounded-xl border border-gray-300 bg-white py-3 pl-10 pr-4 text-sm text-gray-900 outline-none transition-all duration-200 placeholder:text-gray-400 hover:border-gray-400 focus:border-red-600 focus:ring-4 focus:ring-red-600/10"
+                            >
+
+                        </div>
+
 
                         @if (
-                        formulario.controls.nombre.touched &&
-                        formulario.controls.nombre.invalid
+                            formulario.controls.nombre.touched &&
+                            formulario.controls.nombre.invalid
                         ) {
-                        <p class="mt-2 text-xs text-red-600">
-                            Ingresa tu nombre.
-                        </p>
+
+                            <p class="mt-2 flex items-center gap-1.5 text-xs font-medium text-red-600">
+                                <i class="fa-solid fa-circle-exclamation text-[11px]"></i>
+                                Ingresa tu nombre.
+                            </p>
+
                         }
 
                     </div>
 
 
-                    <!-- Apellido -->
+                    <!-- APELLIDO -->
 
                     <div>
 
-                        <label for="apellido" class="block text-sm font-medium text-gray-900">
+                        <label
+                            for="apellido"
+                            class="block text-sm font-semibold text-gray-900"
+                        >
                             Apellido
                         </label>
 
-                        <input id="apellido" type="text" formControlName="apellido" autocomplete="family-name"
-                            class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10"
-                            placeholder="Tu apellido">
+
+                        <div class="relative mt-2">
+
+                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
+                                <i class="fa-regular fa-user text-sm"></i>
+                            </div>
+
+
+                            <input
+                                id="apellido"
+                                type="text"
+                                formControlName="apellido"
+                                autocomplete="family-name"
+                                placeholder="Tu apellido"
+                                class="w-full rounded-xl border border-gray-300 bg-white py-3 pl-10 pr-4 text-sm text-gray-900 outline-none transition-all duration-200 placeholder:text-gray-400 hover:border-gray-400 focus:border-red-600 focus:ring-4 focus:ring-red-600/10"
+                            >
+
+                        </div>
+
 
                         @if (
-                        formulario.controls.apellido.touched &&
-                        formulario.controls.apellido.invalid
+                            formulario.controls.apellido.touched &&
+                            formulario.controls.apellido.invalid
                         ) {
-                        <p class="mt-2 text-xs text-red-600">
-                            Ingresa tu apellido.
-                        </p>
+
+                            <p class="mt-2 flex items-center gap-1.5 text-xs font-medium text-red-600">
+                                <i class="fa-solid fa-circle-exclamation text-[11px]"></i>
+                                Ingresa tu apellido.
+                            </p>
+
                         }
 
                     </div>
@@ -75,100 +134,227 @@
                 </div>
 
 
-                <!-- Correo -->
+                <!-- CORREO -->
 
                 <div>
 
-                    <label for="correo" class="block text-sm font-medium text-gray-900">
+                    <label
+                        for="correo"
+                        class="block text-sm font-semibold text-gray-900"
+                    >
                         Correo electrónico
                     </label>
 
-                    <input id="correo" type="email" formControlName="correo" autocomplete="email"
-                        class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10"
-                        placeholder="correo@ejemplo.com">
+
+                    <div class="relative mt-2">
+
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
+                            <i class="fa-regular fa-envelope text-sm"></i>
+                        </div>
+
+
+                        <input
+                            id="correo"
+                            type="email"
+                            formControlName="correo"
+                            autocomplete="email"
+                            placeholder="correo@ejemplo.com"
+                            class="w-full rounded-xl border border-gray-300 bg-white py-3 pl-10 pr-4 text-sm text-gray-900 outline-none transition-all duration-200 placeholder:text-gray-400 hover:border-gray-400 focus:border-red-600 focus:ring-4 focus:ring-red-600/10"
+                        >
+
+                    </div>
+
 
                     @if (
-                    formulario.controls.correo.touched &&
-                    formulario.controls.correo.invalid
+                        formulario.controls.correo.touched &&
+                        formulario.controls.correo.invalid
                     ) {
-                    <p class="mt-2 text-xs text-red-600">
-                        Ingresa un correo electrónico válido.
-                    </p>
+
+                        <p class="mt-2 flex items-center gap-1.5 text-xs font-medium text-red-600">
+                            <i class="fa-solid fa-circle-exclamation text-[11px]"></i>
+                            Ingresa un correo electrónico válido.
+                        </p>
+
                     }
 
                 </div>
 
 
-                <!-- Telefono -->
+                <!-- TELEFONO -->
 
                 <div>
 
-                    <label for="telefono" class="block text-sm font-medium text-gray-900">
+                    <label
+                        for="telefono"
+                        class="block text-sm font-semibold text-gray-900"
+                    >
                         Teléfono
                     </label>
 
-                    <input id="telefono" type="tel" formControlName="telefono" autocomplete="tel"
-                        class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10"
-                        placeholder="987 654 321">
+
+                    <div class="relative mt-2">
+
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
+                            <i class="fa-solid fa-phone text-sm"></i>
+                        </div>
+
+
+                        <input
+                            id="telefono"
+                            type="tel"
+                            formControlName="telefono"
+                            autocomplete="tel"
+                            placeholder="987 654 321"
+                            class="w-full rounded-xl border border-gray-300 bg-white py-3 pl-10 pr-4 text-sm text-gray-900 outline-none transition-all duration-200 placeholder:text-gray-400 hover:border-gray-400 focus:border-red-600 focus:ring-4 focus:ring-red-600/10"
+                        >
+
+                    </div>
 
                 </div>
 
 
-                <!-- Password -->
+                <!-- PASSWORD -->
 
                 <div>
 
-                    <label for="password" class="block text-sm font-medium text-gray-900">
+                    <label
+                        for="password"
+                        class="block text-sm font-semibold text-gray-900"
+                    >
                         Contraseña
                     </label>
 
-                    <input id="password" type="password" formControlName="password" autocomplete="new-password"
-                        class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-600/10"
-                        placeholder="Mínimo 8 caracteres">
+
+                    <div class="relative mt-2">
+
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
+                            <i class="fa-solid fa-lock text-sm"></i>
+                        </div>
+
+
+                        <input
+                            id="password"
+                            type="password"
+                            formControlName="password"
+                            autocomplete="new-password"
+                            placeholder="Mínimo 8 caracteres"
+                            class="w-full rounded-xl border border-gray-300 bg-white py-3 pl-10 pr-4 text-sm text-gray-900 outline-none transition-all duration-200 placeholder:text-gray-400 hover:border-gray-400 focus:border-red-600 focus:ring-4 focus:ring-red-600/10"
+                        >
+
+                    </div>
+
 
                     @if (
-                    formulario.controls.password.touched &&
-                    formulario.controls.password.invalid
+                        formulario.controls.password.touched &&
+                        formulario.controls.password.invalid
                     ) {
-                    <p class="mt-2 text-xs text-red-600">
-                        La contraseña debe tener al menos 8 caracteres.
-                    </p>
+
+                        <p class="mt-2 flex items-center gap-1.5 text-xs font-medium text-red-600">
+                            <i class="fa-solid fa-circle-exclamation text-[11px]"></i>
+                            La contraseña debe tener al menos 8 caracteres.
+                        </p>
+
                     }
 
                 </div>
 
+
+                <!-- ERROR -->
 
                 @if (error()) {
-                <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                    {{ error() }}
-                </div>
+
+                    <div class="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+
+                        <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
+                            <i class="fa-solid fa-circle-exclamation text-xs"></i>
+                        </div>
+
+
+                        <p class="text-sm leading-5 text-red-700">
+                            {{ error() }}
+                        </p>
+
+                    </div>
+
                 }
 
-                <button type="submit" [disabled]="loading()"
-                    class="w-full rounded-lg bg-red-600 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60">
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="submit"
+                    [disabled]="loading()"
+                    class="flex w-full items-center justify-center gap-2 rounded-xl bg-red-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-red-600/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-red-700 hover:shadow-red-600/30 focus:outline-none focus:ring-4 focus:ring-red-600/20 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
+                >
+
                     @if (loading()) {
-                    Creando cuenta...
+
+                        <i class="fa-solid fa-spinner fa-spin text-xs"></i>
+
+                        <span>
+                            Creando cuenta...
+                        </span>
+
                     } @else {
-                    Crear cuenta
+
+                        <span>
+                            Crear cuenta
+                        </span>
+
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+
                     }
+
                 </button>
 
             </form>
 
 
-            <div class="mt-6 border-t border-gray-100 pt-6 text-center">
+            <!-- DIVIDER -->
+
+            <div class="my-7 flex items-center gap-4">
+
+                <div class="h-px flex-1 bg-gray-100"></div>
+
+                <span class="text-xs font-medium text-gray-400">
+                    ¿Ya eres cliente?
+                </span>
+
+                <div class="h-px flex-1 bg-gray-100"></div>
+
+            </div>
+
+
+            <!-- LOGIN -->
+
+            <div class="text-center">
 
                 <p class="text-sm text-gray-500">
                     ¿Ya tienes una cuenta?
-                    <a routerLink="/login" class="font-semibold text-red-600 transition hover:text-red-700">
-                        Iniciar sesión
-                    </a>
                 </p>
+
+
+                <a
+                    routerLink="/login"
+                    class="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-red-600 transition-colors hover:text-red-700"
+                >
+                    Iniciar sesión
+
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </a>
 
             </div>
 
         </div>
 
+
+        <!-- FOOTER -->
+
+        <p class="mt-6 text-center text-xs leading-5 text-gray-400">
+            Crea tu cuenta y disfruta de una experiencia
+            más personalizada en StyleMax.
+        </p>
+
     </div>
 
-</main>
+</div>

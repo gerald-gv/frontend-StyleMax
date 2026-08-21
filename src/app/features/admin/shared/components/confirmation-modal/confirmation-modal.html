@@ -1,0 +1,57 @@
+@if (abierto()) {
+    <div class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="confirmation-modal-title"
+         (click)="cancelar.emit()">
+
+        <div class="modal-content w-full max-w-md overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl"(click)="$event.stopPropagation()">
+
+            <!-- CONTENIDO -->
+            <div class="px-6 pt-6">
+
+                <!-- ICONO -->
+                <div class="flex h-11 w-11 items-center justify-center rounded-xl
+                            bg-red-50 text-red-600">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+
+                <!-- TEXTO -->
+                <h2 id="confirmation-modal-title" class="mt-5 text-lg font-semibold text-gray-950">
+                    {{ titulo() }}
+                </h2>
+
+                <p class="mt-2 text-sm leading-6 text-gray-500">
+                    {{ mensaje() }}
+                </p>
+
+            </div>
+
+            <!-- ACCIONES -->
+            <div class="mt-6 flex flex-col-reverse gap-2 border-t border-gray-100 bg-gray-50
+                        px-6 py-4 sm:flex-row sm:justify-end">
+
+                <button type="button"
+                        (click)="cancelar.emit()"
+                        class="inline-flex items-center justify-center rounded-lg border border-gray-200
+                               bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 shadow-sm
+                               transition hover:bg-gray-50 hover:text-gray-900
+                               focus:outline-none focus:ring-2 focus:ring-gray-900/10">
+                    {{ textoCancelar() }}
+                </button>
+
+                <button type="button"
+                        (click)="confirmar.emit()"
+                        class="inline-flex items-center justify-center gap-2 rounded-lg bg-red-600
+                               px-4 py-2.5 text-sm font-semibold text-white shadow-sm
+                               transition hover:bg-red-700
+                               focus:outline-none focus:ring-2 focus:ring-red-600/20">
+                    <i class="fa-solid fa-trash text-xs"></i>
+                    {{ textoConfirmar() }}
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+}

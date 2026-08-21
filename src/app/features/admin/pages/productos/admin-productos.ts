@@ -10,10 +10,12 @@ import { MarcaService } from "../../../../core/services/marca.service";
 import { CategoriaService } from "../../../../core/services/categoria.service";
 import { Marca } from "../../../../core/models/marca.model";
 import { Categoria } from "../../../../core/models/categoria.model";
+import { NotificationService } from "../../../../core/services/notification.service";
+import { ConfirmationModal } from "../../shared/components/confirmation-modal/confirmation-modal";
 
 @Component({
     selector: 'admin-productos',
-    imports: [DecimalPipe, SearchBarAdmin, ModalProducto],
+    imports: [DecimalPipe, SearchBarAdmin, ModalProducto, ConfirmationModal],
     templateUrl: './admin-productos.html'
 })
 export class AdminProductos implements OnInit {
@@ -21,6 +23,8 @@ export class AdminProductos implements OnInit {
     private readonly productoService = inject(AdminProductoService);
     private readonly marcaService = inject(MarcaService);
     private readonly categoriaService = inject(CategoriaService);
+
+    private readonly notification = inject(NotificationService);
 
     readonly marcas = signal<Marca[]>([]);
     readonly categorias = signal<Categoria[]>([]);
@@ -33,7 +37,7 @@ export class AdminProductos implements OnInit {
     ];
 
     private readonly destroyRef = inject(DestroyRef);
-    
+
     private readonly terminoBusqueda$ = new Subject<string>();
 
     readonly productos = signal<ProductoAdmin[]>([]);
@@ -64,7 +68,16 @@ export class AdminProductos implements OnInit {
     readonly modalProductoAbierto = signal(false);
     readonly productoSeleccionado = signal<ProductoAdmin | null>(null);
 
+    // MODAL CONFIRMACION
+    readonly modalConfirmacionAbierto = signal(false);
+    readonly productoAEliminar = signal<ProductoAdmin | null>(null);
 
+    readonly mensajeConfirmacion = computed(() => {
+
+        const producto = this.productoAEliminar();
+
+        return producto ? `¿Deseas desactivar el producto "${producto.nombre}"?` : '';
+    });
 
     ngOnInit(): void {
         this.cargarProductos();
@@ -101,25 +114,25 @@ export class AdminProductos implements OnInit {
             takeUntilDestroyed(this.destroyRef)
 
         )
-        .subscribe(response => {
+            .subscribe(response => {
 
-            this.productos.set(response.contenido);
+                this.productos.set(response.contenido);
 
-            this.paginaActual.set(response.pagina);
-            this.tamanioPagina.set(response.tamanio);
-            this.totalElementos.set(response.totalElementos);
-            this.totalPaginas.set(response.totalPaginas);
+                this.paginaActual.set(response.pagina);
+                this.tamanioPagina.set(response.tamanio);
+                this.totalElementos.set(response.totalElementos);
+                this.totalPaginas.set(response.totalPaginas);
 
-            this.buscando.set(false);
-            this.cambiandoPagina.set(false);
-        });
+                this.buscando.set(false);
+                this.cambiandoPagina.set(false);
+            });
     }
 
     protected ultimoElemento(): number {
-    return Math.min(
-        (this.paginaActual() + 1) * this.tamanioPagina(),
-        this.totalElementos()
-    );
+        return Math.min(
+            (this.paginaActual() + 1) * this.tamanioPagina(),
+            this.totalElementos()
+        );
     }
 
     // PRODUCTOS
@@ -224,21 +237,61 @@ export class AdminProductos implements OnInit {
     // PRODUCTOS
 
     productoGuardado(producto: ProductoAdmin): void {
+
+        const productoAnterior = this.productos().find(
+            p => p.id === producto.id
+        );
+
+        const esNuevo = !productoAnterior;
+
         this.productos.update(productos => {
 
-            const existe = productos.some(p => p.id === producto.id);
-
-            if (existe) {
-                return productos.map(p => p.id === producto.id ? producto : p);
+            if (esNuevo) {
+                return [producto, ...productos];
             }
 
-            return [producto, ...productos];
+            return productos.map(p =>
+                p.id === producto.id
+                    ? producto
+                    : p
+            );
         });
 
         this.modalProductoAbierto.set(false);
         this.productoSeleccionado.set(null);
 
         this.cargarEstadisticas();
+
+        // NUEVO
+        if (esNuevo) {
+            this.notification.success(
+                `Producto "${producto.nombre}" creado correctamente.`
+            );
+            return;
+        }
+
+        // INTENTO DE ACTIVACIÓN SIN STOCK
+        if (
+            !productoAnterior!.activo &&
+            !producto.activo &&
+            producto.stock === 0
+        ) {
+            this.notification.warning(`El producto "${producto.nombre}" no se pudo activar porque no tiene stock.`);
+            return;
+        }
+
+        if (productoAnterior!.activo !== producto.activo) {
+
+            this.notification.success(
+                producto.activo
+                    ? `Producto "${producto.nombre}" activado correctamente.`
+                    : `Producto "${producto.nombre}" desactivado correctamente.`
+            );
+
+            return;
+        }
+
+        this.notification.success(`Producto "${producto.nombre}" actualizado correctamente.`);
     }
 
     nuevoProducto(): void {
@@ -259,26 +312,66 @@ export class AdminProductos implements OnInit {
 
     eliminarProducto(producto: ProductoAdmin): void {
 
-        const confirmado = window.confirm(`¿Deseas desactivar el producto "${producto.nombre}"?`);
+        this.productoAEliminar.set(producto);
+        this.modalConfirmacionAbierto.set(true);
+    }
 
-        if (!confirmado) {
+    confirmarDesactivacionProducto(): void {
+
+        const producto = this.productoAEliminar();
+
+        if (!producto) {
             return;
         }
 
-        this.productoService.eliminar(producto.id).subscribe({
 
-            next: (productoActualizado) => {
+        this.productoService
+            .eliminar(producto.id)
+            .subscribe({
 
-                this.productos.update(productos => productos.map(p => p.id === productoActualizado.id ? productoActualizado : p));
-                this.cargarEstadisticas();
-            },
+                next: productoActualizado => {
 
-            error: () => {
-                this.error.set('No se pudo desactivar el producto.');
-            }
+                    this.productos.update(
+                        productos =>
+                            productos.map(
+                                p =>
+                                    p.id === productoActualizado.id
+                                        ? productoActualizado
+                                        : p
+                            )
+                    );
 
-        });
+                    this.cargarEstadisticas();
+
+                    this.notification.success(
+                        `Producto "${producto.nombre}" desactivado correctamente.`
+                    );
+
+                    this.cerrarConfirmacion();
+
+                },
+
+                error: () => {
+
+                    this.notification.error(
+                        `No se pudo desactivar el producto "${producto.nombre}".`
+                    );
+
+                    this.cerrarConfirmacion();
+
+                }
+
+            });
+
     }
+
+    cerrarConfirmacion(): void {
+
+        this.modalConfirmacionAbierto.set(false);
+        this.productoAEliminar.set(null);
+
+    }
+
 
     private cargarMarcas(): void {
         this.marcaService.listar().subscribe({

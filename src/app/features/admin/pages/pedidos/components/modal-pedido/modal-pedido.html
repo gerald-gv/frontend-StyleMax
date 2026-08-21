@@ -1,8 +1,8 @@
 @if (pedidoId() !== null) {
 
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-950/40 p-4 backdrop-blur-sm" (click)="cerrarModal()">
+    <div class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center bg-gray-950/40 p-4 backdrop-blur-sm" (click)="cerrarModal()">
 
-        <div class="flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl" (click)="$event.stopPropagation()">
+        <div class="modal-content flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl" (click)="$event.stopPropagation()">
 
             <!-- HEADER -->
 

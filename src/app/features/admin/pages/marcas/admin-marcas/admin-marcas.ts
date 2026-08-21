@@ -5,6 +5,7 @@ import { AdminMarcaService } from '../../../services/admin-marca.service';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ModalMarca } from "../components/modal-marca/modal-marca";
+import { NotificationService } from '../../../../../core/services/notification.service';
 
 @Component({
   selector: 'admin-marcas',
@@ -18,6 +19,7 @@ export class AdminMarcas implements OnInit {
 
   private readonly terminoBusqueda$ = new Subject<string>();
 
+  private readonly notification = inject(NotificationService);
 
   // MARCAS
 
@@ -254,16 +256,16 @@ export class AdminMarcas implements OnInit {
 
   marcaGuardada(marca: MarcaAdmin): void {
 
-    this.marcas.update(marcas => {
+    const existe = this.marcas().some(
+      m => m.id === marca.id
+    );
 
-      const existe = marcas.some(
-        m => m.id === marca.id
-      );
+    this.marcas.update(marcas => {
 
       if (existe) {
 
-        return marcas.map(
-          m => m.id === marca.id
+        return marcas.map(m =>
+          m.id === marca.id
             ? marca
             : m
         );
@@ -277,12 +279,16 @@ export class AdminMarcas implements OnInit {
 
     });
 
-
     this.modalMarcaAbierto.set(false);
     this.marcaSeleccionada.set(null);
 
     this.cargarEstadisticas();
 
+    this.notification.success(
+      existe
+        ? `Marca "${marca.nombre}" actualizada correctamente.`
+        : `Marca "${marca.nombre}" creada correctamente.`
+    );
   }
 
 
@@ -325,7 +331,6 @@ export class AdminMarcas implements OnInit {
       return;
     }
 
-
     this.marcaService
       .eliminar(marca.id)
       .subscribe({
@@ -334,28 +339,25 @@ export class AdminMarcas implements OnInit {
 
           this.marcas.update(
             marcas =>
-              marcas.map(
-                m =>
-                  m.id === marcaActualizada.id
-                    ? marcaActualizada
-                    : m
+              marcas.map(m =>
+                m.id === marcaActualizada.id
+                  ? marcaActualizada
+                  : m
               )
           );
 
           this.cargarEstadisticas();
 
+          this.notification.success(`Marca "${marca.nombre}" desactivada correctamente.`);
         },
 
         error: () => {
 
-          this.error.set(
-            'No se pudo desactivar la marca.'
-          );
+          this.notification.error(`No se pudo desactivar la marca "${marca.nombre}".`);
 
         }
 
       });
-
   }
 
 }

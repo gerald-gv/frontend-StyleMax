@@ -3,6 +3,7 @@
     <div class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
 
         <!-- Header -->
+
         <div class="flex items-end justify-between">
 
             <div>
@@ -26,6 +27,7 @@
 
 
             <!-- Desktop CTA -->
+
             <a routerLink="/catalogo"
                 class="hidden items-center gap-2 rounded-full bg-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-red-600/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-red-500 hover:shadow-red-600/30 sm:inline-flex">
                 Ver catálogo
@@ -43,80 +45,147 @@
         <div class="relative mt-10">
 
             <!-- Flecha izquierda -->
-            <button type="button" (click)="mover('prev')" [class.invisible]="paginaActual() === 0"
+
+            <button
+                type="button"
+                (click)="mover('prev')"
+                [class.invisible]="paginaActual() === 0"
                 [class.pointer-events-none]="paginaActual() === 0"
                 class="absolute -left-3 top-[40%] z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white text-gray-700 shadow-md ring-1 ring-gray-100 transition-all hover:bg-red-600 hover:text-white sm:flex lg:-left-5"
                 aria-label="Productos anteriores">
+
                 <i class="fa-solid fa-chevron-left text-xs"></i>
+
             </button>
 
 
             <!-- Productos -->
+
             <div #slider class="flex snap-x snap-mandatory gap-4 overflow-x-hidden lg:gap-6">
 
-                @for (producto of productos(); track producto.id) {
+                @if (cargando()) {
 
-                <article [routerLink]="['/productos', producto.slug]" class="group w-[calc(50%-0.5rem)] cursor-pointer flex-none snap-start md:w-[calc(33.333%-0.75rem)] lg:w-[calc(25%-1.125rem)]">
+                    @for (item of [1, 2, 3, 4]; track item) {
 
-                    <!-- Imagen -->
-                    <div class="relative aspect-4/5 overflow-hidden rounded-2xl bg-gray-100">
+                        <article
+                            class="w-[calc(50%-0.5rem)] flex-none snap-start md:w-[calc(33.333%-0.75rem)] lg:w-[calc(25%-1.125rem)]">
 
-                        <img [src]="producto.imagen" [alt]="producto.nombre"
-                            class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                            <!-- Imagen -->
 
-
-                        <!-- Badge -->
-                        <span
-                            class="absolute left-3 top-3 rounded-full bg-red-600 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide text-white shadow-lg shadow-red-600/20">
-                            Destacado
-                        </span>
+                            <div
+                                class="relative aspect-4/5 overflow-hidden rounded-2xl bg-gray-200 animate-pulse">
+                            </div>
 
 
-                        <!-- Favorito -->
-                        <button type="button"
-                            class="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/95 text-gray-600 shadow-md backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:bg-red-600 hover:text-white"
-                            [attr.aria-label]="'Agregar ' + producto.nombre + ' a favoritos'">
-                            <i class="fa-regular fa-heart"></i>
-                        </button>
+                            <!-- Info -->
+
+                            <div class="mt-4">
+
+                                <!-- Categoría -->
+
+                                <div class="h-3 w-20 rounded bg-gray-200 animate-pulse"></div>
 
 
-                        <!-- Quick Action -->
-                        <a [routerLink]="['/catalogo', producto.slug]"
-                            class="absolute bottom-3 left-3 right-3 flex translate-y-2 justify-center rounded-xl bg-white/95 px-4 py-3 text-sm font-semibold text-gray-900 opacity-0 shadow-lg backdrop-blur-sm transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hover:bg-red-600 hover:text-white">
-                            Ver producto
+                                <!-- Nombre -->
 
-                        </a>
-
-                    </div>
+                                <div class="mt-1 h-6 w-3/4 rounded bg-gray-200 animate-pulse"></div>
 
 
-                    <!-- Info -->
-                    <div class="mt-4">
+                                <!-- Precio / Disponible -->
 
-                        <p class="text-xs font-medium uppercase tracking-wide text-gray-400">
-                            {{ producto.categoria }}
-                        </p>
+                                <div class="mt-2 flex items-center justify-between gap-2">
 
-                        <h3
-                            class="mt-1 text-base font-semibold text-gray-900 transition-colors group-hover:text-red-600 sm:text-lg">
-                            {{ producto.nombre }}
-                        </h3>
+                                    <div class="h-6 w-20 rounded bg-gray-200 animate-pulse"></div>
 
-                        <div class="mt-2 flex items-center justify-between gap-2">
+                                    <div class="h-3 w-16 rounded bg-gray-200 animate-pulse"></div>
 
-                            <span class="text-lg font-bold text-gray-900">
-                                S/ {{ producto.precio | number:'1.2-2' }}
-                            </span>
+                                </div>
 
-                            <span class="text-xs text-gray-400">
-                                Disponible
-                            </span>
+                            </div>
 
-                        </div>
+                        </article>
 
-                    </div>
+                    }
 
-                </article>
+                } @else {
+
+                    @for (producto of productos(); track producto.id) {
+
+                        <article
+                            [routerLink]="['/productos', producto.slug]"
+                            class="group w-[calc(50%-0.5rem)] cursor-pointer flex-none snap-start md:w-[calc(33.333%-0.75rem)] lg:w-[calc(25%-1.125rem)]">
+
+                            <!-- Imagen -->
+
+                            <div class="relative aspect-4/5 overflow-hidden rounded-2xl bg-gray-100">
+
+                                <img
+                                    [src]="producto.imagen"
+                                    [alt]="producto.nombre"
+                                    class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+
+
+                                <!-- Badge -->
+
+                                <span
+                                    class="absolute left-3 top-3 rounded-full bg-red-600 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide text-white shadow-lg shadow-red-600/20">
+                                    Destacado
+                                </span>
+
+
+                                <!-- Favorito -->
+
+                                <button
+                                    type="button"
+                                    class="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/95 text-gray-600 shadow-md backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:bg-red-600 hover:text-white"
+                                    [attr.aria-label]="'Agregar ' + producto.nombre + ' a favoritos'">
+
+                                    <i class="fa-regular fa-heart"></i>
+
+                                </button>
+
+
+                                <!-- Quick Action -->
+
+                                <a
+                                    [routerLink]="['/catalogo', producto.slug]"
+                                    class="absolute bottom-3 left-3 right-3 flex translate-y-2 justify-center rounded-xl bg-white/95 px-4 py-3 text-sm font-semibold text-gray-900 opacity-0 shadow-lg backdrop-blur-sm transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hover:bg-red-600 hover:text-white">
+                                    Ver producto
+                                </a>
+
+                            </div>
+
+
+                            <!-- Info -->
+
+                            <div class="mt-4">
+
+                                <p class="text-xs font-medium uppercase tracking-wide text-gray-400">
+                                    {{ producto.categoria }}
+                                </p>
+
+                                <h3
+                                    class="mt-1 text-base font-semibold text-gray-900 transition-colors group-hover:text-red-600 sm:text-lg">
+                                    {{ producto.nombre }}
+                                </h3>
+
+                                <div class="mt-2 flex items-center justify-between gap-2">
+
+                                    <span class="text-lg font-bold text-gray-900">
+                                        S/ {{ producto.precio | number:'1.2-2' }}
+                                    </span>
+
+                                    <span class="text-xs text-gray-400">
+                                        Disponible
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    }
 
                 }
 
@@ -124,40 +193,60 @@
 
 
             <!-- Flecha derecha -->
-            <button type="button" (click)="mover('next')" [class.invisible]="paginaActual() >= totalPaginas() - 1"
+
+            <button
+                type="button"
+                (click)="mover('next')"
+                [class.invisible]="paginaActual() >= totalPaginas() - 1"
                 [class.pointer-events-none]="paginaActual() >= totalPaginas() - 1"
                 class="absolute -right-3 top-[40%] z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white text-gray-700 shadow-md ring-1 ring-gray-100 transition-all hover:bg-red-600 hover:text-white sm:flex lg:-right-5"
                 aria-label="Siguientes productos">
+
                 <i class="fa-solid fa-chevron-right text-xs"></i>
+
             </button>
 
         </div>
 
+
         <!-- Indicadores -->
-        <div class="mt-8 flex items-center justify-center gap-2">
 
-            @for (pagina of paginas(); track $index) {
+        @if (!cargando()) {
 
-            <button type="button" (click)="irAPagina($index)"
-                class=" h-1.5 rounded-full transition-all duration-500 ease-out cursor-pointer"
-                [class.w-5]="paginaActual() !== $index" [class.w-12]="paginaActual() === $index"
-                [class.bg-gray-200]="paginaActual() !== $index" [class.bg-red-600]="paginaActual() === $index"
-                [attr.aria-label]="'Ir a la página ' + ($index + 1)"></button>
+            <div class="mt-8 flex items-center justify-center gap-2">
 
-            }
+                @for (pagina of paginas(); track $index) {
 
-        </div>
+                    <button
+                        type="button"
+                        (click)="irAPagina($index)"
+                        class="h-1.5 cursor-pointer rounded-full transition-all duration-500 ease-out"
+                        [class.w-5]="paginaActual() !== $index"
+                        [class.w-12]="paginaActual() === $index"
+                        [class.bg-gray-200]="paginaActual() !== $index"
+                        [class.bg-red-600]="paginaActual() === $index"
+                        [attr.aria-label]="'Ir a la página ' + ($index + 1)">
+                    </button>
+
+                }
+
+            </div>
+
+        }
 
 
         <!-- Mobile CTA -->
 
         <div class="mt-10 text-center sm:hidden">
 
-            <a routerLink="/catalogo"
+            <a
+                routerLink="/catalogo"
                 class="inline-flex items-center justify-center gap-2 rounded-full bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-red-600/20 transition-all duration-300 hover:bg-red-500">
+
                 Ver catálogo
 
                 <i class="fa-solid fa-arrow-right text-xs"></i>
+
             </a>
 
         </div>

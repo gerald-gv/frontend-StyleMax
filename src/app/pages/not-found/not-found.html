@@ -1,0 +1,43 @@
+<div class="min-h-screen flex flex-col bg-gray-50">
+    <app-navbar />
+
+    <main class="flex-1 pt-34 lg:pt-22 flex items-center justify-center px-6">
+        <section class="w-full max-w-2xl text-center py-16">
+
+            <!-- ICONO -->
+            <div class="mx-auto flex items-center justify-center w-16 h-16 rounded-full
+                        bg-red-50 text-red-500">
+                <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
+            </div>
+
+            <!-- 404 -->
+            <p class="mt-8 text-8xl md:text-9xl font-bold tracking-tight text-slate-800">
+                404
+            </p>
+
+            <!-- TITULO -->
+            <h1 class="mt-4 text-2xl md:text-3xl font-semibold text-slate-900">
+                Página no encontrada
+            </h1>
+
+            <!-- DESCRIPCION -->
+            <p class="mx-auto mt-4 max-w-md text-sm md:text-base leading-6 text-slate-500">
+                Lo sentimos, no pudimos encontrar la página que estás buscando.
+                Puede que la dirección sea incorrecta o que la página ya no exista.
+            </p>
+
+            <!-- ACCION -->
+            <a routerLink="/"
+               class="inline-flex items-center justify-center mt-8 px-5 py-2.5 rounded-xl
+                      bg-slate-900 text-white text-sm font-semibold shadow-sm
+                      transition-all duration-200 hover:bg-slate-800 hover:shadow-md
+                      active:scale-[0.98]">
+                <i class="fa-solid fa-house mr-2"></i>
+                Volver al inicio
+            </a>
+
+        </section>
+    </main>
+
+    <app-footer />
+</div>
