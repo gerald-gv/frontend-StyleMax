@@ -1,0 +1,291 @@
+@if (cargando()) {
+
+    <div class="rounded-xl border border-gray-200 bg-white p-6">
+
+        <div class="h-5 w-32 animate-pulse rounded bg-gray-200"></div>
+
+        <div class="mt-1 h-3 w-48 animate-pulse rounded bg-gray-100"></div>
+
+        <div class="mt-7 space-y-6">
+
+            @for (skeleton of [1, 2, 3, 4]; track skeleton) {
+
+                <div>
+
+                    <div class="flex items-center justify-between">
+
+                        <div class="h-3 w-24 animate-pulse rounded bg-gray-200"></div>
+
+                        <div class="h-3 w-12 animate-pulse rounded bg-gray-100"></div>
+
+                    </div>
+
+                    <div class="mt-2.5 h-2.5 animate-pulse rounded-full bg-gray-100"></div>
+
+                </div>
+
+            }
+
+        </div>
+
+    </div>
+
+}
+
+@else {
+
+    <div class="rounded-xl border border-gray-200 bg-white p-6">
+
+        <div>
+
+            <h2 class="text-base font-bold text-gray-950">
+                Usuarios
+            </h2>
+
+            <p class="mt-1 text-xs text-gray-400">
+                Distribución y actividad de usuarios.
+            </p>
+
+        </div>
+
+
+        <div class="mt-7 space-y-7">
+
+            <!-- CLIENTES -->
+
+            <div>
+
+                <div class="flex items-center justify-between gap-4">
+
+                    <div class="flex items-center gap-2">
+
+                        <span class="h-2 w-2 rounded-full bg-blue-500"></span>
+
+                        <span class="text-sm font-medium text-gray-700">
+                            Clientes
+                        </span>
+
+                    </div>
+
+                    <span class="text-xs font-bold text-gray-900">
+
+                        {{ usuarios()?.clientes ?? 0 }}
+
+                        <span class="font-normal text-gray-400">
+                            / {{ usuarios()?.totalUsuarios ?? 0 }}
+                        </span>
+
+                    </span>
+
+                </div>
+
+
+                <div class="mt-2.5 h-2.5 overflow-hidden rounded-full bg-blue-50">
+
+                    <div
+                        class="h-full rounded-full bg-blue-500 transition-all duration-700 ease-out"
+                        [style.width.%]="porcentaje(
+                            usuarios()?.clientes ?? 0,
+                            usuarios()?.totalUsuarios ?? 0
+                        )"
+                    ></div>
+
+                </div>
+
+
+                <div class="mt-2 flex items-center justify-between">
+
+                    <span class="text-[11px] text-gray-400">
+                        Usuarios registrados
+                    </span>
+
+                    <span class="text-[11px] font-semibold text-blue-600">
+                        {{ porcentaje(
+                            usuarios()?.clientes ?? 0,
+                            usuarios()?.totalUsuarios ?? 0
+                        ) }}%
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ADMINISTRADORES -->
+
+            <div>
+
+                <div class="flex items-center justify-between gap-4">
+
+                    <div class="flex items-center gap-2">
+
+                        <span class="h-2 w-2 rounded-full bg-gray-700"></span>
+
+                        <span class="text-sm font-medium text-gray-700">
+                            Administradores
+                        </span>
+
+                    </div>
+
+                    <span class="text-xs font-bold text-gray-900">
+
+                        {{ usuarios()?.administradores ?? 0 }}
+
+                        <span class="font-normal text-gray-400">
+                            / {{ usuarios()?.totalUsuarios ?? 0 }}
+                        </span>
+
+                    </span>
+
+                </div>
+
+
+                <div class="mt-2.5 h-2.5 overflow-hidden rounded-full bg-gray-100">
+
+                    <div
+                        class="h-full rounded-full bg-gray-700 transition-all duration-700 ease-out"
+                        [style.width.%]="porcentaje(
+                            usuarios()?.administradores ?? 0,
+                            usuarios()?.totalUsuarios ?? 0
+                        )"
+                    ></div>
+
+                </div>
+
+
+                <div class="mt-2 flex items-center justify-between">
+
+                    <span class="text-[11px] text-gray-400">
+                        Usuarios con rol administrador
+                    </span>
+
+                    <span class="text-[11px] font-semibold text-gray-700">
+                        {{ porcentaje(
+                            usuarios()?.administradores ?? 0,
+                            usuarios()?.totalUsuarios ?? 0
+                        ) }}%
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIVOS -->
+
+            <div>
+
+                <div class="flex items-center justify-between gap-4">
+
+                    <div class="flex items-center gap-2">
+
+                        <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+
+                        <span class="text-sm font-medium text-gray-700">
+                            Usuarios activos
+                        </span>
+
+                    </div>
+
+                    <span class="text-xs font-bold text-gray-900">
+
+                        {{ usuarios()?.usuariosActivos ?? 0 }}
+
+                        <span class="font-normal text-gray-400">
+                            / {{ usuarios()?.totalUsuarios ?? 0 }}
+                        </span>
+
+                    </span>
+
+                </div>
+
+
+                <div class="mt-2.5 h-2.5 overflow-hidden rounded-full bg-emerald-50">
+
+                    <div
+                        class="h-full rounded-full bg-emerald-500 transition-all duration-700 ease-out"
+                        [style.width.%]="porcentajeUsuariosActivos()"
+                    ></div>
+
+                </div>
+
+
+                <div class="mt-2 flex items-center justify-between">
+
+                    <span class="text-[11px] text-gray-400">
+                        Usuarios con cuenta activa
+                    </span>
+
+                    <span class="text-[11px] font-semibold text-emerald-600">
+                        {{ porcentajeUsuariosActivos() }}%
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- INACTIVOS -->
+
+            <div>
+
+                <div class="flex items-center justify-between gap-4">
+
+                    <div class="flex items-center gap-2">
+
+                        <span class="h-2 w-2 rounded-full bg-red-500"></span>
+
+                        <span class="text-sm font-medium text-gray-700">
+                            Usuarios inactivos
+                        </span>
+
+                    </div>
+
+                    <span class="text-xs font-bold text-gray-900">
+
+                        {{ usuarios()?.usuariosInactivos ?? 0 }}
+
+                        <span class="font-normal text-gray-400">
+                            / {{ usuarios()?.totalUsuarios ?? 0 }}
+                        </span>
+
+                    </span>
+
+                </div>
+
+
+                <div class="mt-2.5 h-2.5 overflow-hidden rounded-full bg-red-50">
+
+                    <div
+                        class="h-full rounded-full bg-red-500 transition-all duration-700 ease-out"
+                        [style.width.%]="porcentaje(
+                            usuarios()?.usuariosInactivos ?? 0,
+                            usuarios()?.totalUsuarios ?? 0
+                        )"
+                    ></div>
+
+                </div>
+
+
+                <div class="mt-2 flex items-center justify-between">
+
+                    <span class="text-[11px] text-gray-400">
+                        Usuarios con cuenta inactiva
+                    </span>
+
+                    <span class="text-[11px] font-semibold text-red-600">
+                        {{ porcentaje(
+                            usuarios()?.usuariosInactivos ?? 0,
+                            usuarios()?.totalUsuarios ?? 0
+                        ) }}%
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+}

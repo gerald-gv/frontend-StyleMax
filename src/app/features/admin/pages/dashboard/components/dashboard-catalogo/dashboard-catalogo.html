@@ -1,0 +1,275 @@
+@if (cargando()) {
+
+    <div class="rounded-xl border border-gray-200 bg-white p-6">
+
+        <div class="h-5 w-32 animate-pulse rounded bg-gray-200"></div>
+
+        <div class="mt-1 h-3 w-48 animate-pulse rounded bg-gray-100"></div>
+
+        <div class="mt-7 space-y-6">
+
+            @for (skeleton of [1, 2, 3, 4]; track skeleton) {
+
+                <div>
+
+                    <div class="flex items-center justify-between">
+
+                        <div class="h-3 w-28 animate-pulse rounded bg-gray-200"></div>
+
+                        <div class="h-3 w-14 animate-pulse rounded bg-gray-100"></div>
+
+                    </div>
+
+                    <div class="mt-2.5 h-2.5 animate-pulse rounded-full bg-gray-100"></div>
+
+                    <div class="mt-2 h-2.5 w-16 animate-pulse rounded bg-gray-100"></div>
+
+                </div>
+
+            }
+
+        </div>
+
+    </div>
+
+}
+
+@else {
+
+    <div class="rounded-xl border border-gray-200 bg-white p-6">
+
+        <div>
+
+            <h2 class="text-base font-bold text-gray-950">
+                Catálogo
+            </h2>
+
+            <p class="mt-1 text-xs text-gray-400">
+                Estado general del catálogo.
+            </p>
+
+        </div>
+
+
+        <div class="mt-7 space-y-7">
+
+            <!-- PRODUCTOS ACTIVOS -->
+
+            <div>
+
+                <div class="flex items-center justify-between gap-4">
+
+                    <div class="flex items-center gap-2">
+
+                        <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+
+                        <span class="text-sm font-medium text-gray-700">
+                            Productos activos
+                        </span>
+
+                    </div>
+
+                    <span class="text-xs font-bold text-gray-900">
+
+                        {{ productos()?.activos ?? 0 }}
+
+                        <span class="font-normal text-gray-400">
+                            / {{ productos()?.total ?? 0 }}
+                        </span>
+
+                    </span>
+
+                </div>
+
+
+                <div class="mt-2.5 h-2.5 overflow-hidden rounded-full bg-emerald-50">
+
+                    <div
+                        class="h-full rounded-full bg-emerald-500 transition-all duration-700 ease-out"
+                        [style.width.%]="porcentajeProductosActivos()"
+                    ></div>
+
+                </div>
+
+
+                <div class="mt-2 flex items-center justify-between">
+
+                    <span class="text-[11px] text-gray-400">
+                        Disponibilidad del catálogo
+                    </span>
+
+                    <span class="text-[11px] font-semibold text-emerald-600">
+                        {{ porcentajeProductosActivos() }}%
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRODUCTOS DESTACADOS -->
+
+            <div>
+
+                <div class="flex items-center justify-between gap-4">
+
+                    <div class="flex items-center gap-2">
+
+                        <span class="h-2 w-2 rounded-full bg-amber-500"></span>
+
+                        <span class="text-sm font-medium text-gray-700">
+                            Productos destacados
+                        </span>
+
+                    </div>
+
+                    <span class="text-xs font-bold text-gray-900">
+                        {{ productos()?.destacados ?? 0 }}
+                    </span>
+
+                </div>
+
+
+                <div class="mt-2.5 h-2.5 overflow-hidden rounded-full bg-amber-50">
+
+                    <div
+                        class="h-full rounded-full bg-amber-500 transition-all duration-700 ease-out"
+                        [style.width.%]="porcentaje(
+                            productos()?.destacados ?? 0,
+                            productos()?.total ?? 0
+                        )"
+                    ></div>
+
+                </div>
+
+
+                <div class="mt-2 flex items-center justify-between">
+
+                    <span class="text-[11px] text-gray-400">
+                        Productos destacados
+                    </span>
+
+                    <span class="text-[11px] font-semibold text-amber-600">
+                        {{ porcentaje(
+                            productos()?.destacados ?? 0,
+                            productos()?.total ?? 0
+                        ) }}%
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- CATEGORÍAS -->
+
+            <div>
+
+                <div class="flex items-center justify-between gap-4">
+
+                    <div class="flex items-center gap-2">
+
+                        <span class="h-2 w-2 rounded-full bg-blue-500"></span>
+
+                        <span class="text-sm font-medium text-gray-700">
+                            Categorías activas
+                        </span>
+
+                    </div>
+
+                    <span class="text-xs font-bold text-gray-900">
+
+                        {{ categorias()?.activas ?? 0 }}
+
+                        <span class="font-normal text-gray-400">
+                            / {{ categorias()?.total ?? 0 }}
+                        </span>
+
+                    </span>
+
+                </div>
+
+
+                <div class="mt-2.5 h-2.5 overflow-hidden rounded-full bg-blue-50">
+
+                    <div
+                        class="h-full rounded-full bg-blue-500 transition-all duration-700 ease-out"
+                        [style.width.%]="porcentajeCategoriasActivas()"
+                    ></div>
+
+                </div>
+
+
+                <div class="mt-2 flex items-center justify-between">
+
+                    <span class="text-[11px] text-gray-400">
+                        Categorías disponibles
+                    </span>
+
+                    <span class="text-[11px] font-semibold text-blue-600">
+                        {{ porcentajeCategoriasActivas() }}%
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- MARCAS -->
+
+            <div>
+
+                <div class="flex items-center justify-between gap-4">
+
+                    <div class="flex items-center gap-2">
+
+                        <span class="h-2 w-2 rounded-full bg-violet-500"></span>
+
+                        <span class="text-sm font-medium text-gray-700">
+                            Marcas activas
+                        </span>
+
+                    </div>
+
+                    <span class="text-xs font-bold text-gray-900">
+
+                        {{ marcas()?.activas ?? 0 }}
+
+                        <span class="font-normal text-gray-400">
+                            / {{ marcas()?.total ?? 0 }}
+                        </span>
+
+                    </span>
+
+                </div>
+
+
+                <div class="mt-2.5 h-2.5 overflow-hidden rounded-full bg-violet-50">
+
+                    <div
+                        class="h-full rounded-full bg-violet-500 transition-all duration-700 ease-out"
+                        [style.width.%]="porcentajeMarcasActivas()"
+                    ></div>
+
+                </div>
+
+
+                <div class="mt-2 flex items-center justify-between">
+
+                    <span class="text-[11px] text-gray-400">
+                        Marcas disponibles
+                    </span>
+
+                    <span class="text-[11px] font-semibold text-violet-600">
+                        {{ porcentajeMarcasActivas() }}%
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+}
